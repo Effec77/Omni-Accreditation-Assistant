@@ -187,14 +187,18 @@ class ParentExpander:
     
     def expand_with_parent(self, top_children: List[Dict]) -> List[Dict]:
         """
-        Expand top-5 child chunks with parent context.
+        PART 5: Expand top-5 child chunks with parent context.
+        Must preserve ranking order exactly - no sorting, no deduplication, no reordering.
         
         Args:
-            top_children: Top-5 reranked child chunks
+            top_children: Top-5 reranked child chunks (in ranked order)
             
         Returns:
-            Enriched results with parent_context
+            Enriched results with parent_context (same order as input)
         """
+        # Store input order for assertion
+        input_ids = [child['chunk_id'] for child in top_children]
+        
         enriched_results = []
         
         for child in top_children:
@@ -221,8 +225,9 @@ class ParentExpander:
                 max_tokens=1200
             )
             
-            # Create enriched result
+            # Create enriched result (preserve all fields including chunk_id)
             enriched = {
+                'chunk_id': child.get('chunk_id'),  # Preserve chunk_id
                 'framework': child['framework'],
                 'doc_type': child['doc_type'],
                 'criterion': child.get('criterion'),
@@ -240,6 +245,10 @@ class ParentExpander:
             }
             
             enriched_results.append(enriched)
+        
+        # PART 5: Assert order preservation
+        output_ids = [r['chunk_id'] for r in enriched_results]
+        assert input_ids == output_ids, "Parent expansion must not reorder results"
         
         return enriched_results
 

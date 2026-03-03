@@ -12,6 +12,30 @@ from pathlib import Path
 import pickle
 
 
+def prepare_text_for_embedding(chunk: Dict) -> str:
+    """
+    Enrich chunk text with metadata prefix for better embedding discrimination.
+    
+    Phase 1 Fix: Adds structured metadata prefix to help embeddings distinguish
+    between criteria, especially when content is similar.
+    
+    Args:
+        chunk: Chunk dict with metadata
+        
+    Returns:
+        Enriched text for embedding
+    """
+    framework = chunk.get('framework', 'Unknown')
+    criterion = chunk.get('criterion', 'Unknown')
+    doc_type = chunk.get('doc_type', 'general')
+    text = chunk.get('text', '')
+    
+    # Build prefix
+    prefix = f"Framework: {framework} | Criterion: {criterion} | Type: {doc_type} | Content: "
+    
+    return prefix + text
+
+
 class IndexBuilder:
     """
     Builds and persists FAISS indices for document chunks.
@@ -53,8 +77,8 @@ class IndexBuilder:
         print(f"\nBuilding index: {index_name}")
         print(f"  Chunks: {len(chunks)}")
         
-        # Extract texts and chunk IDs
-        texts = [chunk['text'] for chunk in chunks]
+        # Extract enriched texts and chunk IDs
+        texts = [prepare_text_for_embedding(chunk) for chunk in chunks]
         chunk_ids = [chunk['chunk_id'] for chunk in chunks]
         
         # Generate embeddings in batches

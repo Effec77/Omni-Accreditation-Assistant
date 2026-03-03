@@ -4,6 +4,7 @@ Cross-encoder reranking using BGE reranker.
 """
 
 import torch
+import numpy as np
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from typing import List, Dict
 import tiktoken
@@ -104,13 +105,24 @@ class Reranker:
                 outputs = self.model(**inputs)
                 logits = outputs.logits.squeeze(-1)
                 
-                # Normalize with sigmoid to get 0-1 range
-                scores = torch.sigmoid(logits).cpu().numpy()
+                # Get raw scores (no sigmoid)
+                scores = logits.cpu().numpy()
                 
                 all_scores.extend(scores.tolist())
         
+        # PART 4: Min-max normalization instead of sigmoid
+        raw = np.array(all_scores)
+        min_s = raw.min()
+        max_s = raw.max()
+        
+        if max_s - min_s < 1e-8:
+            # All scores are the same
+            normalized_scores = [0.5] * len(all_scores)
+        else:
+            normalized_scores = ((raw - min_s) / (max_s - min_s)).tolist()
+        
         # Add reranker scores to candidates
-        for candidate, score in zip(candidates, all_scores):
+        for candidate, score in zip(candidates, normalized_scores):
             candidate['reranker_score'] = float(score)
         
         # Sort by reranker score

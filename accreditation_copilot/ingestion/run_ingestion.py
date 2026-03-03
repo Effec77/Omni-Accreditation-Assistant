@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from ingestion.pdf_processor import PDFProcessor
 from ingestion.semantic_chunker import SemanticChunker
+from ingestion.validator import validate_ingestion_integrity
 from utils.metadata_store import MetadataStore
 from retrieval.index_builder import IndexBuilder
 from retrieval.bm25_builder import BM25Builder
@@ -105,6 +106,24 @@ class IngestionOrchestrator:
         if not self.all_chunks:
             print("\nNo chunks to index!")
             return
+        
+        # Validate integrity before building indices
+        if not validate_ingestion_integrity(self.metadata_store.db_path):
+            print("\n❌ INGESTION INTEGRITY CHECK FAILED")
+            print("Fix critical issues before building indices.")
+            sys.exit(1)
+        
+        # CRITICAL: Validate no cross-metric contamination
+        from ingestion.semantic_chunker import validate_no_cross_metric_contamination
+        
+        print(f"\n{'='*60}")
+        print(f"Cross-Metric Contamination Check")
+        print(f"{'='*60}")
+        
+        if not validate_no_cross_metric_contamination(self.metadata_store.db_path):
+            print("\n❌ CROSS-METRIC CONTAMINATION DETECTED")
+            print("Fix boundary detection before proceeding.")
+            sys.exit(1)
         
         print(f"\n{'='*60}")
         print(f"Building Indices")

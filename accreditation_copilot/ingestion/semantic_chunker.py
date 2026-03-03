@@ -1,67 +1,241 @@
 """
-Semantic Chunker - Phase 1.1
-Structure-aware chunking for NAAC and NBA documents.
-Token-based chunking with BGE tokenizer for proper granularity.
+Semantic Chunker - Phase 1.4 Final Fix
+Robust metric boundary enforcement.
+
+CRITICAL RULE: Every metric header (X.Y.Z QnM) creates a hard boundary.
+No chunk labeled X.Y.Z may contain another metric header.
 """
 
 import re
 import uuid
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from transformers import AutoTokenizer
+
+
+# Robust metric header detection - handles PDF line noise
+# Matches X.Y.Z QnM anywhere in text, with optional "Weightage" prefix
+NAAC_METRIC_HEADER_PATTERN = re.compile(
+    r'([1-7]\.\d{1,2}\.\d{1,2})\s+QnM\b'
+)
+
+NAAC_WEIGHTAGE_PATTERN = re.compile(
+    r'Weightage\s+([1-7]\.\d{1,2}\.\d{1,2})\s+QnM\b'
+)
+
+NAAC_KI_PATTERN = re.compile(
+    r'Key\s+Indicator\s*[-–]\s*([1-7]\.\d{1,2})\b'
+)
+
+# NBA Header Patterns (unchanged for now)
+NBA_HEADER_PATTERNS = [
+    r'(?m)^[\s]*Criterion\s+(\d+)\b',
+    r'(?m)^[\s]*(PO\d+)\b',
+    r'(?m)^[\s]*(PEO\d+)\b',
+    r'(?m)^[\s]*(C\d+)\b',
+]
+
+
+def find_criterion_boundaries(text: str, framework: str) -> List[Tuple[int, str]]:
+    """
+    Find all metric-level criterion boundaries in text.
+    
+    CRITICAL: Only X.Y.Z QnM headers create boundaries.
+    No normalization, no inference - direct match only.
+    
+    Returns:
+        List of (position, criterion_id) tuples, sorted by position
+    """
+    boundaries = []
+    seen_positions = []
+    
+    if framework == "NAAC":
+        # Detect all metric-level headers (X.Y.Z QnM)
+        for match in NAAC_METRIC_HEADER_PATTERN.finditer(text):
+            pos = match.start()
+            raw_id = match.group(1)
+            
+            # Deduplicate only extremely close matches (within 10 chars)
+            if any(abs(pos - p) < 10 for p in seen_positions):
+                continue
+            
+            # Validate format: must be X.Y.Z
+            if not re.match(r'^[1-7]\.\d{1,2}\.\d{1,2}$', raw_id):
+                continue
+            
+            boundaries.append((pos, raw_id))
+            seen_positions.append(pos)
+    
+    elif framework == "NBA":
+        # NBA logic unchanged
+        for pattern in NBA_HEADER_PATTERNS:
+            for match in re.finditer(pattern, text):
+                pos = match.start()
+                
+                if any(abs(pos - p) < 10 for p in seen_positions):
+                    continue
+                
+                raw_id = match.group(1) if match.lastindex else None
+                if not raw_id:
+                    continue
+                
+                if not re.match(r'^(C\d+|PO\d+|PEO\d+|PSO\d+|CO\d+)$', raw_id):
+                    continue
+                
+                boundaries.append((pos, raw_id))
+                seen_positions.append(pos)
+    
+    # Sort by position
+    boundaries.sort(key=lambda x: x[0])
+    return boundaries
+
+
+def split_into_criterion_sections(text: str, framework: str) -> List[Dict]:
+    """
+    Split document into criterion sections.
+    Each section has a single criterion label.
+    
+    Returns:
+        List of section dicts with criterion, text, start_pos, end_pos
+    """
+    boundaries = find_criterion_boundaries(text, framework)
+    
+    if not boundaries:
+        # No boundaries found - return entire text as unlabeled section
+        return [{
+            "criterion": None,
+            "text": text,
+            "start_pos": 0,
+            "end_pos": len(text)
+        }]
+    
+    sections = []
+    
+    # Preamble (text before first boundary)
+    if boundaries[0][0] > 0:
+        preamble = text[:boundaries[0][0]].strip()
+        if len(preamble) > 100:
+            sections.append({
+                "criterion": None,
+                "text": preamble,
+                "start_pos": 0,
+                "end_pos": boundaries[0][0]
+            })
+    
+    # Process each boundary
+    for i, (pos, criterion_id) in enumerate(boundaries):
+        end_pos = boundaries[i+1][0] if i+1 < len(boundaries) else len(text)
+        section_text = text[pos:end_pos].strip()
+        
+        # Skip very short sections
+        if len(section_text) < 50:
+            continue
+        
+        sections.append({
+            "criterion": criterion_id,
+            "text": section_text,
+            "start_pos": pos,
+            "end_pos": end_pos
+        })
+    
+    return sections
+
+
+def determine_page(position: int, page_positions: List[Tuple[int, int]]) -> int:
+    """
+    Determine which page a text position belongs to.
+    
+    Args:
+        position: Character position in full text
+        page_positions: List of (start_pos, page_num) tuples
+        
+    Returns:
+        Page number
+    """
+    for i, (start_pos, page_num) in enumerate(page_positions):
+        if i + 1 < len(page_positions):
+            next_start = page_positions[i + 1][0]
+            if start_pos <= position < next_start:
+                return page_num
+        else:
+            # Last page
+            if position >= start_pos:
+                return page_num
+    
+    # Default to first page if not found
+    return page_positions[0][1] if page_positions else 1
 
 
 class SemanticChunker:
     """
-    Performs semantic, structure-aware chunking for NAAC and NBA documents.
-    Maintains chunk coherence and attaches rich metadata.
+    Structure-aware chunker that respects criterion boundaries.
     
-    Phase 1.1 Changes:
-    - Token-based chunking using BGE tokenizer
-    - Smaller chunks (300 tokens target, 400 hard cap, 450 absolute max)
-    - Enables meaningful parent-child expansion
+    CRITICAL GUARANTEE: No chunk crosses criterion boundaries.
     """
     
-    def __init__(self, chunk_size: int = 300, chunk_overlap: int = 50):
+    def __init__(self, chunk_size: int = 600, chunk_overlap: int = 50):
         """
-        Initialize semantic chunker with token-based parameters.
+        Initialize semantic chunker.
         
         Args:
-            chunk_size: Target chunk size in tokens (default 300)
-            chunk_overlap: Overlap between chunks in tokens (default 50)
+            chunk_size: Target chunk size in characters (default 600)
+            chunk_overlap: Overlap between chunks in characters (default 50)
         """
-        self.chunk_size = chunk_size  # Target: 300 tokens
-        self.chunk_overlap = chunk_overlap  # Overlap: 50 tokens
-        self.hard_cap = 400  # Hard cap at 400 tokens
-        self.absolute_max = 450  # Never exceed 450 tokens
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
         
-        # Use BGE tokenizer for accurate token counting
+        # Use BGE tokenizer for token counting
         print("Loading BGE tokenizer for chunking...")
         self.tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-base-en-v1.5")
         print("BGE tokenizer loaded successfully")
-        
-        # NAAC patterns - improved metric extraction
-        self.naac_metric_pattern = r'\b(\d\.\d\.\d)\b'
-        
-        # NBA patterns - improved criterion extraction
-        self.nba_po_pattern = r'\b(PO\d+)\b'
-        self.nba_peo_pattern = r'\b(PEO\d+)\b'
-        self.nba_criterion_pattern = r'\bCriterion\s+(\d+)\b'
     
     def _count_tokens(self, text: str) -> int:
+        """Count tokens using BGE tokenizer."""
+        return len(self.tokenizer.encode(text, add_special_tokens=False))
+    
+    def _split_text_simple(self, text: str) -> List[str]:
         """
-        Count tokens using BGE tokenizer.
+        Simple text splitter that respects chunk_size and chunk_overlap.
         
         Args:
-            text: Text to tokenize
+            text: Text to split
             
         Returns:
-            Number of tokens
+            List of text chunks
         """
-        return len(self.tokenizer.encode(text, add_special_tokens=False))
+        if len(text) <= self.chunk_size:
+            return [text]
+        
+        chunks = []
+        start = 0
+        
+        while start < len(text):
+            end = start + self.chunk_size
+            
+            # If not at end, try to break at sentence boundary
+            if end < len(text):
+                # Look for sentence end in last 100 chars
+                search_start = max(start, end - 100)
+                last_period = text.rfind('.', search_start, end)
+                last_newline = text.rfind('\n', search_start, end)
+                
+                break_point = max(last_period, last_newline)
+                if break_point > start:
+                    end = break_point + 1
+            
+            chunk = text[start:end].strip()
+            if chunk:
+                chunks.append(chunk)
+            
+            # Move start forward with overlap
+            start = end - self.chunk_overlap
+            if start >= len(text):
+                break
+        
+        return chunks
     
     def chunk_pages(self, pages: List[Dict], framework: str) -> List[Dict]:
         """
-        Chunk pages based on framework-specific structure.
+        Chunk pages with structure-aware boundary respect.
         
         Args:
             pages: List of page dicts from PDF processor
@@ -70,350 +244,139 @@ class SemanticChunker:
         Returns:
             List of chunk dicts with metadata
         """
-        if framework.upper() == 'NAAC':
-            return self._chunk_naac(pages)
-        elif framework.upper() == 'NBA':
-            return self._chunk_nba(pages)
-        else:
-            raise ValueError(f"Unknown framework: {framework}")
-    
-    def _chunk_naac(self, pages: List[Dict]) -> List[Dict]:
-        """
-        Chunk NAAC documents with token-based granularity.
-        Target: 300 tokens, Hard cap: 400, Absolute max: 450
-        """
-        chunks = []
-        current_chunk = []
-        current_criterion = None
-        current_tokens = 0
-        chunk_order = 0
+        # Concatenate all pages with page markers
+        full_text = ""
+        page_positions = []
         
         for page_data in pages:
-            text = page_data['text']
-            page_num = page_data['page']
-            source = page_data['source']
+            page_positions.append((len(full_text), page_data['page']))
+            full_text += f"\n\n[PAGE_{page_data['page']}]\n" + page_data['text']
+        
+        source = pages[0]['source'] if pages else "unknown"
+        
+        # Split into criterion sections
+        sections = split_into_criterion_sections(full_text, framework)
+        
+        # Chunk within each section
+        chunks = []
+        chunk_order = 0
+        
+        for section in sections:
+            criterion = section["criterion"]
+            section_text = section["text"]
+            section_start = section["start_pos"]
             
-            # Detect document type
-            doc_type = self._detect_naac_doc_type(source)
+            # Split section into chunks
+            sub_chunks = self._split_text_simple(section_text)
             
-            # Split by sentences for finer granularity
-            sentences = self._split_sentences(text)
-            
-            for sentence in sentences:
-                sentence = sentence.strip()
-                if not sentence:
+            for chunk_text in sub_chunks:
+                if len(chunk_text.strip()) < 50:
                     continue
                 
-                # Extract metric ID (e.g., 1.1.1, 2.3.4)
-                metric_matches = re.findall(self.naac_metric_pattern, sentence)
-                if metric_matches:
-                    current_criterion = metric_matches[0]
+                # Determine page number
+                chunk_pos_in_full_text = section_start + section_text.find(chunk_text[:50])
+                page_num = determine_page(chunk_pos_in_full_text, page_positions)
                 
-                sentence_tokens = self._count_tokens(sentence)
+                # Detect document type
+                doc_type = self._detect_doc_type(source, framework)
                 
-                # Check if adding this sentence would exceed hard cap
-                if current_tokens + sentence_tokens > self.hard_cap and current_chunk:
-                    # Save current chunk
-                    chunk_text = ' '.join(current_chunk)
-                    chunk_tokens = self._count_tokens(chunk_text)
-                    
-                    # Enforce absolute max
-                    if chunk_tokens > self.absolute_max:
-                        # Trim to absolute max
-                        chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-                    
-                    chunks.append(self._create_chunk(
-                        chunk_text, page_num, source, 'NAAC', doc_type, 
-                        {'criterion': current_criterion}, chunk_order
-                    ))
-                    chunk_order += 1
-                    
-                    # Start new chunk with overlap
-                    if self.chunk_overlap > 0 and len(current_chunk) > 0:
-                        # Keep last few sentences for overlap
-                        overlap_text = ' '.join(current_chunk[-2:])  # Last 2 sentences
-                        overlap_tokens = self._count_tokens(overlap_text)
-                        if overlap_tokens <= self.chunk_overlap:
-                            current_chunk = current_chunk[-2:]
-                            current_tokens = overlap_tokens
-                        else:
-                            current_chunk = []
-                            current_tokens = 0
-                    else:
-                        current_chunk = []
-                        current_tokens = 0
+                # Create chunk
+                chunk_id = str(uuid.uuid4())
+                chunk = {
+                    'chunk_id': chunk_id,
+                    'text': chunk_text.strip(),
+                    'page': page_num,
+                    'source': source,
+                    'framework': framework,
+                    'doc_type': doc_type,
+                    'criterion': criterion,
+                    'tier': 'general',
+                    'stage': 'general',
+                    'chunk_order': chunk_order
+                }
                 
-                current_chunk.append(sentence)
-                current_tokens += sentence_tokens
-                
-                # Also create chunk if we hit target size and have a good break point
-                if current_tokens >= self.chunk_size and metric_matches:
-                    chunk_text = ' '.join(current_chunk)
-                    chunk_tokens = self._count_tokens(chunk_text)
-                    
-                    if chunk_tokens > self.absolute_max:
-                        chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-                    
-                    chunks.append(self._create_chunk(
-                        chunk_text, page_num, source, 'NAAC', doc_type,
-                        {'criterion': current_criterion}, chunk_order
-                    ))
-                    chunk_order += 1
-                    
-                    # Start new chunk with overlap
-                    if self.chunk_overlap > 0 and len(current_chunk) > 0:
-                        overlap_text = ' '.join(current_chunk[-2:])
-                        overlap_tokens = self._count_tokens(overlap_text)
-                        if overlap_tokens <= self.chunk_overlap:
-                            current_chunk = current_chunk[-2:]
-                            current_tokens = overlap_tokens
-                        else:
-                            current_chunk = []
-                            current_tokens = 0
-                    else:
-                        current_chunk = []
-                        current_tokens = 0
-        
-        # Add remaining chunk
-        if current_chunk:
-            chunk_text = ' '.join(current_chunk)
-            chunk_tokens = self._count_tokens(chunk_text)
-            
-            if chunk_tokens > self.absolute_max:
-                chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-            
-            chunks.append(self._create_chunk(
-                chunk_text, page_num, source, 'NAAC', doc_type,
-                {'criterion': current_criterion}, chunk_order
-            ))
+                chunks.append(chunk)
+                chunk_order += 1
         
         return chunks
     
-    def _chunk_nba(self, pages: List[Dict]) -> List[Dict]:
-        """
-        Chunk NBA documents with token-based granularity.
-        Target: 300 tokens, Hard cap: 400, Absolute max: 450
-        """
-        chunks = []
-        current_chunk = []
-        current_criterion = None
-        current_tokens = 0
-        chunk_order = 0
-        
-        for page_data in pages:
-            text = page_data['text']
-            page_num = page_data['page']
-            source = page_data['source']
-            
-            # Detect document type and tier
-            doc_type = self._detect_nba_doc_type(source)
-            tier = self._detect_nba_tier(source)
-            
-            # Split by sentences for finer granularity
-            sentences = self._split_sentences(text)
-            
-            for sentence in sentences:
-                sentence = sentence.strip()
-                if not sentence:
-                    continue
-                
-                # Extract criterion - prioritize PO/PEO, then Criterion number
-                po_matches = re.findall(self.nba_po_pattern, sentence)
-                peo_matches = re.findall(self.nba_peo_pattern, sentence)
-                criterion_matches = re.findall(self.nba_criterion_pattern, sentence)
-                
-                # Priority: PO > PEO > Criterion
-                if po_matches:
-                    current_criterion = po_matches[0]
-                elif peo_matches:
-                    current_criterion = peo_matches[0]
-                elif criterion_matches:
-                    current_criterion = f"C{criterion_matches[0]}"
-                
-                sentence_tokens = self._count_tokens(sentence)
-                
-                # Check if adding this sentence would exceed hard cap
-                if current_tokens + sentence_tokens > self.hard_cap and current_chunk:
-                    chunk_text = ' '.join(current_chunk)
-                    chunk_tokens = self._count_tokens(chunk_text)
-                    
-                    if chunk_tokens > self.absolute_max:
-                        chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-                    
-                    chunks.append(self._create_chunk(
-                        chunk_text, page_num, source, 'NBA', doc_type,
-                        {'criterion': current_criterion, 'tier': tier}, chunk_order
-                    ))
-                    chunk_order += 1
-                    
-                    # Start new chunk with overlap
-                    if self.chunk_overlap > 0 and len(current_chunk) > 0:
-                        overlap_text = ' '.join(current_chunk[-2:])
-                        overlap_tokens = self._count_tokens(overlap_text)
-                        if overlap_tokens <= self.chunk_overlap:
-                            current_chunk = current_chunk[-2:]
-                            current_tokens = overlap_tokens
-                        else:
-                            current_chunk = []
-                            current_tokens = 0
-                    else:
-                        current_chunk = []
-                        current_tokens = 0
-                
-                current_chunk.append(sentence)
-                current_tokens += sentence_tokens
-                
-                # Create chunk at good break points
-                if current_tokens >= self.chunk_size and (po_matches or peo_matches or criterion_matches):
-                    chunk_text = ' '.join(current_chunk)
-                    chunk_tokens = self._count_tokens(chunk_text)
-                    
-                    if chunk_tokens > self.absolute_max:
-                        chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-                    
-                    chunks.append(self._create_chunk(
-                        chunk_text, page_num, source, 'NBA', doc_type,
-                        {'criterion': current_criterion, 'tier': tier}, chunk_order
-                    ))
-                    chunk_order += 1
-                    
-                    # Start new chunk with overlap
-                    if self.chunk_overlap > 0 and len(current_chunk) > 0:
-                        overlap_text = ' '.join(current_chunk[-2:])
-                        overlap_tokens = self._count_tokens(overlap_text)
-                        if overlap_tokens <= self.chunk_overlap:
-                            current_chunk = current_chunk[-2:]
-                            current_tokens = overlap_tokens
-                        else:
-                            current_chunk = []
-                            current_tokens = 0
-                    else:
-                        current_chunk = []
-                        current_tokens = 0
-        
-        # Add remaining chunk
-        if current_chunk:
-            chunk_text = ' '.join(current_chunk)
-            chunk_tokens = self._count_tokens(chunk_text)
-            
-            if chunk_tokens > self.absolute_max:
-                chunk_text = self._trim_to_token_limit(chunk_text, self.absolute_max)
-            
-            chunks.append(self._create_chunk(
-                chunk_text, page_num, source, 'NBA', doc_type,
-                {'criterion': current_criterion, 'tier': tier}, chunk_order
-            ))
-        
-        return chunks
-    
-    
-    def _split_sentences(self, text: str) -> List[str]:
-        """
-        Split text into sentences while preserving structure.
-        
-        Args:
-            text: Text to split
-            
-        Returns:
-            List of sentences
-        """
-        # Simple sentence splitting on common delimiters
-        # Preserve paragraph breaks
-        sentences = []
-        for para in text.split('\n\n'):
-            # Split on sentence boundaries
-            para_sentences = re.split(r'(?<=[.!?])\s+', para)
-            sentences.extend(para_sentences)
-        
-        return [s.strip() for s in sentences if s.strip()]
-    
-    def _trim_to_token_limit(self, text: str, max_tokens: int) -> str:
-        """
-        Trim text to fit within token limit.
-        
-        Args:
-            text: Text to trim
-            max_tokens: Maximum number of tokens
-            
-        Returns:
-            Trimmed text
-        """
-        tokens = self.tokenizer.encode(text, add_special_tokens=False)
-        if len(tokens) <= max_tokens:
-            return text
-        
-        # Trim tokens and decode
-        trimmed_tokens = tokens[:max_tokens]
-        return self.tokenizer.decode(trimmed_tokens)
-    
-    def _create_chunk(self, text: str, page: int, source: str, 
-                     framework: str, doc_type: str, metadata: Dict, 
-                     chunk_order: int = 0) -> Dict:
-        """Create a chunk dict with metadata."""
-        chunk_id = str(uuid.uuid4())
-        
-        chunk = {
-            'chunk_id': chunk_id,
-            'text': text,
-            'page': page,
-            'source': source,
-            'framework': framework,
-            'doc_type': doc_type,
-            'criterion': metadata.get('criterion'),
-            'tier': metadata.get('tier', 'general'),
-            'stage': 'general',
-            'chunk_order': chunk_order
-        }
-        
-        return chunk
-    
-    def _detect_naac_doc_type(self, filename: str) -> str:
-        """Detect NAAC document type from filename."""
+    def _detect_doc_type(self, filename: str, framework: str) -> str:
+        """Detect document type from filename."""
         filename_lower = filename.lower()
         
-        # Metric documents
-        if any(keyword in filename_lower for keyword in ['ssr', 'manual', 'quality indicator', 'qif', 'sss']):
-            return 'metric'
-        
-        # Policy documents
-        if any(keyword in filename_lower for keyword in ['raf', 'dvv', 'sop']):
+        if framework == 'NAAC':
+            # Metric documents
+            if any(keyword in filename_lower for keyword in ['ssr', 'manual', 'quality indicator', 'qif', 'sss']):
+                return 'metric'
+            # Policy documents
+            if any(keyword in filename_lower for keyword in ['raf', 'dvv', 'sop']):
+                return 'policy'
             return 'policy'
         
-        # Default to policy
-        return 'policy'
-    
-    def _detect_nba_doc_type(self, filename: str) -> str:
-        """Detect NBA document type from filename."""
-        filename_lower = filename.lower()
-        
-        # Prequalifier documents
-        if 'prequalifier' in filename_lower or 'pro_forma' in filename_lower:
-            return 'prequalifier'
-        
-        # Metric documents (includes SAR)
-        if any(keyword in filename_lower for keyword in ['sar', 'evaluation_guidelines', 'accreditation_manual']):
+        elif framework == 'NBA':
+            # Prequalifier documents
+            if 'prequalifier' in filename_lower or 'pro_forma' in filename_lower:
+                return 'prequalifier'
+            # Metric documents
+            if any(keyword in filename_lower for keyword in ['sar', 'evaluation_guidelines', 'accreditation_manual']):
+                return 'metric'
+            # Policy documents
+            if 'general_accreditation_manual' in filename_lower or 'general' in filename_lower:
+                return 'policy'
             return 'metric'
         
-        # Policy documents
-        if 'general_accreditation_manual' in filename_lower or 'general' in filename_lower:
-            return 'policy'
-        
-        # Default to metric
-        return 'metric'
+        return 'general'
+
+
+def validate_no_cross_metric_contamination(db_path: str) -> bool:
+    """
+    Validate that no chunk contains metric headers other than its own label.
     
-    def _detect_nba_tier(self, filename: str) -> str:
-        """Detect NBA tier from filename."""
-        filename_lower = filename.lower()
+    CRITICAL VALIDATION: This must pass before proceeding to Phase 2.
+    
+    Args:
+        db_path: Path to metadata.db
         
-        if 'tier' in filename_lower:
-            if 'tier-ii' in filename_lower or 'tier 2' in filename_lower:
-                return 'tier2'
-            else:
-                return 'tier1'
-        elif 'general' in filename_lower:
-            return 'general'
-        else:
-            return 'general'
+    Returns:
+        True if validation passes, False otherwise
+    """
+    import sqlite3
+    
+    conn = sqlite3.connect(db_path)
+    
+    cursor = conn.execute("""
+        SELECT chunk_id, criterion, text
+        FROM chunks
+        WHERE framework='NAAC'
+        AND criterion IS NOT NULL
+    """)
+    
+    violations = []
+    
+    for chunk_id, criterion, text in cursor.fetchall():
+        # Find all metric headers in chunk text
+        headers = re.findall(
+            r'([1-7]\.\d{1,2}\.\d{1,2})\s+QnM',
+            text
+        )
+        
+        unique_headers = set(headers)
+        
+        # Check if any header differs from chunk's label
+        for h in unique_headers:
+            if h != criterion:
+                violations.append((chunk_id, criterion, h))
+    
+    conn.close()
+    
+    if violations:
+        print("❌ CROSS-METRIC CONTAMINATION DETECTED:")
+        for chunk_id, labeled, found in violations:
+            print(f"  Chunk {chunk_id[:8]}... labeled '{labeled}' contains header '{found}'")
+        return False
+    
+    print("✅ PASS: Zero cross-metric contamination")
+    return True
 
 
 # Test function

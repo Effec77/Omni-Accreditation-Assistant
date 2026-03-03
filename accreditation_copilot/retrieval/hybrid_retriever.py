@@ -55,6 +55,7 @@ class HybridRetriever:
             framework: NAAC or NBA
             query_type: metric, policy, or prequalifier
             original_query: Original user query (for criterion boost)
+            explicit_metric: Pre-extracted explicit metric ID
             top_k_per_variant: Results per variant
             final_top_k: Final number of results to return
             
@@ -67,6 +68,14 @@ class HybridRetriever:
             raise ValueError(f"Invalid index key: {index_key}")
         
         index_name = self.INDEX_MAP[index_key]
+        
+        # PART 1: Adaptive fusion weights based on explicit metric detection
+        if explicit_metric:
+            dense_weight = 0.85
+            bm25_weight = 0.15
+        else:
+            dense_weight = 0.70
+            bm25_weight = 0.30
         
         # Aggregate results across variants
         all_results = {}  # chunk_id -> best result
@@ -103,9 +112,9 @@ class HybridRetriever:
             dense_norm = self.score_fusion.normalize_dense(dense_scores)
             bm25_norm = self.score_fusion.normalize_bm25(bm25_scores)
             
-            # Fuse with adjusted weights (0.7 dense + 0.3 BM25)
+            # Fuse with adaptive weights
             fused_scores = self.score_fusion.fuse_scores(
-                dense_norm, bm25_norm, weight_dense=0.7
+                dense_norm, bm25_norm, weight_dense=dense_weight
             )
             
             # Store results
@@ -124,10 +133,48 @@ class HybridRetriever:
         # Convert to list
         results = list(all_results.values())
         
-        # Apply stronger criterion boost (0.25 for explicit metrics)
-        results = self.score_fusion.apply_criterion_boost(
-            results, original_query, explicit_metric=explicit_metric, boost=0.25
-        )
+        # PART 2: Multiplicative criterion boost
+        if explicit_metric:
+            # Collect chunk IDs that need metadata
+            chunk_ids_to_check = [r['chunk_id'] for r in results]
+            
+            # Fetch metadata for all chunks (do this in main thread, not executor)
+            # We'll apply boost based on chunk_id pattern matching instead
+            for result in results:
+                chunk_id = result['chunk_id']
+                
+                # Extract criterion from chunk_id if possible
+                # Format: framework_source_criterion_page_order
+                # Example: NAAC_NAAC_SSR_Manual_Universities.pdf_3.2.1_65_0
+                parts = chunk_id.split('_')
+                
+                # Try to find criterion in chunk_id
+                chunk_criterion = None
+                for part in parts:
+                    # Check if part matches criterion pattern
+                    if '.' in part and part.replace('.', '').isdigit():
+                        chunk_criterion = part
+                        break
+                    elif part.startswith('C') and part[1:].isdigit():
+                        chunk_criterion = part
+                        break
+                    elif part.startswith('PO') or part.startswith('PEO'):
+                        chunk_criterion = part
+                        break
+                
+                if chunk_criterion:
+                    # Extract prefix (e.g., "3.2" from "3.2.1")
+                    if '.' in explicit_metric:
+                        prefix = ".".join(explicit_metric.split(".")[:2])
+                    else:
+                        prefix = explicit_metric
+                    
+                    # Exact match: 1.25x boost
+                    if chunk_criterion == explicit_metric:
+                        result['fused_score'] *= 1.25
+                    # Sibling criterion: 1.10x boost
+                    elif chunk_criterion.startswith(prefix):
+                        result['fused_score'] *= 1.10
         
         # Sort by fused score
         results.sort(key=lambda x: x['fused_score'], reverse=True)

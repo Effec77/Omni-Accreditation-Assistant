@@ -224,13 +224,102 @@ class RetrievalPipeline:
         
         return enriched
     
-    def _ensure_exact_matches(self, candidates: List[Dict], exact_match_chunk_ids: List[str]) -> List[Dict]:
+    def _assemble_candidates_tiered(self, query: str, query_variants: List[str],
+                                     framework: str, explicit_criterion: str,
+                                     top_k: int = 20) -> List[Dict]:
         """
-        Ensure exact match chunks are included in candidates.
+        Tiered candidate assembly for explicit metric queries.
+        
+        Tier 1 — Exact criterion match (SQLite lookup, guaranteed slots)
+        Tier 2 — Sibling criteria (same key indicator prefix)
+        Tier 3 — Hybrid retrieval fills remaining slots
+        
+        No hard filtering — all tiers contribute.
+        Tier assignment determines score floor, not exclusion.
+        """
+        import sqlite3
+        
+        candidates = []
+        seen_ids = set()
+        
+        conn = sqlite3.connect('data/metadata.db')
+        
+        # Extract prefix for sibling matching (e.g., 3.2.1 → 3.2)
+        prefix = '.'.join(explicit_criterion.split('.')[:2])
+        
+        # Tier 1 — exact match
+        cursor = conn.execute("""
+            SELECT chunk_id, text, criterion, source, page,
+                   doc_type, framework
+            FROM chunks
+            WHERE criterion = ? AND framework = ?
+        """, (explicit_criterion, framework))
+        
+        for row in cursor.fetchall():
+            chunk = dict(zip(
+                ['chunk_id','text','criterion','source',
+                 'page','doc_type','framework'], row
+            ))
+            chunk['tier'] = 1
+            chunk['dense_score'] = 0.99  # Very high score for exact match
+            chunk['bm25_score'] = 0.0
+            chunk['fused_score'] = 0.99  # Ensure it's at top of candidates
+            chunk['reranker_score'] = 0.0
+            candidates.append(chunk)
+            seen_ids.add(chunk['chunk_id'])
+        
+        # Tier 2 — siblings (same key indicator)
+        cursor = conn.execute("""
+            SELECT chunk_id, text, criterion, source, page,
+                   doc_type, framework
+            FROM chunks
+            WHERE criterion LIKE ? AND criterion != ?
+            AND framework = ?
+            LIMIT 6
+        """, (f"{prefix}%", explicit_criterion, framework))
+        
+        for row in cursor.fetchall():
+            chunk = dict(zip(
+                ['chunk_id','text','criterion','source',
+                 'page','doc_type','framework'], row
+            ))
+            if chunk['chunk_id'] not in seen_ids:
+                chunk['tier'] = 2
+                chunk['dense_score'] = 0.80
+                chunk['bm25_score'] = 0.0
+                chunk['fused_score'] = 0.80
+                chunk['reranker_score'] = 0.0
+                candidates.append(chunk)
+                seen_ids.add(chunk['chunk_id'])
+        
+        conn.close()
+        
+        # Tier 3 — hybrid fills remaining slots
+        remaining = top_k - len(candidates)
+        if remaining > 0:
+            # Run hybrid retrieval synchronously
+            hybrid_results = self.hybrid_retriever.retrieve(
+                query_variants, framework, 'metric', query,
+                explicit_criterion, 15, remaining + 5
+            )
+            for chunk in hybrid_results:
+                if chunk['chunk_id'] not in seen_ids:
+                    chunk['tier'] = 3
+                    candidates.append(chunk)
+                    seen_ids.add(chunk['chunk_id'])
+                    if len(candidates) >= top_k:
+                        break
+        
+        return candidates[:top_k]
+    
+    def _ensure_exact_matches(self, candidates: List[Dict], exact_match_chunk_ids: List[str], explicit_metric: str = None) -> List[Dict]:
+        """
+        PART 3: Guarantee exact match chunks are included in candidates.
         
         Args:
             candidates: Current candidate list
             exact_match_chunk_ids: Chunk IDs that must be included
+            explicit_metric: The explicit metric for boosting
             
         Returns:
             Updated candidates with exact matches guaranteed
@@ -241,21 +330,24 @@ class RetrievalPipeline:
         # Get existing chunk IDs
         existing_ids = set(c['chunk_id'] for c in candidates)
         
-        # Add missing exact matches
+        # Add missing exact matches at the beginning with strong boost
         for chunk_id in exact_match_chunk_ids:
             if chunk_id not in existing_ids:
-                # Add with high fused score to ensure inclusion
-                candidates.append({
-                    'chunk_id': chunk_id,
-                    'dense_score': 0.9,
-                    'bm25_score': 0.0,
-                    'fused_score': 0.9  # High score to ensure inclusion
-                })
+                # Fetch chunk metadata to get criterion
+                chunk = self.index_loader.get_chunk_metadata(chunk_id)
+                if chunk:
+                    # Insert at beginning with very high fused score (1.25x boost applied)
+                    # This ensures it will be in top candidates for reranking
+                    candidates.insert(0, {
+                        'chunk_id': chunk_id,
+                        'dense_score': 0.95,
+                        'bm25_score': 0.0,
+                        'fused_score': 0.95 * 1.25  # Apply 1.25x boost for exact match
+                    })
+                    break  # Only add one exact match if missing
         
-        # Re-sort by fused score
-        candidates.sort(key=lambda x: x['fused_score'], reverse=True)
-        
-        return candidates[:20]  # Keep top 20
+        # Keep top 20
+        return candidates[:20]
     
     async def run_retrieval(self, query: str, verbose: bool = False, 
                            enable_parent_expansion: bool = True) -> List[Dict]:
@@ -305,43 +397,53 @@ class RetrievalPipeline:
             for i, variant in enumerate(variants, 1):
                 print(f"  {i}. {variant}")
         
-        # Step 5: Run hybrid and HyDE retrieval in parallel
-        if verbose:
-            print(f"\nRunning parallel retrieval...")
-        
-        hybrid_results, hyde_results = await asyncio.gather(
-            self._run_hybrid_retrieval(variants, framework, query_type, query, explicit_metric),
-            self._run_hyde_retrieval(query, framework, query_type)
-        )
-        
-        if verbose:
-            print(f"  Hybrid: {len(hybrid_results)} results")
-            print(f"  HyDE: {len(hyde_results)} results")
-        
-        # Step 6: Conditional merge
-        use_hyde = self._should_use_hyde(hybrid_results, hyde_results)
-        
-        if verbose:
-            if use_hyde:
-                avg_hybrid = np.mean([r['fused_score'] for r in hybrid_results[:10]]) if hybrid_results else 0
-                avg_hyde = np.mean([r['dense_score'] for r in hyde_results[:10]]) if hyde_results else 0
-                print(f"\nHyDE Decision: MERGE (HyDE avg={avg_hyde:.3f} > Hybrid avg={avg_hybrid:.3f} * 1.05)")
-            else:
-                print(f"\nHyDE Decision: SKIP (Hybrid stronger or insufficient improvement)")
-        
-        if use_hyde:
-            candidates = self._merge_results(hybrid_results, hyde_results)
-        else:
-            candidates = hybrid_results[:20]
-        
-        # Step 7: Ensure exact matches are included
-        if exact_match_chunk_ids:
-            candidates = self._ensure_exact_matches(candidates, exact_match_chunk_ids)
+        # Step 5: Candidate assembly
+        # Use tiered assembly for explicit metrics, hybrid retrieval for open queries
+        if explicit_metric:
             if verbose:
-                print(f"Exact matches ensured in candidates")
-        
-        if verbose:
-            print(f"Candidates for reranking: {len(candidates)}")
+                print(f"\nUsing tiered candidate assembly...")
+            
+            candidates = self._assemble_candidates_tiered(
+                query, variants, framework, explicit_metric, top_k=20
+            )
+            
+            if verbose:
+                print(f"  Tier 1 (exact): {sum(1 for c in candidates if c.get('tier') == 1)} chunks")
+                print(f"  Tier 2 (siblings): {sum(1 for c in candidates if c.get('tier') == 2)} chunks")
+                print(f"  Tier 3 (hybrid): {sum(1 for c in candidates if c.get('tier') == 3)} chunks")
+                print(f"Candidates for reranking: {len(candidates)}")
+        else:
+            # Open query - use standard hybrid + HyDE
+            if verbose:
+                print(f"\nRunning parallel retrieval...")
+            
+            hybrid_results, hyde_results = await asyncio.gather(
+                self._run_hybrid_retrieval(variants, framework, query_type, query, explicit_metric),
+                self._run_hyde_retrieval(query, framework, query_type)
+            )
+            
+            if verbose:
+                print(f"  Hybrid: {len(hybrid_results)} results")
+                print(f"  HyDE: {len(hyde_results)} results")
+            
+            # Conditional merge
+            use_hyde = self._should_use_hyde(hybrid_results, hyde_results)
+            
+            if verbose:
+                if use_hyde:
+                    avg_hybrid = np.mean([r['fused_score'] for r in hybrid_results[:10]]) if hybrid_results else 0
+                    avg_hyde = np.mean([r['dense_score'] for r in hyde_results[:10]]) if hyde_results else 0
+                    print(f"\nHyDE Decision: MERGE (HyDE avg={avg_hyde:.3f} > Hybrid avg={avg_hybrid:.3f} * 1.05)")
+                else:
+                    print(f"\nHyDE Decision: SKIP (Hybrid stronger or insufficient improvement)")
+            
+            if use_hyde:
+                candidates = self._merge_results(hybrid_results, hyde_results)
+            else:
+                candidates = hybrid_results[:20]
+            
+            if verbose:
+                print(f"Candidates for reranking: {len(candidates)}")
         
         # Step 8: Rerank
         if verbose:
@@ -361,6 +463,20 @@ class RetrievalPipeline:
             
             if verbose:
                 print(f"Parent expansion complete")
+        
+        # PART 6: Enforce exact match at rank 1 after expansion
+        if explicit_metric and verbose:
+            # Check that exact match is present
+            found = any(r.get('criterion') == explicit_metric for r in results)
+            if not found:
+                print(f"[!] Warning: Exact match for {explicit_metric} not found in top-5")
+                print(f"   Top-5 criteria: {[r.get('criterion') for r in results]}")
+            else:
+                # Check that exact match is at rank 1
+                if results and results[0].get('criterion') != explicit_metric:
+                    print(f"[!] Warning: Exact match {explicit_metric} not at rank 1. Got {results[0].get('criterion')}")
+                else:
+                    print(f"[+] Exact match {explicit_metric} at rank 1")
         
         if verbose:
             print(f"\n{'='*60}")
