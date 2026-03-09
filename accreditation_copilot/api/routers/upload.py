@@ -96,14 +96,25 @@ async def ingest_uploaded_files():
         # Import institution ingestion runner
         from ingestion.institution.run_institution_ingestion import run_institution_ingestion
         
-        # Run ingestion for institution documents in data/raw_docs/
-        result = run_institution_ingestion(raw_docs_dir="data/raw_docs")
+        # Use absolute path relative to project root
+        project_root = Path(__file__).parent.parent.parent
+        raw_docs_dir = project_root / "data" / "raw_docs"
         
-        if result["status"] == "error":
-            raise HTTPException(status_code=500, detail=result["message"])
+        print(f"[INGESTION] Starting ingestion from: {raw_docs_dir}")
+        print(f"[INGESTION] Directory exists: {raw_docs_dir.exists()}")
+        
+        # Run ingestion for institution documents in data/raw_docs/
+        result = run_institution_ingestion(raw_docs_dir=str(raw_docs_dir))
+        
+        print(f"[INGESTION] Result: {result}")
+        
+        if result.get("status") == "error":
+            raise HTTPException(status_code=500, detail=result.get("message", "Unknown error"))
         
         return result
         
+    except HTTPException:
+        raise
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()

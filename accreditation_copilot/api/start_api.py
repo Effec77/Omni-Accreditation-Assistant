@@ -13,16 +13,16 @@ print(f"Working directory: {Path.cwd()}")
 
 try:
     import uvicorn
-    print("✓ uvicorn installed")
+    print("[OK] uvicorn installed")
 except ImportError:
-    print("✗ uvicorn not installed. Run: pip install fastapi uvicorn")
+    print("[ERROR] uvicorn not installed. Run: pip install fastapi uvicorn")
     sys.exit(1)
 
 try:
     import fastapi
-    print("✓ fastapi installed")
+    print("[OK] fastapi installed")
 except ImportError:
-    print("✗ fastapi not installed. Run: pip install fastapi")
+    print("[ERROR] fastapi not installed. Run: pip install fastapi")
     sys.exit(1)
 
 print("\nStarting server on http://localhost:8000")

@@ -7,6 +7,9 @@ import AuditDashboard from "@/components/AuditDashboard";
 import EvidenceViewer from "@/components/EvidenceViewer";
 import GapAnalysisPanel from "@/components/GapAnalysisPanel";
 import MetricsPanel from "@/components/MetricsPanel";
+import ComparisonComponent from "@/components/ComparisonComponent";
+import RecommendationEngine from "@/components/RecommendationEngine";
+import GapAnalysisVisualizer from "@/components/GapAnalysisVisualizer";
 import { Sparkles } from "lucide-react";
 
 export default function Home() {
@@ -76,30 +79,53 @@ export default function Home() {
           )}
 
           {!loading && auditResult && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in duration-500">
+            <div className="space-y-6 animate-in fade-in duration-500">
               {/* Audit Dashboard */}
-              <div className="lg:col-span-2">
-                <AuditDashboard result={auditResult} />
-              </div>
+              <AuditDashboard result={auditResult} />
+
+              {/* NAAC vs Institutional Comparison */}
+              {auditResult.dimensions && auditResult.dimensions.length > 0 && (
+                <ComparisonComponent 
+                  dimensions={auditResult.dimensions}
+                  coverageRatio={auditResult.coverage_ratio || 0}
+                />
+              )}
+
+              {/* Gap Analysis Visualizer */}
+              {auditResult.gaps && auditResult.gaps.length > 0 && (
+                <GapAnalysisVisualizer 
+                  gaps={auditResult.gaps}
+                  coverageRatio={auditResult.coverage_ratio || 0}
+                  totalDimensions={auditResult.dimensions?.length || 0}
+                  coveredDimensions={auditResult.dimensions_covered || []}
+                  missingDimensions={auditResult.dimensions_missing || []}
+                />
+              )}
+
+              {/* Recommendations */}
+              <RecommendationEngine 
+                confidenceScore={auditResult.confidence_score || 0}
+                coverageRatio={auditResult.coverage_ratio || 0}
+                missingDimensions={auditResult.dimensions_missing || []}
+                criterionId={auditResult.criterion || ""}
+                showTopOnly={false}
+              />
 
               {/* Evidence Viewer */}
-              <div>
-                <EvidenceViewer evidence={auditResult.evidence} />
-              </div>
+              <EvidenceViewer 
+                evidence={auditResult.evidence}
+                dimensions={auditResult.dimensions_covered || []}
+              />
 
-              {/* Gap Analysis */}
-              <div>
-                <GapAnalysisPanel 
-                  gaps={auditResult.gaps} 
-                  recommendations={auditResult.recommendations}
-                  result={auditResult}
-                />
-              </div>
+              {/* Legacy Gap Analysis Panel (for backward compatibility) */}
+              <GapAnalysisPanel 
+                gaps={auditResult.gaps} 
+                recommendations={auditResult.recommendations}
+                result={auditResult}
+              />
 
               {/* Metrics Panel */}
-              <div className="lg:col-span-2">
-                <MetricsPanel />
-              </div>
+              <MetricsPanel />
             </div>
           )}
         </div>

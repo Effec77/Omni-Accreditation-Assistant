@@ -11,7 +11,7 @@ NAAC_CRITERIA = [
     {
         "criterion": "3.2.1",
         "description": "Grants received from Government and non-governmental agencies for research projects / endowments in the institution during the last five years",
-        "query_template": "research funding grants from government and non-governmental agencies"
+        "query_template": "extramural research funding amount lakhs projects DST SERB DBT ICSSR government agencies year-wise"
     },
     {
         "criterion": "3.3.1",

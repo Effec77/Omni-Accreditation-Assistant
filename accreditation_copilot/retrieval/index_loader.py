@@ -20,9 +20,29 @@ class IndexLoader:
     """
     
     def __init__(self, index_dir: str = 'indexes', db_path: str = 'data/metadata.db'):
-        self.index_dir = Path(index_dir)
+        # Resolve paths relative to accreditation_copilot directory
+        # This handles both running from accreditation_copilot/ and accreditation_copilot/api/
+        project_root = Path(__file__).parent.parent
+        
+        # If paths are relative, resolve them from project root
+        if not Path(index_dir).is_absolute():
+            self.index_dir = project_root / index_dir
+        else:
+            self.index_dir = Path(index_dir)
+            
+        if not Path(db_path).is_absolute():
+            db_path = str(project_root / db_path)
+        
         self.framework_index_dir = self.index_dir / 'framework'  # MILESTONE 1: Framework indexes
         self.institution_index_dir = self.index_dir / 'institution'  # MILESTONE 1: Institution indexes
+        
+        # Debug logging
+        print(f"[IndexLoader] Project root: {project_root}")
+        print(f"[IndexLoader] Index dir: {self.index_dir}")
+        print(f"[IndexLoader] Institution index dir: {self.institution_index_dir}")
+        print(f"[IndexLoader] DB path: {db_path}")
+        print(f"[IndexLoader] Institution index exists: {(self.institution_index_dir / 'institution.index').exists()}")
+        
         self.metadata_store = MetadataStore(db_path)
         
         # Cache for loaded indices
@@ -127,10 +147,13 @@ class IndexLoader:
         
         results = []
         for score, idx in zip(scores[0], indices[0]):
-            if idx < len(chunk_ids):
+            # Convert NumPy types to Python types
+            idx = int(idx)
+            score = float(score)
+            if idx >= 0 and idx < len(chunk_ids):
                 results.append({
                     'chunk_id': chunk_ids[idx],
-                    'dense_score': float(score)
+                    'dense_score': score
                 })
         
         return results
@@ -149,6 +172,10 @@ class IndexLoader:
         """
         bm25, chunk_ids, _ = self.load_bm25_index(index_name)
         
+        # Handle empty/None BM25 index (framework indexes)
+        if bm25 is None or len(chunk_ids) == 0:
+            return []
+        
         # Get BM25 scores
         scores = bm25.get_scores(query_tokens)
         
@@ -157,7 +184,9 @@ class IndexLoader:
         
         results = []
         for idx in top_indices:
-            if idx < len(chunk_ids):
+            # Convert NumPy types to Python types
+            idx = int(idx)
+            if idx >= 0 and idx < len(chunk_ids):
                 results.append({
                     'chunk_id': chunk_ids[idx],
                     'bm25_score': float(scores[idx])

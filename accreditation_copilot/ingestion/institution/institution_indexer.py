@@ -37,9 +37,13 @@ class InstitutionIndexer:
             db_path: SQLite database path
         """
         self.model_name = model_name
-        self.index_dir = Path(index_dir)
+        
+        # Resolve paths relative to project root (3 levels up from this file)
+        project_root = Path(__file__).parent.parent.parent
+        self.index_dir = project_root / index_dir if not Path(index_dir).is_absolute() else Path(index_dir)
         self.index_dir.mkdir(parents=True, exist_ok=True)
-        self.db_path = Path(db_path)
+        self.db_path = project_root / db_path if not Path(db_path).is_absolute() else Path(db_path)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
         # Load embedding model
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
