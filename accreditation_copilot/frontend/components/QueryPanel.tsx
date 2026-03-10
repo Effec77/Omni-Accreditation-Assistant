@@ -89,7 +89,7 @@ export default function QueryPanel({ onAuditStart, onAuditComplete }: QueryPanel
         formData.append('files', file);
       });
 
-      const response = await fetch('http://localhost:8000/api/upload/', {
+      const response = await fetch('http://127.0.0.1:8000/api/upload/', {
         method: 'POST',
         body: formData,
       });
@@ -113,20 +113,22 @@ export default function QueryPanel({ onAuditStart, onAuditComplete }: QueryPanel
   const handleIngestFiles = async () => {
     setIsUploading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/upload/ingest', {
+      const response = await fetch('http://127.0.0.1:8000/api/upload/ingest', {
         method: 'POST',
       });
 
       if (!response.ok) {
-        throw new Error('Ingestion failed');
+        const errorText = await response.text();
+        console.error('Ingestion error:', errorText);
+        throw new Error(`Ingestion failed: ${response.status}`);
       }
 
       const result = await response.json();
       console.log('Ingestion successful:', result);
-      alert('Files ingested successfully! You can now run audits.');
+      alert(`Files ingested successfully! ${result.files_processed} files, ${result.chunks_created} chunks created.`);
     } catch (error) {
       console.error('Ingestion failed:', error);
-      alert('File ingestion failed. Please check the backend logs.');
+      alert(`File ingestion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
@@ -148,7 +150,7 @@ export default function QueryPanel({ onAuditStart, onAuditComplete }: QueryPanel
     onAuditStart();
 
     try {
-      const response = await fetch('http://localhost:8000/api/audit/run', {
+      const response = await fetch('http://127.0.0.1:8000/api/audit/run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

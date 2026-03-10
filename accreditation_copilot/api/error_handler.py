@@ -5,11 +5,36 @@ Catches errors from pipeline components and returns structured JSON responses.
 import sys
 from pathlib import Path
 import traceback
+import numpy as np
 from typing import Dict, Any, Callable
 from functools import wraps
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.evidence_normalizer import normalize_evidence_fields
+
+
+def convert_numpy_types(obj):
+    """
+    Convert NumPy types to Python native types for JSON serialization.
+    
+    Args:
+        obj: Object that may contain NumPy types
+        
+    Returns:
+        Object with NumPy types converted to Python types
+    """
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    else:
+        return obj
 
 
 def safe_audit_execution(func: Callable) -> Callable:
@@ -143,27 +168,34 @@ def normalize_evidence_fields_wrapper(chunk: Dict[str, Any]) -> Dict[str, Any]:
 def standardize_audit_response(result: Dict[str, Any]) -> Dict[str, Any]:
     """
     FIX 6: Ensure audit response follows consistent JSON schema.
+    Converts NumPy types to Python types for JSON serialization.
     
     Args:
         result: Raw audit result
         
     Returns:
-        Standardized audit response
+        Standardized audit response with Python native types
     """
-    return {
+    response = {
         "status": "success",
         "framework": result.get("framework", "unknown"),
         "criterion": result.get("criterion", "unknown"),
         "compliance_status": result.get("compliance_status", "unknown"),
-        "confidence_score": result.get("confidence_score", 0.0),
-        "coverage_ratio": result.get("coverage_ratio", 0.0),
+        "confidence_score": float(result.get("confidence_score", 0.0)),
+        "coverage_ratio": float(result.get("coverage_ratio", 0.0)),
         "gaps": result.get("gaps", []),
         "recommendations": result.get("recommendations", []),
         "evidence_sources": result.get("evidence_sources", []),
-        "evidence_count": result.get("evidence_count", 0),
-        "institution_evidence_count": result.get("institution_evidence_count", 0),
+        "evidence_count": int(result.get("evidence_count", 0)),
+        "institution_evidence_count": int(result.get("institution_evidence_count", 0)),
         "dimension_grounding": result.get("dimension_grounding", []),
         "gaps_identified": result.get("gaps_identified", []),
         "evidence_strength": result.get("evidence_strength", {}),
-        "timestamp": result.get("timestamp", None)
+        "timestamp": result.get("timestamp", None),
+        "dimensions_covered": result.get("dimensions_covered", []),
+        "dimensions_missing": result.get("dimensions_missing", []),
+        "explanation": result.get("explanation", "")
     }
+    
+    # Convert all NumPy types to Python types
+    return convert_numpy_types(response)

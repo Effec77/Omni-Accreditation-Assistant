@@ -28,6 +28,7 @@ class ConfidenceCalculator:
         Calculate confidence score and status.
         
         FIXED: Multiplicative penalty for missing dimensions.
+        MILESTONE 5: Only use institution chunks for scoring (framework chunks are for LLM context only).
         
         Args:
             evidence_scores: Output from EvidenceScorer
@@ -37,25 +38,49 @@ class ConfidenceCalculator:
         Returns:
             Confidence analysis with score and status
         """
-        # Average evidence score
+        # MILESTONE 5: Filter to only institution chunks for scoring
+        institution_indices = [
+            i for i, r in enumerate(retrieval_results)
+            if r.get('source_type') == 'institution'
+        ]
+        
+        # Filter evidence scores to only institution chunks
+        institution_evidence_scores = [
+            evidence_scores[i] for i in institution_indices
+            if i < len(evidence_scores)
+        ]
+        
+        # Filter retrieval results to only institution chunks
+        institution_retrieval_results = [
+            retrieval_results[i] for i in institution_indices
+        ]
+        
+        # If no institution evidence, return zero confidence
+        if not institution_evidence_scores or not institution_retrieval_results:
+            return {
+                'confidence_score': 0.0,
+                'status': 'Insufficient',
+                'base_score': 0.0,
+                'avg_evidence_score': 0.0,
+                'avg_retrieval_score': 0.0,
+                'coverage_ratio': 0.0
+            }
+        
+        # Average evidence score (institution only)
         avg_evidence_score = (
-            sum(e['evidence_score'] for e in evidence_scores) / len(evidence_scores)
-            if evidence_scores else 0.0
+            sum(e['evidence_score'] for e in institution_evidence_scores) / len(institution_evidence_scores)
         )
         
-        # Average retrieval score (reranker) - handle both formats
+        # Average retrieval score (reranker) - institution only
         total_reranker_score = 0.0
-        for r in retrieval_results:
+        for r in institution_retrieval_results:
             score = r.get('reranker_score', 0.0)
             if score == 0.0:
                 # Try nested format
                 score = r.get('scores', {}).get('reranker', 0.0)
             total_reranker_score += score
         
-        avg_retrieval_score = (
-            total_reranker_score / len(retrieval_results)
-            if retrieval_results else 0.0
-        )
+        avg_retrieval_score = total_reranker_score / len(institution_retrieval_results)
         
         # Base score: weighted combination
         base_score = (

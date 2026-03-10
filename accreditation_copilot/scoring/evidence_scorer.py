@@ -18,8 +18,10 @@ class EvidenceScorer:
     """Score evidence quality based on detectable signals."""
     
     # FIXED: Stricter patterns for real evidence only
-    CURRENCY_PATTERN = re.compile(r'(rs\.?|inr|₹)\s*\d+(\.\d+)?\s*(crore|lakh|lakhs|million)?', re.IGNORECASE)
-    PROJECT_COUNT_PATTERN = re.compile(r'\d+\s+(projects?|grants?|proposals?|schemes?)', re.IGNORECASE)
+    # Updated to match "1240 Lakhs" or "INR 1240" or "Rs. 1240" or "Funding: 1240 Lakhs"
+    CURRENCY_PATTERN = re.compile(r'(funding|amount|grant|total):\s*\d+(\.\d+)?\s*(crore|lakh|lakhs|million)|(rs\.?|inr|₹)?\s*\d+(\.\d+)?\s*(crore|lakh|lakhs|million)', re.IGNORECASE)
+    # Updated to match "Projects: 14" or "14 projects"
+    PROJECT_COUNT_PATTERN = re.compile(r'(projects?|grants?|proposals?|schemes?):\s*\d+|\d+\s+(projects?|grants?|proposals?|schemes?)', re.IGNORECASE)
     DATE_RANGE_PATTERN = re.compile(r'(19|20)\d{2}[-–]\d{2,4}', re.IGNORECASE)
     
     ENTITY_PATTERN = re.compile(r'\b(dst|serb|dbt|icssr|ugc|aicte)\b', re.IGNORECASE)

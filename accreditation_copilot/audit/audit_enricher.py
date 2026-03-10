@@ -13,7 +13,12 @@ class AuditEnricher:
     
     def __init__(self, db_path: str = "data/metadata.db"):
         """Initialize enricher with database path."""
-        self.db_path = Path(db_path)
+        # Resolve path relative to accreditation_copilot directory
+        if not Path(db_path).is_absolute():
+            project_root = Path(__file__).parent.parent
+            self.db_path = project_root / db_path
+        else:
+            self.db_path = Path(db_path)
     
     def enrich_sources(self, results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """

@@ -14,7 +14,7 @@ export default function MetricsPanel() {
 
   const fetchMetrics = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/metrics/');
+      const response = await fetch('http://127.0.0.1:8000/api/metrics/');
       const data = await response.json();
       setMetrics(data);
     } catch (error) {

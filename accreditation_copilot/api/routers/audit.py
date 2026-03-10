@@ -82,7 +82,9 @@ async def run_audit(request: AuditRequest):
         
         # Get criterion details from registry
         from criteria.criterion_registry import get_criteria
-        criteria = get_criteria(request.framework)
+        # Convert framework to uppercase for consistency
+        framework_upper = request.framework.upper()
+        criteria = get_criteria(framework_upper)
         criterion_def = next((c for c in criteria if c['criterion'] == request.criterion), None)
         
         if not criterion_def:
@@ -94,7 +96,7 @@ async def run_audit(request: AuditRequest):
         # Run audit with caching enabled
         result = auditor.audit_criterion(
             criterion_id=request.criterion,
-            framework=request.framework,
+            framework=framework_upper,
             query_template=query_template,
             description=criterion_def['description']
         )
