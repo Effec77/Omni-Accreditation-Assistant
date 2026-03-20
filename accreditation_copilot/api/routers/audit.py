@@ -43,6 +43,122 @@ def get_auditor():
         cache = AuditCache()
     return auditor, cache
 
+def calculate_grade(confidence_score: float, coverage_ratio: float) -> str:
+    """
+    Calculate NAAC/NBA grade based on confidence score only (matching frontend).
+    
+    Args:
+        confidence_score: Overall confidence (0-1)
+        coverage_ratio: Dimension coverage (0-1) - not used in calculation
+        
+    Returns:
+        Grade string (A+, A, B+, B, C)
+    """
+    # Match frontend grade ranges exactly
+    if confidence_score >= 0.85:
+        return 'A+'
+    elif confidence_score >= 0.70:
+        return 'A'
+    elif confidence_score >= 0.50:
+        return 'B+'
+    elif confidence_score >= 0.30:
+        return 'B'
+    else:
+        return 'C'
+
+def generate_personalized_recommendations(user_query: str, audit_result: dict, criterion: str, framework: str) -> list:
+    """Generate personalized recommendations based on user's question and audit results"""
+    try:
+        model_manager = get_model_manager()
+        groq_client = model_manager.get_groq_client()
+        
+        # Extract key info from audit
+        confidence = audit_result.get('confidence_score', 0)
+        coverage = audit_result.get('coverage_ratio', 0)
+        grade = calculate_grade(confidence, coverage)
+        missing_dims = audit_result.get('dimensions_missing', [])
+        gaps = audit_result.get('gaps', [])
+        compliance_status = audit_result.get('compliance_status', 'Unknown')
+        evidence_count = audit_result.get('institution_evidence_count', 0)
+        
+        # Determine target grade
+        grade_progression = {'C': 'B', 'B': 'B+', 'B+': 'A', 'A': 'A+', 'A+': 'A+'}
+        target_grade = grade_progression.get(grade, 'A+')
+        
+        # Build detailed context for AI
+        context = f"""
+You are an expert NAAC/NBA accreditation consultant. A university has asked you this question:
+
+"{user_query}"
+
+Here is their current audit status for {framework} Criterion {criterion}:
+
+CURRENT PERFORMANCE:
+- Current Grade: {grade}
+- Target Grade: {target_grade}
+- Confidence Score: {confidence*100:.1f}%
+- Coverage: {coverage*100:.1f}%
+- Compliance Status: {compliance_status}
+- Evidence Documents: {evidence_count} institutional documents found
+
+GAPS IDENTIFIED:
+{chr(10).join(f"- {gap}" for gap in gaps[:5]) if gaps else "- No major gaps identified"}
+
+MISSING DIMENSIONS:
+{chr(10).join(f"- {dim}" for dim in missing_dims) if missing_dims else "- All dimensions covered"}
+
+YOUR TASK:
+Provide a comprehensive, actionable answer to their question. Structure your response as follows:
+
+1. DIRECT ANSWER (2-3 sentences addressing their specific question)
+
+2. KEY ACTIONS (3-5 specific, measurable actions they should take)
+   - Be concrete: include numbers, timelines, specific documents needed
+   - Prioritize actions by impact
+
+3. EXPECTED IMPACT
+   - How will these actions improve their grade?
+   - What score improvement can they expect?
+
+4. TIMELINE
+   - Short-term (1-3 months)
+   - Medium-term (3-6 months)
+   - Long-term (6-12 months)
+
+5. BENCHMARKING
+   - What do top-performing institutions do differently?
+   - Specific examples from A+ institutions
+
+Keep it practical, specific, and focused on moving from {grade} to {target_grade}.
+"""
+        
+        response = groq_client.chat.completions.create(
+            model="llama-3.1-70b-versatile",
+            messages=[
+                {"role": "system", "content": "You are an expert NAAC/NBA accreditation consultant. Provide detailed, actionable advice with specific numbers, timelines, and benchmarks."},
+                {"role": "user", "content": context}
+            ],
+            temperature=0.7,
+            max_tokens=800
+        )
+        
+        recommendation_text = response.choices[0].message.content
+        
+        # Parse into structured format
+        return [{
+            "title": f"Personalized Roadmap: {grade} → {target_grade}",
+            "description": recommendation_text,
+            "priority": "High",
+            "impact": f"Can improve grade from {grade} to {target_grade}",
+            "current_grade": grade,
+            "target_grade": target_grade,
+            "actions": recommendation_text.split('\n')[:8]  # First 8 lines as actions
+        }]
+        
+    except Exception as e:
+        logger.error(f"Failed to generate personalized recommendations: {str(e)}")
+        return []
+
 class AuditRequest(BaseModel):
     framework: str  # "NAAC" or "NBA"
     criterion: str  # e.g., "3.2.1"
@@ -64,6 +180,9 @@ class AuditResponse(BaseModel):
     explanation: str
     timestamp: str
     cached: bool = False
+    grade: Optional[str] = None
+    personalized_recommendations: Optional[list] = None
+    user_query: Optional[str] = None
 
 @router.post("/run", response_model=AuditResponse)
 async def run_audit(request: AuditRequest):
@@ -90,8 +209,8 @@ async def run_audit(request: AuditRequest):
         if not criterion_def:
             raise HTTPException(status_code=404, detail=f"Criterion {request.criterion} not found for {request.framework}")
         
-        # Use custom query if provided, otherwise use template
-        query_template = request.query if request.query else criterion_def['query_template']
+        # ALWAYS use the criterion template for audit (ignore user query for scoring)
+        query_template = criterion_def['query_template']
         
         # Run audit with caching enabled
         result = auditor.audit_criterion(
@@ -100,6 +219,24 @@ async def run_audit(request: AuditRequest):
             query_template=query_template,
             description=criterion_def['description']
         )
+        
+        # If user provided a custom query, generate personalized recommendations
+        if request.query and request.query.strip():
+            logger.info(f"[CUSTOM QUERY] Generating personalized recommendations for: {request.query}")
+            try:
+                personalized_recs = generate_personalized_recommendations(
+                    user_query=request.query,
+                    audit_result=result,
+                    criterion=request.criterion,
+                    framework=framework_upper
+                )
+                # Add personalized recommendations to the result
+                result['personalized_recommendations'] = personalized_recs
+                result['user_query'] = request.query
+            except Exception as e:
+                logger.error(f"[CUSTOM QUERY ERROR] {str(e)}")
+                # Don't fail the audit if recommendation generation fails
+                result['personalized_recommendations'] = []
         
         # FIX 7: Log retrieval count
         evidence_count = result.get("evidence_count", 0)
@@ -118,6 +255,23 @@ async def run_audit(request: AuditRequest):
         
         # FIX 6: Standardize response
         standardized = standardize_audit_response(result)
+        
+        # Calculate grade
+        grade = calculate_grade(
+            standardized.get("confidence_score", 0.0),
+            standardized.get("coverage_ratio", 0.0)
+        )
+        
+        # Add grade to result
+        standardized['grade'] = grade
+        
+        # Debug logging
+        logger.info(f"[GRADE CALCULATION] Confidence: {standardized.get('confidence_score', 0.0):.3f}, Grade: {grade}")
+        
+        # If personalized recommendations were generated, add them to standardized
+        if 'personalized_recommendations' in result:
+            standardized['personalized_recommendations'] = result['personalized_recommendations']
+            standardized['user_query'] = result.get('user_query', '')
         
         return AuditResponse(
             criterion=request.criterion,
@@ -138,7 +292,10 @@ async def run_audit(request: AuditRequest):
             recommendations=standardized.get("recommendations", []),
             explanation=standardized.get("explanation", ""),
             timestamp=datetime.now().isoformat(),
-            cached=cached
+            cached=cached,
+            grade=grade,
+            personalized_recommendations=standardized.get('personalized_recommendations', []),
+            user_query=standardized.get('user_query', '')
         )
         
     except Exception as e:

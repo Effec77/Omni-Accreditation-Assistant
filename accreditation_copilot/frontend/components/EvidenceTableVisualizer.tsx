@@ -15,7 +15,7 @@ interface EvidenceTableVisualizerProps {
   dimensions: string[];
 }
 
-// Extract structured data from evidence text - IMPROVED VERSION
+// Extract structured data from evidence text - ENHANCED VERSION
 function extractTableData(text: string): { type: string; data: any[]; summary: any } | null {
   const summary = {
     totalProjects: 0,
@@ -24,88 +24,98 @@ function extractTableData(text: string): { type: string; data: any[]; summary: a
     years: new Set<string>()
   };
   
-  // Split by common delimiters and clean
+  // Clean text
   const cleanText = text.replace(/\s+/g, ' ').trim();
   
-  // Pattern 1: Look for explicit table markers
-  if (cleanText.includes('Table') && (cleanText.includes('Year') || cleanText.includes('Projects') || cleanText.includes('Funding'))) {
+  // Pattern 1: Extract year-wise data (works with your realistic PDFs)
+  const yearPattern = /(\d{4}-\d{2})/g;
+  const years = cleanText.match(yearPattern) || [];
+  
+  // Pattern 2: Extract numbers that look like project counts (typically 2-3 digits)
+  const projectPattern = /\b(\d{1,3})\b(?=\s*(?:projects?|Projects?|funded|research))/gi;
+  const projects = Array.from(cleanText.matchAll(projectPattern)).map(m => parseInt(m[1]));
+  
+  // Pattern 3: Extract funding amounts (typically 3-5 digits for Lakhs)
+  const fundingPattern = /(?:₹|INR|Rs\.?)?\s*(\d{3,5})(?:\s*(?:Lakhs?|L\b))?/gi;
+  const funding = Array.from(cleanText.matchAll(fundingPattern)).map(m => parseInt(m[1]));
+  
+  // Pattern 4: Extract agencies
+  const agencyPattern = /\b(DST|SERB|DBT|ICSSR|Industry|Corporate|UGC|AICTE|State\s+Govt?|Government)\b/gi;
+  const agencies = Array.from(new Set(Array.from(cleanText.matchAll(agencyPattern)).map(m => m[1].toUpperCase())));
+  
+  // Build year-wise table if we have years
+  if (years.length > 0 && (projects.length > 0 || funding.length > 0)) {
     const rows: any[] = [];
-    
-    // Extract year patterns: 2019-20, 2020-21, etc.
-    const yearMatches = cleanText.match(/(\d{4}-\d{2})/g) || [];
-    
-    // Extract project numbers: "Projects: 22" or "22 projects" or just numbers near "Projects"
-    const projectMatches = cleanText.match(/(?:Projects?:?\s*|Number of Projects:?\s*)(\d+)|(\d+)\s+projects?/gi) || [];
-    const projectNumbers = projectMatches.map(m => {
-      const num = m.match(/\d+/);
-      return num ? parseInt(num[0]) : 0;
-    });
-    
-    // Extract funding: "785 Lakhs" or "Funding: 785" or "₹785"
-    const fundingMatches = cleanText.match(/(?:Funding|Total|Amount)[:\s]*(?:₹|INR|Rs\.?)?\s*(\d+(?:,\d+)?)\s*(?:Lakhs?|Crore)?/gi) || [];
-    const fundingNumbers = fundingMatches.map(m => {
-      const num = m.match(/(\d+(?:,\d+)?)/);
-      return num ? parseInt(num[1].replace(/,/g, '')) : 0;
-    });
-    
-    // Extract agencies
-    const agencyPattern = /(DST|SERB|DBT|ICSSR|Industry|Corporate|UGC|AICTE|Government)/gi;
-    const agencyMatches = cleanText.match(agencyPattern) || [];
-    const uniqueAgencies = Array.from(new Set(agencyMatches.map(a => a.toUpperCase())));
-    
-    // Build rows by matching indices
-    const maxRows = Math.max(yearMatches.length, projectNumbers.length, fundingNumbers.length);
+    const maxRows = Math.max(years.length, projects.length, funding.length);
     
     for (let i = 0; i < maxRows; i++) {
-      const year = yearMatches[i] || '';
-      const projects = projectNumbers[i] || 0;
-      const funding = fundingNumbers[i] || 0;
-      const agencies = uniqueAgencies.slice(i * 2, (i + 1) * 2).join(', ') || uniqueAgencies.join(', ');
+      const year = years[i] || '';
+      const proj = projects[i] || 0;
+      const fund = funding[i] || 0;
+      const agencyList = agencies.slice(0, 3).join(', ') || 'Multiple';
       
-      if (year || projects || funding) {
-        rows.push({ year, projects, funding, agencies });
-        summary.totalProjects += projects;
-        summary.totalFunding += funding;
+      if (year || proj || fund) {
+        rows.push({ 
+          year, 
+          projects: proj, 
+          funding: fund, 
+          agencies: agencyList 
+        });
+        summary.totalProjects += proj;
+        summary.totalFunding += fund;
         if (year) summary.years.add(year);
       }
     }
     
-    uniqueAgencies.forEach(a => summary.agencies.add(a));
+    agencies.forEach(a => summary.agencies.add(a));
     
     if (rows.length > 0) {
       return { type: 'year-wise', data: rows, summary };
     }
   }
   
-  // Pattern 2: Agency-focused data
-  const agencyPattern = /(DST|SERB|DBT|ICSSR|Industry|Corporate)/gi;
-  const agencies = cleanText.match(agencyPattern);
-  
-  if (agencies && agencies.length > 0) {
-    const agencyData: any[] = [];
-    const uniqueAgencies = Array.from(new Set(agencies.map(a => a.toUpperCase())));
+  // Build agency-wise table if we have agencies
+  if (agencies.length > 0 && (projects.length > 0 || funding.length > 0)) {
+    const rows: any[] = [];
     
-    // Try to find numbers associated with each agency
-    uniqueAgencies.forEach(agency => {
-      const agencyIndex = cleanText.toUpperCase().indexOf(agency);
-      const contextAfter = cleanText.substring(agencyIndex, agencyIndex + 200);
+    agencies.forEach((agency, idx) => {
+      const proj = projects[idx] || Math.floor(projects.reduce((a, b) => a + b, 0) / agencies.length);
+      const fund = funding[idx] || Math.floor(funding.reduce((a, b) => a + b, 0) / agencies.length);
       
-      const projectMatch = contextAfter.match(/(\d+)\s*(?:projects?|Projects?)/i);
-      const fundingMatch = contextAfter.match(/(?:₹|INR|Rs\.?)?\s*(\d+(?:,\d+)?)\s*(?:Lakhs?|Crore)/i);
-      
-      const projects = projectMatch ? parseInt(projectMatch[1]) : 0;
-      const funding = fundingMatch ? parseInt(fundingMatch[1].replace(/,/g, '')) : 0;
-      
-      if (projects || funding) {
-        agencyData.push({ agency, projects, funding });
-        summary.totalProjects += projects;
-        summary.totalFunding += funding;
+      if (proj || fund) {
+        rows.push({ agency, projects: proj, funding: fund });
+        summary.totalProjects += proj;
+        summary.totalFunding += fund;
         summary.agencies.add(agency);
       }
     });
     
-    if (agencyData.length > 0) {
-      return { type: 'agency-wise', data: agencyData, summary };
+    if (rows.length > 0) {
+      return { type: 'agency-wise', data: rows, summary };
+    }
+  }
+  
+  // Fallback: If we have any numbers, create a simple summary
+  if (projects.length > 0 || funding.length > 0) {
+    const totalProj = projects.reduce((a, b) => a + b, 0);
+    const totalFund = funding.reduce((a, b) => a + b, 0);
+    
+    if (totalProj > 0 || totalFund > 0) {
+      summary.totalProjects = totalProj;
+      summary.totalFunding = totalFund;
+      agencies.forEach(a => summary.agencies.add(a));
+      years.forEach(y => summary.years.add(y));
+      
+      return {
+        type: 'summary',
+        data: [{ 
+          description: 'Total', 
+          projects: totalProj, 
+          funding: totalFund,
+          agencies: agencies.join(', ') || 'Multiple'
+        }],
+        summary
+      };
     }
   }
   
@@ -229,7 +239,7 @@ export default function EvidenceTableVisualizer({ evidence, dimensions }: Eviden
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-foreground flex items-center gap-2">
                     <CheckCircle size={18} className="text-accent" />
-                    {e.structured?.type === 'year-wise' ? 'Year-wise Funding Data' : 'Agency-wise Funding Data'}
+                    {e.structured?.type === 'year-wise' ? 'Year-wise Funding Data' : e.structured?.type === 'agency-wise' ? 'Agency-wise Funding Data' : 'Funding Summary'}
                   </h3>
                   <div className="flex items-center gap-2">
                     <div className="px-3 py-1 bg-accent/20 rounded-full">
@@ -252,11 +262,18 @@ export default function EvidenceTableVisualizer({ evidence, dimensions }: Eviden
                           <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Funding (₹ Lakhs)</th>
                           <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Agencies</th>
                         </>
-                      ) : (
+                      ) : e.structured?.type === 'agency-wise' ? (
                         <>
                           <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Agency</th>
                           <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Projects</th>
                           <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Funding (₹ Lakhs)</th>
+                        </>
+                      ) : (
+                        <>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Description</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Projects</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Funding (₹ Lakhs)</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Agencies</th>
                         </>
                       )}
                     </tr>
@@ -271,11 +288,18 @@ export default function EvidenceTableVisualizer({ evidence, dimensions }: Eviden
                             <td className="px-6 py-4 text-sm text-accent font-semibold">{row.funding ? `₹${row.funding.toLocaleString()}` : '-'}</td>
                             <td className="px-6 py-4 text-sm text-muted-foreground">{row.agencies || '-'}</td>
                           </>
-                        ) : (
+                        ) : e.structured?.type === 'agency-wise' ? (
                           <>
                             <td className="px-6 py-4 text-sm text-foreground font-semibold">{row.agency || '-'}</td>
                             <td className="px-6 py-4 text-sm text-foreground">{row.projects || '-'}</td>
                             <td className="px-6 py-4 text-sm text-accent font-semibold">{row.funding ? `₹${row.funding.toLocaleString()}` : '-'}</td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-6 py-4 text-sm text-foreground font-medium">{row.description || '-'}</td>
+                            <td className="px-6 py-4 text-sm text-foreground">{row.projects || '-'}</td>
+                            <td className="px-6 py-4 text-sm text-accent font-semibold">{row.funding ? `₹${row.funding.toLocaleString()}` : '-'}</td>
+                            <td className="px-6 py-4 text-sm text-muted-foreground">{row.agencies || '-'}</td>
                           </>
                         )}
                       </tr>
@@ -298,52 +322,56 @@ export default function EvidenceTableVisualizer({ evidence, dimensions }: Eviden
             Funding Distribution by Agency
           </h3>
           <div className="space-y-6">
-            {Array.from(globalSummary.agencies).map((agency, idx) => {
-              const agencyData = structuredEvidence
-                .flatMap(e => e.structured?.data || [])
-                .filter((row: any) => row.agency?.toUpperCase() === agency);
-              
-              const totalFunding = agencyData.reduce((sum: number, row: any) => 
-                sum + (row.funding || 0), 0
-              );
-              
-              const totalProjects = agencyData.reduce((sum: number, row: any) => 
-                sum + (row.projects || 0), 0
-              );
-              
-              const maxFunding = Math.max(...Array.from(globalSummary.agencies).map(a => {
-                const data = structuredEvidence
-                  .flatMap(e => e.structured?.data || [])
-                  .filter((row: any) => row.agency?.toUpperCase() === a);
-                return data.reduce((sum: number, row: any) => sum + (row.funding || 0), 0);
-              }));
-              
-              const percentage = maxFunding > 0 ? (totalFunding / maxFunding) * 100 : 0;
-              
-              return (
-                <div key={idx} className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-foreground font-semibold text-lg">{agency}</span>
-                      <p className="text-sm text-muted-foreground">{totalProjects} projects</p>
+            {Array.from(globalSummary.agencies).length > 0 ? (
+              Array.from(globalSummary.agencies).map((agency, idx) => {
+                // Get funding for this agency from all evidence
+                const agencyFunding = structuredEvidence.reduce((total, e) => {
+                  const agencyRows = e.structured?.data.filter((row: any) => 
+                    row.agency?.toUpperCase() === agency || 
+                    row.agencies?.toUpperCase().includes(agency)
+                  ) || [];
+                  return total + agencyRows.reduce((sum: number, row: any) => sum + (row.funding || 0), 0);
+                }, 0);
+                
+                const agencyProjects = structuredEvidence.reduce((total, e) => {
+                  const agencyRows = e.structured?.data.filter((row: any) => 
+                    row.agency?.toUpperCase() === agency || 
+                    row.agencies?.toUpperCase().includes(agency)
+                  ) || [];
+                  return total + agencyRows.reduce((sum: number, row: any) => sum + (row.projects || 0), 0);
+                }, 0);
+                
+                const percentage = globalSummary.totalFunding > 0 
+                  ? (agencyFunding / globalSummary.totalFunding) * 100 
+                  : 0;
+                
+                return (
+                  <div key={idx} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-foreground font-semibold text-lg">{agency}</span>
+                        <p className="text-sm text-muted-foreground">{agencyProjects} projects</p>
+                      </div>
+                      <span className="text-accent font-bold text-xl">₹{agencyFunding.toLocaleString()} L</span>
                     </div>
-                    <span className="text-accent font-bold text-xl">₹{totalFunding.toLocaleString()} L</span>
-                  </div>
-                  <div className="h-10 bg-muted/30 rounded-lg overflow-hidden border border-border/30">
-                    <div
-                      className="h-full bg-gradient-to-r from-accent/90 to-accent flex items-center px-4 transition-all duration-700 ease-out"
-                      style={{ width: `${percentage}%` }}
-                    >
-                      {percentage > 15 && (
-                        <span className="text-sm font-medium text-accent-foreground">
-                          {percentage.toFixed(0)}%
-                        </span>
-                      )}
+                    <div className="h-10 bg-muted/30 rounded-lg overflow-hidden border border-border/30">
+                      <div
+                        className="h-full bg-gradient-to-r from-accent/90 to-accent flex items-center px-4 transition-all duration-700 ease-out"
+                        style={{ width: `${Math.max(percentage, 5)}%` }}
+                      >
+                        {percentage > 10 && (
+                          <span className="text-sm font-medium text-accent-foreground">
+                            {percentage.toFixed(0)}%
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <p className="text-muted-foreground text-center py-8">No agency data available for chart view</p>
+            )}
           </div>
         </div>
       )}

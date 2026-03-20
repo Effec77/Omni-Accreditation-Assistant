@@ -172,13 +172,16 @@ class AuditCache:
         cache_file = self.cache_dir / f"cache_{cache_key}.json"
         return cache_file.exists()
     
-    def clear_cache(self, older_than_hours: Optional[int] = None):
+    def clear_cache(self, older_than_hours: Optional[int] = None) -> int:
         """
         Clear cached results.
         
         Args:
             older_than_hours: If specified, only clear cache older than this many hours.
                             If None, clear all cache.
+                            
+        Returns:
+            Number of cache entries cleared
         """
         cleared_count = 0
         
@@ -207,6 +210,7 @@ class AuditCache:
                 cleared_count += 1
         
         print(f"[CACHE CLEAR] Removed {cleared_count} cached result(s)")
+        return cleared_count
     
     def get_cache_stats(self) -> Dict[str, Any]:
         """

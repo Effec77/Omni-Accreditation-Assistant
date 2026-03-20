@@ -61,8 +61,8 @@ export default function QueryPanel({ onAuditStart, onAuditComplete }: QueryPanel
     }
   };
 
-  // File upload handler
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // File upload handler - automatically upload to backend
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const validFiles = files.filter(file => {
@@ -74,7 +74,38 @@ export default function QueryPanel({ onAuditStart, onAuditComplete }: QueryPanel
         alert('Some files were skipped. Only PDF, PNG, and JPG files are allowed.');
       }
       
+      if (validFiles.length === 0) return;
+      
       setUploadedFiles(prev => [...prev, ...validFiles]);
+      
+      // Automatically upload to backend
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        validFiles.forEach(file => {
+          formData.append('files', file);
+        });
+
+        const response = await fetch('http://127.0.0.1:8000/api/upload/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const result = await response.json();
+        console.log('Upload successful:', result);
+        alert(`Successfully uploaded ${validFiles.length} file(s). Now click "Ingest Files" to process them.`);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        alert('File upload failed. Please try again.');
+        // Remove files from UI if upload failed
+        setUploadedFiles(prev => prev.filter(f => !validFiles.includes(f)));
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 

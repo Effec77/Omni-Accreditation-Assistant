@@ -113,21 +113,36 @@ async def ingest_uploaded_files():
         project_root = Path(__file__).parent.parent.parent
         raw_docs_dir = project_root / "data" / "raw_docs"
         
-        print(f"[INGESTION] Starting ingestion from: {raw_docs_dir}")
+        print(f"\n{'='*80}")
+        print(f"STARTING FRESH INGESTION")
+        print(f"{'='*80}")
+        print(f"[INGESTION] Directory: {raw_docs_dir}")
         print(f"[INGESTION] Directory exists: {raw_docs_dir.exists()}")
         
-        # CRITICAL FIX: Clear old institution indexes and database entries
-        print("[INGESTION] Clearing old institution data...")
+        # List PDFs to be ingested
+        pdfs = list(raw_docs_dir.glob("*.pdf"))
+        print(f"[INGESTION] PDFs to ingest: {len(pdfs)}")
+        for pdf in pdfs:
+            print(f"  - {pdf.name}")
+        
+        # CRITICAL FIX: Clear old institution indexes
+        print(f"\n[STEP 1] Clearing old institution indexes...")
         indexes_dir = project_root / "indexes" / "institution"
         if indexes_dir.exists():
+            deleted_count = 0
             for index_file in indexes_dir.glob("institution*"):
                 try:
                     index_file.unlink()
-                    print(f"  Deleted: {index_file.name}")
+                    deleted_count += 1
+                    print(f"  ✓ Deleted: {index_file.name}")
                 except Exception as e:
-                    print(f"  Warning: Could not delete {index_file.name}: {e}")
+                    print(f"  ✗ Warning: Could not delete {index_file.name}: {e}")
+            print(f"  Total deleted: {deleted_count} files")
+        else:
+            print(f"  No indexes directory found")
         
-        # Clear institution chunks from database
+        # CRITICAL FIX: Clear institution chunks from database with VACUUM
+        print(f"\n[STEP 2] Clearing institution chunks from database...")
         import sqlite3
         db_path = project_root / "data" / "metadata.db"
         if db_path.exists():
@@ -136,43 +151,60 @@ async def ingest_uploaded_files():
                 cursor = conn.execute("DELETE FROM chunks WHERE source_type='institution'")
                 deleted_count = cursor.rowcount
                 conn.commit()
+                # VACUUM to reclaim space and reset database
+                conn.execute("VACUUM")
+                conn.commit()
                 conn.close()
-                print(f"  Deleted {deleted_count} old institution chunks from database")
+                print(f"  ✓ Deleted {deleted_count} old institution chunks")
+                print(f"  ✓ Database vacuumed")
             except Exception as e:
-                print(f"  Warning: Could not clear database: {e}")
+                print(f"  ✗ Warning: Could not clear database: {e}")
+        else:
+            print(f"  No database found")
         
-        # CRITICAL FIX: Clear audit cache to prevent stale results
-        print("[INGESTION] Clearing audit cache...")
+        # CRITICAL FIX: Clear audit cache
+        print(f"\n[STEP 3] Clearing audit cache...")
         from cache.audit_cache import AuditCache
         cache = AuditCache()
-        cache.clear_cache()
-        print("  Audit cache cleared")
+        cleared_count = cache.clear_cache()
+        print(f"  ✓ Audit cache cleared ({cleared_count} entries)")
         
-        # CRITICAL FIX: Clear IndexLoader cache to force reload of institution indexes
-        print("[INGESTION] Clearing IndexLoader cache...")
+        # CRITICAL FIX: Clear IndexLoader cache
+        print(f"\n[STEP 4] Clearing IndexLoader cache...")
         from retrieval.index_loader import IndexLoader
-        # Create a temporary instance just to clear the cache
-        # Note: This won't affect existing instances, but we need to restart
-        # the auditor to pick up new indexes
         temp_loader = IndexLoader()
         temp_loader.clear_institution_cache()
+        print(f"  ✓ IndexLoader cache cleared")
         
-        # CRITICAL: Reset the global auditor instance to force reload
-        # This ensures the next audit uses fresh indexes
+        # CRITICAL FIX: Reset global auditor instance
+        print(f"\n[STEP 5] Resetting auditor instance...")
         from api.routers.audit import get_auditor
         import api.routers.audit as audit_module
         audit_module.auditor = None
         audit_module.model_manager = None
         audit_module.cache = None
-        print("  Auditor instance reset - will reload on next audit")
+        print(f"  ✓ Auditor instance reset")
         
-        # Run ingestion for institution documents in data/raw_docs/
+        # Run ingestion
+        print(f"\n[STEP 6] Running ingestion pipeline...")
         result = run_institution_ingestion(raw_docs_dir=str(raw_docs_dir))
         
-        print(f"[INGESTION] Result: {result}")
+        print(f"\n{'='*80}")
+        print(f"INGESTION COMPLETE")
+        print(f"{'='*80}")
+        print(f"Result: {result}")
         
         if result.get("status") == "error":
             raise HTTPException(status_code=500, detail=result.get("message", "Unknown error"))
+        
+        # Add chunk count to response
+        if db_path.exists():
+            conn = sqlite3.connect(str(db_path))
+            cursor = conn.execute("SELECT COUNT(*) FROM chunks WHERE source_type='institution'")
+            chunk_count = cursor.fetchone()[0]
+            conn.close()
+            result["chunks_created"] = chunk_count
+            print(f"\n✓ Total chunks created: {chunk_count}")
         
         return result
         
@@ -181,5 +213,8 @@ async def ingest_uploaded_files():
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
-        print(f"[INGESTION ERROR] {error_details}")
+        print(f"\n{'='*80}")
+        print(f"INGESTION ERROR")
+        print(f"{'='*80}")
+        print(error_details)
         raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
