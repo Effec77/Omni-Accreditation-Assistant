@@ -1,571 +1,356 @@
-# Multimodal RAG Project
+# Omni Accreditation Copilot
 
-This repository contains the **Omni-Accreditation Compliance Copilot** system and related validation tools.
+> AI-powered accreditation compliance assessment platform for educational institutions
 
-## Project Structure
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-```
-.
-├── accreditation_copilot/    # Main application
-│   ├── data/                 # Data storage
-│   ├── ingestion/            # Document processing
-│   ├── retrieval/            # Hybrid search
-│   ├── scoring/              # Compliance scoring
-│   ├── synthesis/            # LLM synthesis
-│   ├── evaluation/           # Metrics & evaluation
-│   └── utils/                # Utilities
-│
-├── docs/                     # Documentation
-│   ├── PHASE0_REPORT.md     # Environment setup report
-│   ├── SETUP_GUIDE.md       # Setup instructions
-│   └── ...                  # Other documentation
-│
-├── testing/                  # Validation scripts
-│   ├── validate_phase0.py   # Phase 0 validation
-│   ├── verify_cuda.py       # CUDA verification
-│   └── ...                  # Other test scripts
-│
-├── venv/                     # Python virtual environment
-├── .env                      # Environment variables (not in git)
-└── .env.example             # Environment template
-```
+## Overview
+
+Omni Accreditation Copilot automates the accreditation compliance assessment process for educational institutions. Using advanced AI and RAG (Retrieval-Augmented Generation) technology, it analyzes institutional documents against NAAC and NBA frameworks, providing detailed compliance reports, gap analysis, and actionable recommendations.
+
+### Key Features
+
+- ✅ **Automated Compliance Audits** - Evaluate 127 NAAC criteria automatically
+- 📊 **CGPA Calculation** - Automatic NAAC CGPA scoring (0-4 scale) with grade assignment
+- 🔍 **Intelligent Document Analysis** - RAG-based evidence extraction and analysis
+- 📈 **Gap Detection** - Identifies missing evidence and compliance gaps
+- 💡 **Actionable Recommendations** - Specific steps to improve accreditation scores
+- 🤖 **AI-Powered Insights** - LLM-based compliance reasoning and synthesis
+- 🔄 **Multi-Framework Support** - Supports both NAAC and NBA frameworks
+
+### Demo
+
+![Full Audit Dashboard](docs/images/dashboard.png)
+*Full NAAC Audit Dashboard with CGPA calculation and criterion-wise breakdown*
 
 ## Quick Start
 
-### 1. Activate Virtual Environment
-
-```bash
-# Windows
-.\venv\Scripts\activate
-
-# Linux/Mac
-source venv/bin/activate
-```
-
-### 2. Validate Environment
-
-```bash
-cd accreditation_copilot
-python ..\testing\validate_phase0.py
-```
-
-### 3. Run Application
-
-```bash
-cd accreditation_copilot
-python main.py
-```
-
-## Documentation
-
-All documentation is in the `docs/` folder:
-- **PHASE0_REPORT.md** - Environment validation results
-- **SETUP_GUIDE.md** - Detailed setup instructions
-- **ENVIRONMENT_REPORT.md** - Technical environment details
-
-## Testing
-
-Validation and test scripts are in the `testing/` folder.
-
-## Configuration
-
-1. Copy `.env.example` to `.env`
-2. Add your API keys:
-   - Groq API keys
-   - LangSmith API key (optional)
-3. Configure Ollama host if needed
-
-## System Requirements
-
-- Python 3.12+
-- NVIDIA GPU with CUDA support (RTX 4060 or better)
-- 8GB+ VRAM
-- Ollama with LLaVA model
-
-## Current Status
-
-✅ **Phase 0 Complete** - Environment validated and ready  
-🔄 **Phase 1 Next** - Ingestion pipeline implementation
-
-See `docs/PHASE0_REPORT.md` for detailed validation results.
-
-
-
-<div align="center">
-
-# 🎓 Accreditation Copilot
-
-### Intelligent RAG System for NAAC & NBA Accreditation Compliance
-
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.5.1-red.svg)](https://pytorch.org/)
-[![CUDA](https://img.shields.io/badge/CUDA-12.1-green.svg)](https://developer.nvidia.com/cuda-toolkit)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Documentation](#-documentation) • [Performance](#-performance)
-
-</div>
-
----
-
-## 🌟 Overview
-
-**Accreditation Copilot** is a state-of-the-art Retrieval-Augmented Generation (RAG) system designed to help educational institutions navigate the complex requirements of:
-
-- 🏛️ **NAAC** (National Assessment and Accreditation Council)
-- 🎯 **NBA** (National Board of Accreditation)
-
-Built with cutting-edge AI technologies, it provides accurate, context-rich answers to accreditation queries in under a second.
-
----
-
-## ✨ Features
-
-<table>
-<tr>
-<td width="50%">
-
-### 🔍 **Hybrid Retrieval**
-- Dense search with FAISS
-- Sparse search with BM25
-- Reciprocal Rank Fusion
-- Cross-encoder reranking
-
-</td>
-<td width="50%">
-
-### 🧠 **Smart Context**
-- Parent-child chunk expansion
-- 2.8x context enrichment
-- Token-optimized (300-400 tokens)
-- Hierarchical sibling addition
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### ⚡ **High Performance**
-- ~900ms query response time
-- GPU-accelerated embeddings
-- Round-robin API key rotation
-- 100% sibling addition success
-
-</td>
-<td width="50%">
-
-### 🎯 **Precision Retrieval**
-- Metric-specific detection
-- Criterion-based boosting
-- Framework auto-detection
-- Exact match guarantee
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 Quick Start
-
 ### Prerequisites
 
-```bash
-✅ Python 3.12+
-✅ CUDA-capable GPU (optional but recommended)
-✅ 8GB+ RAM
-✅ Groq API keys (get them at console.groq.com)
-```
+- Python 3.12+
+- Node.js 18+
+- CUDA-capable GPU (recommended)
+- 16GB+ RAM
 
 ### Installation
 
 ```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd accreditation_copilot
+# Clone repository
+git clone https://github.com/Effec77/Omni-Accreditation-Assistant.git
+cd Omni-Accreditation-Assistant
+git checkout Testing
 
-# 2. Create virtual environment
+# Backend setup
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 3. Install dependencies
+cd accreditation_copilot
 pip install -r requirements.txt
 
-# 4. Configure environment
+# Configure environment
 cp .env.example .env
-# Edit .env and add your Groq API keys
+# Edit .env and add your API keys
 
-# 5. Add PDF documents
-# Place NAAC PDFs in: data/raw_docs/naac/
-# Place NBA PDFs in: data/raw_docs/nba/
+# Frontend setup
+cd frontend
+npm install
 
-# 6. Build indices
-python scripts/rebuild_ingestion.py
-
-# 7. Test the system
-python tests/test_phase2_2_verification.py
+# Install Ollama (local LLM fallback)
+# Download from https://ollama.ai/download
+ollama pull llama3.1:8b
+ollama pull llava
 ```
 
-### Expected Output
-
-```
-✅ Retrieval completed successfully
-   Retrieved 5 results
-
-Result #1:
-  Framework: NAAC
-  Criterion: 3.3.1
-  Siblings Used: 3
-  Child Tokens: 304 → Parent Tokens: 1150
-  Reranker Score: 0.803
-  ✅ Token limit OK (under 1200)
-
-✅ ALL TESTS PASSED
-```
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-graph LR
-    A[User Query] --> B[Framework Router]
-    B --> C[Query Expander]
-    C --> D[Hybrid Retrieval]
-    D --> E[FAISS Dense]
-    D --> F[BM25 Sparse]
-    E --> G[Score Fusion]
-    F --> G
-    G --> H[Reranker]
-    H --> I[Parent Expander]
-    I --> J[Top-5 Results]
-    
-    style A fill:#e1f5ff
-    style J fill:#d4edda
-    style D fill:#fff3cd
-    style H fill:#f8d7da
-```
-
-### Pipeline Flow
-
-1. **Framework Detection** → Identifies NAAC or NBA queries
-2. **Query Expansion** → Generates 6 query variants
-3. **Hybrid Retrieval** → Searches with FAISS (dense) + BM25 (sparse)
-4. **Score Fusion** → Combines results using Reciprocal Rank Fusion
-5. **Reranking** → Cross-encoder scoring for top-10 candidates
-6. **Parent Expansion** → Adds sibling chunks for richer context
-7. **Results** → Returns top-5 enriched results
-
----
-
-## 📊 Performance
-
-<table>
-<tr>
-<th>Metric</th>
-<th>Value</th>
-<th>Status</th>
-</tr>
-<tr>
-<td>Query Response Time</td>
-<td>~900ms</td>
-<td>⚡ Fast</td>
-</tr>
-<tr>
-<td>Context Expansion</td>
-<td>2.8x average</td>
-<td>📈 Excellent</td>
-</tr>
-<tr>
-<td>Chunk Size Distribution</td>
-<td>88.7% in 300-400 tokens</td>
-<td>🎯 Optimal</td>
-</tr>
-<tr>
-<td>Sibling Addition Rate</td>
-<td>100%</td>
-<td>✅ Perfect</td>
-</tr>
-<tr>
-<td>GPU Memory Usage</td>
-<td>1.2GB / 8GB (15%)</td>
-<td>💚 Efficient</td>
-</tr>
-<tr>
-<td>Ingestion Speed</td>
-<td>~2 min for 14 PDFs</td>
-<td>⚡ Fast</td>
-</tr>
-</table>
-
-### Benchmark Results
-
-```
-📊 Retrieval Quality
-├─ Precision@1: 80%
-├─ Precision@5: 100%
-└─ Avg Reranker Score: 0.68
-
-🎯 Context Quality
-├─ Avg Siblings Added: 2.0
-├─ Token Budget Usage: 82%
-└─ Context Completeness: +85%
-
-⚡ System Efficiency
-├─ Retrieval Time: 900ms
-├─ GPU Utilization: 15%
-└─ Throughput: 67 queries/min
-```
-
----
-
-## 🛠️ Technology Stack
-
-<div align="center">
-
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| **Language** | Python | 3.12.10 |
-| **Deep Learning** | PyTorch | 2.5.1+cu121 |
-| **Embeddings** | BAAI/bge-base-en-v1.5 | 768-dim |
-| **Reranker** | BAAI/bge-reranker-base | - |
-| **Vector Store** | FAISS | IndexFlatIP |
-| **Sparse Retrieval** | BM25 | rank-bm25 |
-| **Database** | SQLite | 3.x |
-| **LLM API** | Groq | - |
-| **PDF Processing** | PyMuPDF | - |
-
-</div>
-
----
-
-## 📁 Project Structure
-
-```
-accreditation_copilot/
-│
-├── 📄 README.md                    # You are here
-├── 📄 requirements.txt             # Python dependencies
-├── 🐍 main.py                      # Main entry point
-│
-├── 📦 ingestion/                   # Phase 1: Document Processing
-│   ├── pdf_processor.py           # PDF text extraction
-│   ├── semantic_chunker.py        # Token-based chunking
-│   └── run_ingestion.py           # Ingestion orchestrator
-│
-├── 🔍 retrieval/                   # Phase 2: Hybrid Retrieval
-│   ├── retrieval_pipeline.py      # Main orchestrator
-│   ├── hybrid_retriever.py        # FAISS + BM25
-│   ├── parent_expander.py         # Context expansion
-│   ├── reranker.py                # Cross-encoder
-│   └── ... (9 more modules)
-│
-├── 🛠️ utils/                       # Utilities
-│   ├── metadata_store.py          # SQLite interface
-│   └── groq_pool.py               # API key rotation
-│
-├── 🧪 tests/                       # Test Suite
-│   └── test_phase2_2_verification.py
-│
-├── 📜 scripts/                     # Utility Scripts
-│   └── rebuild_ingestion.py       # Rebuild indices
-│
-├── 📚 docs/                        # Documentation
-│   ├── COMPLETE_IMPLEMENTATION_GUIDE.md
-│   ├── PHASE2_OUTPUT_EXAMPLES.md
-│   └── QUICK_START.md
-│
-├── 💾 data/                        # Data Storage
-│   ├── metadata.db                # Chunk metadata
-│   └── raw_docs/                  # Source PDFs
-│
-└── 🗂️ indexes/                     # Vector Indices
-    ├── *.index                    # FAISS indices
-    └── *_bm25.pkl                 # BM25 indices
-```
-
----
-
-## 📖 Documentation
-
-<table>
-<tr>
-<td width="33%" align="center">
-
-### 📘 [Complete Guide](docs/COMPLETE_IMPLEMENTATION_GUIDE.md)
-Full technical documentation with architecture details
-
-</td>
-<td width="33%" align="center">
-
-### 🚀 [Quick Start](docs/QUICK_START.md)
-Get up and running in 5 minutes
-
-</td>
-<td width="33%" align="center">
-
-### 📊 [Output Examples](docs/PHASE2_OUTPUT_EXAMPLES.md)
-Real retrieval results and comparisons
-
-</td>
-</tr>
-</table>
-
-### Phase Documentation
-
-- 📄 [Phase 1: Ingestion Pipeline](docs/PHASE1_CORRECTION_SUMMARY.md)
-- 📄 [Phase 1.1: Chunk Optimization](docs/PHASE1_1_COMPLETE.md)
-- 📄 [Phase 2: Hybrid Retrieval](docs/PHASE2_SUMMARY.md)
-- 📄 [Phase 2.1: Precision Upgrade](docs/PHASE2_1_SUMMARY.md)
-- 📄 [Phase 2.2: Parent-Child Expansion](docs/PHASE2_2_CLEAN_VERIFICATION.md)
-
----
-
-## 🧪 Testing
-
-Run the test suite to verify everything works:
+### Running the Application
 
 ```bash
-# Full verification test
-python tests/test_phase2_2_verification.py
+# Terminal 1: Start backend
+cd accreditation_copilot/api
+python start_api.py
 
-# Individual phase tests
-python tests/test_phase2.py          # Phase 2 retrieval
-python tests/test_phase2_1.py        # Phase 2.1 precision
-python tests/test_groq_keys.py       # API key rotation
+# Terminal 2: Start frontend
+cd accreditation_copilot/frontend
+npm run dev
 ```
 
----
+Access the application at `http://localhost:3000`
 
-## ⚙️ Configuration
+## Documentation
+
+- 📖 [Complete Documentation](DOCUMENTATION.md) - Full user and developer guide
+- 🏗️ [System Architecture](SYSTEM_ARCHITECTURE.md) - Detailed technical architecture
+- 🚀 [Quick Start Guide](QUICK_START_FULL_AUDIT.md) - Get started quickly
+- 🔧 [Troubleshooting](TROUBLESHOOTING_FULL_AUDIT.md) - Common issues and solutions
+- 🤖 [Ollama Fallback Guide](OLLAMA_FALLBACK_IMPLEMENTED.md) - LLM fallback system
+
+## Architecture
+
+### High-Level Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Frontend (Next.js)                        │
+│  Dashboard | Criteria Selector | Help Chatbot               │
+└────────────────────────┬────────────────────────────────────┘
+                         │ REST API
+┌────────────────────────┴────────────────────────────────────┐
+│                    Backend (FastAPI)                         │
+│  Audit Router | Upload Router | Chatbot Router              │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+┌────────────────────────┴────────────────────────────────────┐
+│                  Audit Engine (Core)                         │
+│  Query Expansion → Dual Retrieval → Evidence Scoring        │
+│  → Dimension Checking → Confidence Calculation → LLM        │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+┌────────────────────────┴────────────────────────────────────┐
+│                  Data & AI Layer                             │
+│  FAISS Indexes | SQLite DB | Groq API | Ollama              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Technology Stack
+
+**Backend**:
+- FastAPI (Python 3.12)
+- FAISS (vector search)
+- SQLite (metadata)
+- BGE embeddings & reranker
+- Groq API (Llama 3.3 70B)
+- Ollama (Llama 3.1 8B, LLaVA)
+
+**Frontend**:
+- Next.js 14 (TypeScript)
+- React 18
+- Tailwind CSS
+- shadcn/ui
+
+## Features in Detail
+
+### 1. Full NAAC Audit
+
+Comprehensive evaluation of all 7 NAAC criteria (127 metrics):
+- Automatic CGPA calculation
+- Letter grade assignment (A++, A+, A, B++, B+, B, C, D)
+- Criterion-wise breakdown
+- Evidence sources
+- Gap analysis
+- Improvement suggestions
+
+### 2. Criterion-Level Analysis
+
+Detailed compliance assessment for individual criteria:
+- Confidence scoring (0-1 scale)
+- Dimension coverage analysis
+- Evidence extraction and grounding
+- Gap identification
+- Actionable recommendations
+
+### 3. Intelligent Document Processing
+
+Advanced RAG pipeline:
+- **Dual Retrieval**: Framework guidelines + institutional evidence
+- **Semantic Search**: BGE embeddings for accurate retrieval
+- **Reranking**: BGE reranker for relevance optimization
+- **Evidence Scoring**: Multi-signal quality assessment
+- **Quality Boost**: 30% boost for high-quality evidence
+
+### 4. AI-Powered Analysis
+
+LLM-based compliance reasoning:
+- **Primary**: Groq API with Llama 3.3 70B
+- **Fallback**: Local Ollama with Llama 3.1 8B
+- **Multi-Key Pool**: 7+ API keys (700k tokens/day)
+- **Automatic Failover**: Seamless Groq→Ollama switching
+
+### 5. Help Chatbot
+
+Context-aware assistance:
+- Accreditation framework guidance
+- Document upload help
+- Troubleshooting support
+- Powered by Google Gemini 1.5 Pro
+
+## API Reference
+
+### Full Audit
+
+```http
+POST /api/audit/run-full-audit
+```
+
+**Response**:
+```json
+{
+  "overall_result": {
+    "cgpa": 3.26,
+    "letter_grade": "A+",
+    "accreditation_status": "Accredited"
+  },
+  "individual_criteria": [...],
+  "improvement_suggestions": [...]
+}
+```
+
+### Criterion Audit
+
+```http
+POST /api/audit/run
+Content-Type: application/json
+
+{
+  "framework": "NAAC",
+  "criterion": "3.1.1",
+  "query": "Optional custom query"
+}
+```
+
+See [DOCUMENTATION.md](DOCUMENTATION.md) for complete API reference.
+
+## Configuration
 
 ### Environment Variables
 
-Edit `accreditation_copilot/.env`:
+Create `.env` file in `accreditation_copilot/`:
 
 ```env
-# Groq API Keys (supports up to 9 keys)
-GROQ_API_KEY_1=gsk_your_first_key_here
-GROQ_API_KEY_2=gsk_your_second_key_here
+# Required
+GROQ_API_KEY_1=your_groq_key_here
+GEMINI_API_KEY=your_gemini_key_here
 
-# LangSmith (optional - for observability)
-LANGCHAIN_API_KEY=ls_your_key_here
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_PROJECT=accreditation-copilot
+# Optional (for more capacity)
+GROQ_API_KEY_2=additional_key
+GROQ_API_KEY_3=additional_key
+# ... up to GROQ_API_KEY_9
 
-# HuggingFace (optional - for private models)
-# HF_TOKEN=hf_your_token_here
-
-# Ollama (optional - for local LLMs)
-# OLLAMA_HOST=http://localhost:11434
+# Optional
+HF_TOKEN=your_huggingface_token
+LANGCHAIN_API_KEY=your_langsmith_key
+OLLAMA_HOST=http://localhost:11434
 ```
 
-### Chunking Parameters
+Get API keys:
+- Groq: https://console.groq.com/keys
+- Gemini: https://makersuite.google.com/app/apikey
+- HuggingFace: https://huggingface.co/settings/tokens
 
-Adjust in `ingestion/semantic_chunker.py`:
+## Performance
 
-```python
-chunk_size = 300        # Target tokens per chunk
-chunk_overlap = 50      # Overlap between chunks
-hard_cap = 400          # Maximum allowed tokens
-absolute_max = 450      # Never exceed this limit
+### Metrics
+
+- **Embedding Generation**: ~50ms per query (GPU)
+- **FAISS Search**: ~10ms per query
+- **Reranking**: ~100ms for 10 documents (GPU)
+- **LLM Synthesis**: ~2s (Groq) / ~10s (Ollama)
+- **Single Criterion Audit**: ~5-8 seconds
+- **Full NAAC Audit**: ~10-15 minutes (127 criteria)
+
+### Optimization
+
+- Model caching (singleton pattern)
+- Vector indexing (FAISS)
+- GPU acceleration (CUDA)
+- API key pooling (7x capacity)
+- Result caching (24 hours)
+- Batch processing
+
+## Troubleshooting
+
+### Common Issues
+
+**Low Scores for Good Documents**:
+```bash
+# Check institution data
+python check_institution_data.py
+
+# Run diagnostics
+python deep_score_diagnostic.py
 ```
 
-### Retrieval Parameters
+**Rate Limit Errors**:
+- System automatically falls back to Ollama
+- Add more Groq API keys (up to 9 supported)
 
-Adjust in `retrieval/retrieval_pipeline.py`:
-
-```python
-top_k_per_variant = 20      # Results per query variant
-top_k_fusion = 10           # Results after fusion
-top_k_final = 5             # Final results after reranking
-max_parent_tokens = 1200    # Token limit for parent context
+**Backend Not Starting**:
+```bash
+python restart_backend.py
 ```
 
----
+See [TROUBLESHOOTING_FULL_AUDIT.md](TROUBLESHOOTING_FULL_AUDIT.md) for detailed solutions.
 
-## 🗺️ Roadmap
+## Development
 
-### ✅ Completed
+### Project Structure
 
-- [x] Phase 0: Environment Setup
-- [x] Phase 1: Ingestion Pipeline
-- [x] Phase 1.1: Chunk Optimization
-- [x] Phase 2: Hybrid Retrieval
-- [x] Phase 2.1: Precision Upgrades
-- [x] Phase 2.2: Parent-Child Expansion
+```
+accreditation_copilot/
+├── api/              # FastAPI backend
+├── frontend/         # Next.js frontend
+├── audit/            # Audit engine
+├── retrieval/        # Document retrieval
+├── scoring/          # Scoring pipeline
+├── llm/              # LLM components
+├── utils/            # Utilities
+└── models/           # Model management
+```
 
-### 🔄 In Progress
+### Adding New Criteria
 
-- [ ] Phase 3: Answer Generation
-  - [ ] LLM integration
-  - [ ] Citation tracking
-  - [ ] Confidence scoring
+1. Edit `criteria/criterion_registry.py`
+2. Add criterion definition
+3. Restart backend
 
-### 📋 Planned
+### Modifying Scoring
 
-- [ ] Phase 4: Evaluation
-  - [ ] Retrieval metrics
-  - [ ] Answer quality assessment
-  - [ ] End-to-end testing
-- [ ] Web Interface
-- [ ] Multi-modal support (images, tables)
-- [ ] Real-time document updates
-- [ ] Comparative analysis (NAAC vs NBA)
+1. Edit `scoring/evidence_scorer.py` or `scoring/confidence_calculator.py`
+2. Test with `python deep_score_diagnostic.py`
+3. Restart backend
 
----
+## Contributing
 
-## 🤝 Contributing
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
-Contributions are welcome! Here's how you can help:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. 💻 Make your changes
-4. ✅ Add tests
-5. 📝 Update documentation
-6. 🚀 Submit a pull request
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and development process.
-
----
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Acknowledgments
+
+- **Groq** - Fast LLM inference
+- **Ollama** - Local LLM deployment
+- **BAAI** - BGE embedding and reranker models
+- **FastAPI** - Modern Python web framework
+- **Next.js** - React framework
+- **FAISS** - Efficient similarity search
+
+## Support
+
+- 📧 Email: support@example.com
+- 💬 Discord: [Join our community](https://discord.gg/example)
+- 🐛 Issues: [GitHub Issues](https://github.com/Effec77/Omni-Accreditation-Assistant/issues)
+- 📖 Docs: [Documentation](DOCUMENTATION.md)
+
+## Roadmap
+
+- [ ] Multi-tenancy support
+- [ ] Document versioning
+- [ ] Comparative analysis
+- [ ] PDF report generation
+- [ ] Email notifications
+- [ ] Mobile applications
+- [ ] Advanced analytics
+- [ ] API webhooks
+
 ---
-
-## 🙏 Acknowledgments
-
-- **BAAI** for BGE embedding and reranking models
-- **FAISS Team** for efficient vector search
-- **Groq** for fast LLM inference
-- **PyMuPDF** for PDF processing
-- **HuggingFace** for model hosting
-
----
-
-## 📧 Contact & Support
-
-<div align="center">
-
-**Questions?** Open an [issue](../../issues) or reach out:
-
-[![GitHub Issues](https://img.shields.io/github/issues/yourusername/accreditation-copilot)](../../issues)
-[![GitHub Discussions](https://img.shields.io/github/discussions/yourusername/accreditation-copilot)](../../discussions)
-
-</div>
-
----
-
-<div align="center">
-
-### ⭐ Star this repo if you find it helpful!
 
 **Made with ❤️ for educational institutions**
 
-*Last Updated: March 2, 2026 • Version 1.0 • Phase 2.2 Complete*
-
-</div>
-
+**Version**: 1.0.0  
+**Last Updated**: March 2026
