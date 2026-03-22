@@ -43,6 +43,34 @@ def get_auditor():
         cache = AuditCache()
     return auditor, cache
 
+@router.get("/criteria/{framework}")
+async def get_available_criteria(framework: str):
+    """
+    Get all available criteria for a framework.
+    
+    Args:
+        framework: 'NAAC' or 'NBA'
+        
+    Returns:
+        List of available criteria with descriptions
+    """
+    try:
+        from criteria.criterion_registry import get_criteria
+        
+        framework_upper = framework.upper()
+        criteria = get_criteria(framework_upper)
+        
+        return {
+            "framework": framework_upper,
+            "criteria": criteria,
+            "count": len(criteria)
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 def calculate_grade(confidence_score: float, coverage_ratio: float) -> str:
     """
     Calculate NAAC/NBA grade based on confidence score only (matching frontend).
@@ -213,11 +241,13 @@ async def run_audit(request: AuditRequest):
         query_template = criterion_def['query_template']
         
         # Run audit with caching enabled
+        # Pass user query if provided to influence synthesis
         result = auditor.audit_criterion(
             criterion_id=request.criterion,
             framework=framework_upper,
             query_template=query_template,
-            description=criterion_def['description']
+            description=criterion_def['description'],
+            user_query=request.query if request.query else ""
         )
         
         # If user provided a custom query, generate personalized recommendations
@@ -301,6 +331,87 @@ async def run_audit(request: AuditRequest):
     except Exception as e:
         # FIX 7: Log error
         logger.error(f"[AUDIT ERROR] {request.criterion}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/run-full-audit")
+async def run_full_naac_audit():
+    """
+    Run audit for ALL NAAC criteria and calculate overall CGPA/grade.
+    This is the main endpoint for comprehensive NAAC accreditation assessment.
+    """
+    try:
+        from criteria.criterion_registry import get_criteria
+        from scoring.naac_grading import calculate_naac_cgpa, get_improvement_suggestions
+        
+        logger.info("[FULL AUDIT START] Running comprehensive NAAC audit")
+        
+        auditor, cache = get_auditor()
+        
+        # Get all NAAC criteria
+        naac_criteria = get_criteria("NAAC")
+        
+        # Run audit for each criterion
+        results = []
+        for criterion_def in naac_criteria:
+            criterion_id = criterion_def['criterion']
+            
+            logger.info(f"[FULL AUDIT] Processing criterion {criterion_id}")
+            
+            try:
+                result = auditor.audit_criterion(
+                    criterion_id=criterion_id,
+                    framework="NAAC",
+                    query_template=criterion_def['query_template'],
+                    description=criterion_def['description'],
+                    user_query=""
+                )
+                
+                # Standardize response
+                standardized = standardize_audit_response(result)
+                
+                # Calculate grade
+                grade = calculate_grade(
+                    standardized.get("confidence_score", 0.0),
+                    standardized.get("coverage_ratio", 0.0)
+                )
+                
+                standardized['grade'] = grade
+                standardized['criterion'] = criterion_id
+                
+                results.append(standardized)
+                
+            except Exception as e:
+                logger.error(f"[FULL AUDIT ERROR] Criterion {criterion_id}: {str(e)}")
+                # Continue with other criteria even if one fails
+                continue
+        
+        # Calculate overall NAAC CGPA
+        cgpa_result = calculate_naac_cgpa(results)
+        
+        # Get improvement suggestions
+        suggestions = get_improvement_suggestions(cgpa_result)
+        
+        logger.info(f"[FULL AUDIT COMPLETE] CGPA: {cgpa_result['cgpa']}, Grade: {cgpa_result['letter_grade']}")
+        
+        return {
+            "audit_type": "full_naac_audit",
+            "framework": "NAAC",
+            "timestamp": datetime.now().isoformat(),
+            "overall_result": cgpa_result,
+            "improvement_suggestions": suggestions,
+            "individual_criteria": results,
+            "summary": {
+                "total_criteria": len(naac_criteria),
+                "criteria_evaluated": cgpa_result['total_criteria_evaluated'],
+                "metrics_evaluated": cgpa_result['total_metrics_evaluated'],
+                "cgpa": cgpa_result['cgpa'],
+                "grade": cgpa_result['letter_grade'],
+                "accreditation_status": cgpa_result['accreditation_status']
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"[FULL AUDIT ERROR] {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/cache")

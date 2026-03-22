@@ -1,6 +1,6 @@
 """
 Query Expander - Phase 2
-Expands queries using Groq LLM.
+Expands queries using Groq LLM with Ollama fallback.
 """
 
 import json
@@ -10,16 +10,16 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.groq_pool import GroqKeyPool
+from utils.llm_fallback import get_llm_fallback_manager
 
 
 class QueryExpander:
     """
-    Expands queries into multiple variants using Groq.
+    Expands queries into multiple variants using LLM with fallback.
     """
     
     def __init__(self):
-        self.groq_pool = GroqKeyPool()
+        self.llm_manager = get_llm_fallback_manager()
         self.cache = {}
     
     def _normalize_query(self, query: str) -> str:
@@ -70,22 +70,18 @@ Return ONLY a JSON object with this exact format:
         # Try to get response
         for attempt in range(max_retries + 1):
             try:
-                response, key_used = self.groq_pool.completion(
+                response, source = self.llm_manager.completion(
                     model="llama-3.3-70b-versatile",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.2,
                     max_tokens=500
                 )
+                
+                print(f"[QueryExpander] Used {source} for query expansion")
+                
             except Exception as e:
-                # FIX 1: Rate limit protection
-                error_str = str(e).lower()
-                if '429' in error_str or 'rate limit' in error_str:
-                    print(f"[QUERY EXPANSION] Rate limit hit, using fallback (attempt {attempt + 1}/{max_retries + 1})")
-                    if attempt >= max_retries:
-                        return [query]  # Fallback to original query
-                    continue
-                elif attempt >= max_retries:
-                    print(f"[QUERY EXPANSION] Error after {max_retries} retries: {e}")
+                print(f"[QUERY EXPANSION] Error (attempt {attempt + 1}/{max_retries + 1}): {e}")
+                if attempt >= max_retries:
                     return [query]  # Fallback to original query
                 continue
             

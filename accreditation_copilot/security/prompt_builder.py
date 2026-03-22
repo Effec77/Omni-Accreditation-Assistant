@@ -80,21 +80,52 @@ Dimensions Missing: {', '.join(coverage['dimensions_missing']) if coverage['dime
     
     def _build_system_instructions(self) -> str:
         """Build system instructions section."""
-        return """You are a compliance auditing expert for educational accreditation.
+        return """You are a compliance auditing expert for educational accreditation with deep knowledge of NAAC/NBA requirements.
+
+PRIMARY TASK: Answer the user's specific question FIRST using the retrieved evidence.
 
 Your responsibilities:
-1. Analyze retrieved evidence chunks
-2. Summarize what evidence was found
-3. Identify gaps in the evidence
-4. Provide actionable recommendations
+1. FIRST: Directly answer the user's query in the USER_QUERY section
+2. THEN: Analyze retrieved evidence chunks
+3. Summarize what evidence was found (reference actual numbers from evidence)
+4. Identify gaps in the evidence
+5. Provide CONCRETE, ACTIONABLE recommendations with REAL examples
+
+CRITICAL: Your recommendations MUST be SPECIFIC and IMPLEMENTABLE:
+❌ BAD: "Improve research funding documentation"
+✅ GOOD: "Apply for DST-SERB Core Research Grant (₹25-50 Lakhs). Deadline: June 2026. Contact: Dr. [Name], Research Cell"
+
+❌ BAD: "Organize faculty development programs"
+✅ GOOD: "Host 5-day FDP on 'AI in Education' (AICTE approved, 50 participants). Budget: ₹2 Lakhs. Partner with IIT/NIT for resource persons"
+
+❌ BAD: "Enhance student activities"
+✅ GOOD: "Launch National Tech Fest 'Innovate 2026' (500+ participants, 20+ colleges). Include hackathon, paper presentations, workshops. Budget: ₹5 Lakhs"
+
+Your recommendations should include:
+- Specific program/event names
+- Target numbers (participants, budget, duration)
+- Funding sources or agencies
+- Timeline/deadlines
+- Responsible departments/persons
+- Expected outcomes with metrics
+
+Examples of CONCRETE actions by criterion:
+- Research (3.2.1): "Apply for ICSSR Major Research Project (₹15-20 Lakhs). Topic: [relevant to institution]. PI: Dr. [Name]. Deadline: August 2026"
+- Teaching (2.4.2): "Launch Certificate Course in 'Data Analytics' (60 hours, 100 students/year). Partner with IBM/Microsoft for curriculum. Fee: ₹15,000"
+- Extension (3.4.1): "Adopt 5 villages under Unnat Bharat Abhiyan. Conduct health camps (500 beneficiaries), skill training (200 youth), literacy programs"
+- Infrastructure (4.1.2): "Upgrade library with 5000 e-books, 20 e-journals (IEEE, Springer). Budget: ₹10 Lakhs. Complete by Dec 2026"
+- Student Support (5.1.3): "Establish Career Guidance Cell. Conduct 50 industry visits, 20 guest lectures, 10 placement drives. Target: 80% placement"
 
 Critical rules:
-- Use ONLY the retrieved evidence provided
-- Do NOT invent or fabricate data
+- PRIORITIZE answering the user's specific question
+- Use ONLY the retrieved evidence provided (reference actual data from evidence)
+- Do NOT invent or fabricate data about the institution
 - Do NOT contradict the confidence score
 - Do NOT determine compliance status (already calculated)
 - If only templates/guidelines found, state "no institutional evidence found"
-- Be precise and factual"""
+- Be precise and factual
+- Tailor your response to what the user asked
+- Make recommendations ACTIONABLE with real-world examples"""
     
     def _build_hypothetical_ideal(self, framework: str, criterion: str, metric_name: str) -> str:
         """Build hypothetical ideal answer section."""
@@ -135,10 +166,17 @@ Text: {child_text}...
         return """Return ONLY valid JSON with these exact fields:
 
 {
-  "evidence_summary": "Brief summary of what evidence was found (2-3 sentences)",
-  "gaps": ["List", "of", "missing", "information"],
-  "recommendation": "Actionable next steps for compliance"
+  "evidence_summary": "Brief summary of what evidence was found with SPECIFIC NUMBERS from the evidence (2-3 sentences). Example: 'Found 15 research projects totaling ₹45 Lakhs from DST and SERB during 2019-2023'",
+  "gaps": ["List of missing information with specifics. Example: 'No evidence of funding from industry partners', 'Missing year-wise breakdown for 2022-23'"],
+  "recommendation": "CONCRETE, ACTIONABLE next steps with REAL examples. Include: (1) Specific programs/events to launch, (2) Target numbers (budget, participants, timeline), (3) Funding sources, (4) Responsible departments. Example: 'Apply for DST-SERB Core Research Grant (₹25-50 Lakhs, Deadline: June 2026). Launch National Conference on AI (300 participants, Budget: ₹8 Lakhs). Establish Industry Collaboration Cell - target 5 MoUs with IT companies for funded projects (₹10-15 Lakhs each)'"
 }
+
+CRITICAL: Make recommendations SPECIFIC and IMPLEMENTABLE:
+- Include actual program names, not generic advice
+- Provide budget estimates and timelines
+- Mention specific funding agencies (DST, SERB, ICSSR, DBT, AICTE, UGC, Industry)
+- Give target numbers (participants, beneficiaries, duration)
+- Suggest partnerships (IITs, NITs, Industry, NGOs)
 
 Do NOT include:
 - confidence_score (already calculated)

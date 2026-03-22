@@ -11,7 +11,8 @@ interface AuditDashboardProps {
 
 export default function AuditDashboard({ result }: AuditDashboardProps) {
   const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
+    const statusLower = status?.toLowerCase() || '';
+    switch (statusLower) {
       case 'compliant':
         return <CheckCircle2 className="text-green-500" size={24} />;
       case 'partially_compliant':
@@ -24,7 +25,8 @@ export default function AuditDashboard({ result }: AuditDashboardProps) {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+    const statusLower = status?.toLowerCase() || '';
+    switch (statusLower) {
       case 'compliant':
         return 'text-green-500';
       case 'partially_compliant':

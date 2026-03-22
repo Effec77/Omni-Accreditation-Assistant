@@ -7,7 +7,7 @@ import time
 from typing import List, Dict, Any
 
 from .evidence_scorer import EvidenceScorer
-from .dimension_checker import DimensionChecker
+from .semantic_dimension_checker import SemanticDimensionChecker  # NEW: Semantic checker
 from .confidence_calculator import ConfidenceCalculator
 from .synthesizer import ComplianceSynthesizer
 from .output_formatter import OutputFormatter
@@ -16,10 +16,22 @@ from .output_formatter import OutputFormatter
 class ScoringPipeline:
     """Complete Phase 3 scoring and reasoning pipeline."""
     
-    def __init__(self):
-        """Initialize all Phase 3 components."""
+    def __init__(self, use_semantic_checker: bool = True):
+        """
+        Initialize all Phase 3 components.
+        
+        Args:
+            use_semantic_checker: Use semantic dimension checker (default: True)
+        """
         self.evidence_scorer = EvidenceScorer()
-        self.dimension_checker = DimensionChecker()
+        
+        # NEW: Use semantic dimension checker by default
+        if use_semantic_checker:
+            self.dimension_checker = SemanticDimensionChecker()
+        else:
+            from .dimension_checker import DimensionChecker
+            self.dimension_checker = DimensionChecker()
+        
         self.confidence_calculator = ConfidenceCalculator()
         self.synthesizer = ComplianceSynthesizer()
         self.output_formatter = OutputFormatter()
@@ -65,7 +77,8 @@ class ScoringPipeline:
             confidence,
             coverage,
             retrieval_results,
-            evidence_scores
+            evidence_scores,
+            user_query=query  # CRITICAL: Pass user's actual question
         )
         
         # C5: Format output

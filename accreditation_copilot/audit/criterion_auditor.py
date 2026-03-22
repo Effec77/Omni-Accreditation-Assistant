@@ -104,7 +104,8 @@ class CriterionAuditor:
         framework: str,
         query_template: str,
         description: str,
-        timeout_seconds: int = 30
+        timeout_seconds: int = 30,
+        user_query: str = ""
     ) -> Dict[str, Any]:
         """
         Audit a single criterion with caching support and timeout protection.
@@ -115,6 +116,7 @@ class CriterionAuditor:
             query_template: Query template for retrieval
             description: Criterion description
             timeout_seconds: Maximum execution time (default: 30 seconds)
+            user_query: Optional user's custom question to influence synthesis
             
         Returns:
             Structured compliance result (from cache or fresh computation)
@@ -123,7 +125,7 @@ class CriterionAuditor:
         try:
             with audit_timeout(timeout_seconds):
                 return self._execute_audit(
-                    criterion_id, framework, query_template, description
+                    criterion_id, framework, query_template, description, user_query
                 )
         except AuditTimeoutError as e:
             print(f"[TIMEOUT] {str(e)}")
@@ -155,7 +157,8 @@ class CriterionAuditor:
         criterion_id: str,
         framework: str,
         query_template: str,
-        description: str
+        description: str,
+        user_query: str = ""
     ) -> Dict[str, Any]:
         """
         Internal method to execute audit logic.
@@ -165,6 +168,7 @@ class CriterionAuditor:
             framework: Framework name
             query_template: Query template
             description: Criterion description
+            user_query: Optional user's custom question
             
         Returns:
             Audit result
@@ -203,8 +207,10 @@ class CriterionAuditor:
         )
         
         # Step 3: Run Phase 3 scoring pipeline
+        # Use user_query if provided, otherwise fall back to query_template
+        query_for_synthesis = user_query if user_query else query_template
         compliance_report = self.scoring_pipeline.process(
-            query=query_template,
+            query=query_for_synthesis,
             framework=framework,
             criterion=criterion_id,
             retrieval_results=retrieval_results

@@ -1,20 +1,20 @@
 """
 D3 - Compliance Auditor
-Groq LLM call for compliance synthesis.
+Groq LLM call for compliance synthesis with Ollama fallback.
 Refactored from scoring/synthesizer.py with security enhancements.
 """
 
 import json
 from typing import List, Dict, Any
-from utils.groq_pool import GroqKeyPool
+from utils.llm_fallback import get_llm_fallback_manager
 
 
 class ComplianceAuditor:
-    """Generate compliance explanation using Groq LLM."""
+    """Generate compliance explanation using Groq LLM with Ollama fallback."""
     
     def __init__(self):
-        """Initialize auditor with Groq pool."""
-        self.groq_pool = GroqKeyPool()
+        """Initialize auditor with LLM fallback manager."""
+        self.llm_manager = get_llm_fallback_manager()
     
     def audit(
         self,
@@ -22,7 +22,7 @@ class ComplianceAuditor:
         max_retries: int = 2
     ) -> Dict[str, Any]:
         """
-        Call Groq LLM for compliance auditing.
+        Call LLM for compliance auditing with automatic fallback.
         
         Args:
             prompt: Structured XML prompt from PromptBuilder
@@ -33,7 +33,7 @@ class ComplianceAuditor:
         """
         for attempt in range(max_retries + 1):
             try:
-                response, _ = self.groq_pool.completion(
+                response, source = self.llm_manager.completion(
                     model="llama-3.3-70b-versatile",
                     messages=[
                         {
@@ -48,6 +48,8 @@ class ComplianceAuditor:
                     temperature=0.1,
                     max_tokens=800
                 )
+                
+                print(f"[ComplianceAuditor] Used {source} for synthesis")
                 
                 # Parse JSON response
                 content = response.choices[0].message.content.strip()
@@ -83,7 +85,11 @@ class ComplianceAuditor:
             
             except Exception as e:
                 print(f"Audit error: {e}")
-                return self._fallback_response()
+                if attempt < max_retries:
+                    print(f"Retrying... ({attempt + 1}/{max_retries})")
+                    continue
+                else:
+                    return self._fallback_response()
         
         return self._fallback_response()
     

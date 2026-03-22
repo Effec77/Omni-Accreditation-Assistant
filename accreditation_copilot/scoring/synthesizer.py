@@ -37,7 +37,8 @@ class ComplianceSynthesizer:
         confidence: Dict[str, Any],
         coverage: Dict[str, Any],
         results: List[Dict[str, Any]],
-        evidence_scores: List[Dict[str, Any]]
+        evidence_scores: List[Dict[str, Any]],
+        user_query: str = ""
     ) -> Dict[str, Any]:
         """
         Generate compliance explanation using D1-D5 layers.
@@ -49,6 +50,7 @@ class ComplianceSynthesizer:
             coverage: Output from DimensionChecker
             results: Phase 2 retrieval results
             evidence_scores: Output from EvidenceScorer
+            user_query: User's original question (CRITICAL for query-aware responses)
             
         Returns:
             Validated synthesis with explanation, gaps, and recommendations
@@ -56,9 +58,9 @@ class ComplianceSynthesizer:
         # D1: Sanitize context
         sanitized_results = self.sanitizer.sanitize(results)
         
-        # D2: Build secure XML prompt
+        # D2: Build secure XML prompt (NOW WITH USER QUERY)
         prompt = self.prompt_builder.build_compliance_prompt(
-            query="",  # Not needed in prompt
+            query=user_query,  # CRITICAL: Pass user's actual question
             criterion=criterion,
             framework=framework,
             metric_name=coverage.get('metric_name', 'Unknown'),

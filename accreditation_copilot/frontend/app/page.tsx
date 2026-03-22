@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import QueryPanel from "@/components/QueryPanel";
 import AuditDashboard from "@/components/AuditDashboard";
+import FullAuditDashboard from "@/components/FullAuditDashboard";
 import EvidenceViewer from "@/components/EvidenceViewer";
 import GapAnalysisPanel from "@/components/GapAnalysisPanel";
 import MetricsPanel from "@/components/MetricsPanel";
@@ -112,105 +113,132 @@ export default function Home() {
 
           {!loading && auditResult && (
             <div className="space-y-6 animate-in fade-in duration-500">
-              {/* Personalized Recommendations (if user asked a question) - SHOW FIRST */}
-              {auditResult.personalized_recommendations && auditResult.personalized_recommendations.length > 0 && (
-                <div className="glass-card p-6 rounded-xl border-2 border-primary/50 bg-gradient-to-br from-primary/10 to-accent/10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-lg bg-primary/30 animate-pulse">
-                      <Sparkles className="text-primary" size={28} />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold gradient-text">AI-Powered Recommendations</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Your question: <span className="text-primary font-medium">"{auditResult.user_query}"</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    {auditResult.personalized_recommendations.map((rec: any, idx: number) => (
-                      <div 
-                        key={idx} 
-                        className="p-6 bg-background/80 rounded-xl border border-primary/30 backdrop-blur-sm"
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <h4 className="text-lg font-bold text-primary">{rec.title}</h4>
-                          {rec.current_grade && rec.target_grade && (
-                            <div className="flex items-center gap-2">
-                              <span className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm font-bold">
-                                {rec.current_grade}
-                              </span>
-                              <span className="text-muted-foreground">→</span>
-                              <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-bold">
-                                {rec.target_grade}
-                              </span>
+              {/* Full NAAC Audit Result */}
+              {auditResult.is_full_audit ? (
+                <FullAuditDashboard result={auditResult} />
+              ) : (
+                <>
+                  {/* Personalized Recommendations (if user asked a question) - SHOW FIRST */}
+                  {auditResult.personalized_recommendations && auditResult.personalized_recommendations.length > 0 && (
+                    <div className="glass-card p-6 rounded-xl border-2 border-primary/50 bg-gradient-to-br from-primary/10 to-accent/10">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 rounded-lg bg-primary/30 animate-pulse">
+                          <Sparkles className="text-primary" size={28} />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-bold gradient-text">AI-Powered Recommendations</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Your question: <span className="text-primary font-medium">"{auditResult.user_query}"</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        {auditResult.personalized_recommendations.map((rec: any, idx: number) => (
+                          <div 
+                            key={idx} 
+                            className="p-6 bg-background/80 rounded-xl border border-primary/30 backdrop-blur-sm"
+                          >
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="text-lg font-bold text-primary">{rec.title}</h4>
+                              {rec.current_grade && rec.target_grade && (
+                                <div className="flex items-center gap-2">
+                                  <span className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm font-bold">
+                                    {rec.current_grade}
+                                  </span>
+                                  <span className="text-muted-foreground">→</span>
+                                  <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-bold">
+                                    {rec.target_grade}
+                                  </span>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                        <div className="prose prose-invert max-w-none">
-                          <p className="text-foreground whitespace-pre-line leading-relaxed">{rec.description}</p>
-                        </div>
-                        {rec.priority && (
-                          <div className="mt-4 flex items-center gap-2">
-                            <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm font-medium">
-                              {rec.priority} Priority
-                            </span>
-                            {rec.impact && (
-                              <span className="text-sm text-muted-foreground">• {rec.impact}</span>
+                            <div className="prose prose-invert max-w-none">
+                              <p className="text-foreground whitespace-pre-line leading-relaxed">{rec.description}</p>
+                            </div>
+                            {rec.priority && (
+                              <div className="mt-4 flex items-center gap-2">
+                                <span className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm font-medium">
+                                  {rec.priority} Priority
+                                </span>
+                                {rec.impact && (
+                                  <span className="text-sm text-muted-foreground">• {rec.impact}</span>
+                                )}
+                              </div>
                             )}
                           </div>
-                        )}
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
+                  )}
+
+                  {/* Audit Dashboard */}
+                  {auditResult.multi_criterion ? (
+                    // Multi-criterion results - show each criterion separately
+                    <div className="space-y-6">
+                      <div className="glass-card p-4 rounded-xl border-2 border-cyan-400/50">
+                        <h3 className="text-xl font-bold gradient-text mb-2">
+                          Multi-Criterion Analysis: {auditResult.framework}
+                        </h3>
+                        <p className="text-muted-foreground text-sm">
+                          Showing results for {auditResult.criteria.length} criteria: {auditResult.criteria.join(', ')}
+                        </p>
+                      </div>
+                      {auditResult.results.map((result: any, index: number) => (
+                        <div key={index}>
+                          <AuditDashboard result={result} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // Single criterion result
+                    <AuditDashboard result={auditResult} />
+                  )}
+
+                  {/* NAAC vs Institutional Comparison */}
+                  {auditResult.dimensions && auditResult.dimensions.length > 0 && (
+                    <ComparisonComponent 
+                      dimensions={auditResult.dimensions}
+                      coverageRatio={auditResult.coverage_ratio || 0}
+                    />
+                  )}
+
+                  {/* Gap Analysis Visualizer */}
+                  {auditResult.gaps && auditResult.gaps.length > 0 && (
+                    <GapAnalysisVisualizer 
+                      gaps={auditResult.gaps}
+                      coverageRatio={auditResult.coverage_ratio || 0}
+                      totalDimensions={auditResult.dimensions?.length || 0}
+                      coveredDimensions={auditResult.dimensions_covered || []}
+                      missingDimensions={auditResult.dimensions_missing || []}
+                    />
+                  )}
+
+                  {/* Recommendations */}
+                  <RecommendationEngine 
+                    confidenceScore={auditResult.confidence_score || 0}
+                    coverageRatio={auditResult.coverage_ratio || 0}
+                    missingDimensions={auditResult.dimensions_missing || []}
+                    criterionId={auditResult.criterion || ""}
+                    showTopOnly={false}
+                  />
+
+                  {/* Evidence Viewer */}
+                  <EvidenceViewer 
+                    evidence={auditResult.evidence}
+                    dimensions={auditResult.dimensions_covered || []}
+                  />
+
+                  {/* Legacy Gap Analysis Panel (for backward compatibility) */}
+                  <GapAnalysisPanel 
+                    gaps={auditResult.gaps} 
+                    recommendations={auditResult.recommendations}
+                    result={auditResult}
+                  />
+
+                  {/* Metrics Panel */}
+                  <MetricsPanel />
+                </>
               )}
-
-              {/* Audit Dashboard */}
-              <AuditDashboard result={auditResult} />
-
-              {/* NAAC vs Institutional Comparison */}
-              {auditResult.dimensions && auditResult.dimensions.length > 0 && (
-                <ComparisonComponent 
-                  dimensions={auditResult.dimensions}
-                  coverageRatio={auditResult.coverage_ratio || 0}
-                />
-              )}
-
-              {/* Gap Analysis Visualizer */}
-              {auditResult.gaps && auditResult.gaps.length > 0 && (
-                <GapAnalysisVisualizer 
-                  gaps={auditResult.gaps}
-                  coverageRatio={auditResult.coverage_ratio || 0}
-                  totalDimensions={auditResult.dimensions?.length || 0}
-                  coveredDimensions={auditResult.dimensions_covered || []}
-                  missingDimensions={auditResult.dimensions_missing || []}
-                />
-              )}
-
-              {/* Recommendations */}
-              <RecommendationEngine 
-                confidenceScore={auditResult.confidence_score || 0}
-                coverageRatio={auditResult.coverage_ratio || 0}
-                missingDimensions={auditResult.dimensions_missing || []}
-                criterionId={auditResult.criterion || ""}
-                showTopOnly={false}
-              />
-
-              {/* Evidence Viewer */}
-              <EvidenceViewer 
-                evidence={auditResult.evidence}
-                dimensions={auditResult.dimensions_covered || []}
-              />
-
-              {/* Legacy Gap Analysis Panel (for backward compatibility) */}
-              <GapAnalysisPanel 
-                gaps={auditResult.gaps} 
-                recommendations={auditResult.recommendations}
-                result={auditResult}
-              />
-
-              {/* Metrics Panel */}
-              <MetricsPanel />
             </div>
           )}
         </div>

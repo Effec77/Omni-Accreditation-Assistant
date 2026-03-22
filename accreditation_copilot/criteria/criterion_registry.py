@@ -9,6 +9,16 @@ from typing import List, Dict, Any
 # NAAC Criteria Registry
 NAAC_CRITERIA = [
     {
+        "criterion": "1.2.1",
+        "description": "Number of Certificate/Value added courses offered and online courses of MOOCs, SWAYAM, NPTEL etc. during the last five years",
+        "query_template": "certificate courses value added courses MOOCs SWAYAM NPTEL online courses"
+    },
+    {
+        "criterion": "2.1.1",
+        "description": "Enrolment percentage (Average of last five years)",
+        "query_template": "student enrollment admission capacity seats filled year-wise"
+    },
+    {
         "criterion": "3.2.1",
         "description": "Grants received from Government and non-governmental agencies for research projects / endowments in the institution during the last five years",
         "query_template": "extramural research funding amount lakhs projects DST SERB DBT ICSSR government agencies year-wise"
@@ -16,12 +26,12 @@ NAAC_CRITERIA = [
     {
         "criterion": "3.3.1",
         "description": "Number of research papers published per teacher in the Journals notified on UGC care list during the last five years",
-        "query_template": "research papers publications in UGC care journals"
+        "query_template": "research papers publications in UGC care journals scopus indexed"
     },
     {
         "criterion": "3.4.1",
         "description": "Extension activities are carried out in the neighborhood community, sensitizing students to social issues, for their holistic development, and impact thereof during the last five years",
-        "query_template": "extension activities community engagement social issues"
+        "query_template": "extension activities community engagement social issues NSS NCC outreach programs"
     },
     {
         "criterion": "3.4.2",
@@ -32,6 +42,26 @@ NAAC_CRITERIA = [
         "criterion": "3.5.1",
         "description": "Number of functional MoUs/linkages with institutions/ industries in India and abroad for internship, on-the-job training, project work, student / faculty exchange and collaborative research during the last five years",
         "query_template": "MoUs linkages with institutions industries for internship training research"
+    },
+    {
+        "criterion": "4.1.2",
+        "description": "Percentage of expenditure for infrastructure development and augmentation excluding salary during the last five years",
+        "query_template": "infrastructure expenditure budget allocation facilities development augmentation"
+    },
+    {
+        "criterion": "5.1.1",
+        "description": "Percentage of students benefited by scholarships and freeships provided by the institution, government and non-government bodies, industries, individuals, philanthropists during the last five years",
+        "query_template": "scholarships freeships financial aid student beneficiaries government schemes"
+    },
+    {
+        "criterion": "6.2.2",
+        "description": "Implementation of e-governance in areas of operation: Administration, Finance and Accounts, Student Admission and Support, Examination",
+        "query_template": "e-governance ERP system digital administration online admission examination management"
+    },
+    {
+        "criterion": "7.1.2",
+        "description": "The Institution has facilities and initiatives for: Alternate sources of energy and energy conservation, Management of degradable and non-degradable waste, Water conservation, Green campus initiatives, Disabled-friendly, barrier free environment",
+        "query_template": "environmental sustainability green campus solar energy waste management water conservation disabled-friendly"
     }
 ]
 

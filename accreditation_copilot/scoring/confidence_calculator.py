@@ -82,10 +82,10 @@ class ConfidenceCalculator:
         
         avg_retrieval_score = total_reranker_score / len(institution_retrieval_results)
         
-        # Base score: weighted combination
+        # Base score: weighted combination - UPDATED: Less weight on unreliable reranker
         base_score = (
-            0.6 * avg_evidence_score +
-            0.4 * avg_retrieval_score
+            0.75 * avg_evidence_score +  # Increased from 0.6 - trust evidence more
+            0.25 * avg_retrieval_score   # Decreased from 0.4 - reranker too strict
         )
         
         # Coverage ratio (FIXED: multiplicative penalty)

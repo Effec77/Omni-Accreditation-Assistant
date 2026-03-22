@@ -13,7 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from retrieval.index_loader import IndexLoader
-from utils.groq_pool import GroqKeyPool
+from utils.llm_fallback import get_llm_fallback_manager
 
 
 class HyDERetriever:
@@ -33,7 +33,7 @@ class HyDERetriever:
     
     def __init__(self, model_name: str = 'BAAI/bge-base-en-v1.5'):
         self.index_loader = IndexLoader()
-        self.groq_pool = GroqKeyPool()
+        self.llm_manager = get_llm_fallback_manager()
         
         # Load embedding model
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -90,7 +90,7 @@ Provide a comprehensive, evidence-based answer that would satisfy {framework} ev
 Keep the answer focused and under 300 words."""
         
         try:
-            response, key_used = self.groq_pool.completion(
+            response, source = self.llm_manager.completion(
                 model="llama-3.3-70b-versatile",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1,

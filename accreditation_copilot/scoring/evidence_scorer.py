@@ -28,13 +28,13 @@ class EvidenceScorer:
     KEYWORD_PATTERN = re.compile(r'\b(grant|funded|sanctioned|extramural|sponsored|awarded)\b', re.IGNORECASE)
     STRUCTURE_PATTERN = re.compile(r'(\||table|year wise|year-wise|\t)', re.IGNORECASE)
     
-    # Signal weights
+    # Signal weights - UPDATED: More weight on actual data (numeric/entity)
     WEIGHTS = {
-        'numeric': 0.25,
-        'entity': 0.20,
-        'keyword': 0.15,
-        'structure': 0.10,
-        'reranker': 0.30
+        'numeric': 0.40,   # Increased from 0.25 - prioritize actual numbers
+        'entity': 0.30,    # Increased from 0.20 - prioritize agency names
+        'keyword': 0.10,   # Decreased from 0.15 - less critical
+        'structure': 0.10, # Same - nice to have
+        'reranker': 0.10   # Decreased from 0.30 - too unreliable
     }
     
     def score(self, results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -159,7 +159,7 @@ class EvidenceScorer:
         }
     
     def _calculate_score(self, signals: Dict[str, float], reranker_score: float) -> float:
-        """Calculate final evidence score using weighted formula."""
+        """Calculate final evidence score using weighted formula with quality boost."""
         score = (
             self.WEIGHTS['numeric'] * signals['numeric'] +
             self.WEIGHTS['entity'] * signals['entity'] +
@@ -167,6 +167,10 @@ class EvidenceScorer:
             self.WEIGHTS['structure'] * signals['structure'] +
             self.WEIGHTS['reranker'] * reranker_score
         )
+        
+        # Quality boost: If chunk has strong numeric AND entity evidence, boost score
+        if signals['numeric'] >= 0.6 and signals['entity'] >= 0.6:
+            score *= 1.3  # 30% boost for high-quality evidence
         
         # Clamp to [0, 1]
         return min(max(score, 0.0), 1.0)
