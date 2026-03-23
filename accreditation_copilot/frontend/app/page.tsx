@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import TopNavBar from "@/components/TopNavBar";
 import QueryPanel from "@/components/QueryPanel";
 import AuditDashboard from "@/components/AuditDashboard";
 import FullAuditDashboard from "@/components/FullAuditDashboard";
@@ -60,7 +61,10 @@ export default function Home() {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 ml-72 flex flex-col overflow-hidden">
+        {/* Top Navigation Bar */}
+        <TopNavBar />
+
         {/* Query Panel */}
         <div className="p-6 border-b border-border/50">
           <QueryPanel 
