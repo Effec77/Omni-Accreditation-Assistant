@@ -1,8 +1,7 @@
 # Frontend Dockerfile for Accreditation Copilot
-# Multi-stage build for optimized production image
+# Single-stage build for simplicity
 
-# Stage 1: Dependencies
-FROM node:20-alpine AS dependencies
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -10,53 +9,24 @@ WORKDIR /app
 # Copy package files
 COPY accreditation_copilot/frontend/package*.json ./
 
-# Install ALL dependencies (including devDependencies for build)
-RUN npm ci && \
-    npm cache clean --force
-
-# Stage 2: Builder
-FROM node:20-alpine AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy dependencies from previous stage
-COPY --from=dependencies /app/node_modules ./node_modules
+# Install all dependencies
+RUN npm ci
 
 # Copy application code
 COPY accreditation_copilot/frontend/ ./
 
-# Set environment variables for build
+# Set environment variables
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production \
-    NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
-
-# Install autoprefixer explicitly (ensures it's available)
-RUN npm install --save-dev autoprefixer postcss tailwindcss
+    NEXT_PUBLIC_API_URL=http://13.232.129.54:8000 \
+    PORT=3000
 
 # Build the application
 RUN npm run build
 
-# Stage 3: Runner
-FROM node:20-alpine AS runner
-
-# Set working directory
-WORKDIR /app
-
-# Set environment variables
-ENV NODE_ENV=production \
-    NEXT_TELEMETRY_DISABLED=1 \
-    PORT=3000 \
-    NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
-
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
-
-# Copy necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
@@ -72,4 +42,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start the application
-CMD ["node", "server.js"]
+CMD ["node", ".next/standalone/server.js"]
