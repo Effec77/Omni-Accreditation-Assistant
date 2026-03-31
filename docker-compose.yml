@@ -25,6 +25,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        - NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
     container_name: accreditation-frontend
     restart: unless-stopped
     ports:
@@ -34,6 +36,8 @@ services:
       - NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
     networks:
       - accreditation-network
+    depends_on:
+      - backend
 
 networks:
   accreditation-network:
