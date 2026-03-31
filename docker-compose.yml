@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-  # Backend API Service
   backend:
     build:
       context: .
@@ -16,101 +13,13 @@ services:
     env_file:
       - accreditation_copilot/.env
     volumes:
-      # Mount data directories
       - ./data:/app/data
       - ./accreditation_copilot/data:/app/accreditation_copilot/data
-      - ./accreditation_copilot/indexes:/app/accreditation_copilot/indexes
       - ./accreditation_copilot/api/indexes:/app/accreditation_copilot/api/indexes
       - ./accreditation_copilot/api/data:/app/accreditation_copilot/api/data
-      - ./accreditation_copilot/audit_results:/app/accreditation_copilot/audit_results
-      # Mount logs
-      - ./logs:/app/logs
     networks:
       - accreditation-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 8G
-        reservations:
-          cpus: '1'
-          memory: 4G
-
-  # Frontend Service
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: accreditation-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://backend:8000
-      - NEXT_TELEMETRY_DISABLED=1
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - accreditation-network
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2G
-        reservations:
-          cpus: '0.5'
-          memory: 1G
-
-  # Nginx Reverse Proxy (Optional - can use external Nginx)
-  nginx:
-    image: nginx:alpine
-    container_name: accreditation-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-      - ./logs/nginx:/var/log/nginx
-    depends_on:
-      - backend
-      - frontend
-    networks:
-      - accreditation-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
 
 networks:
   accreditation-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-
-volumes:
-  data:
-  indexes:
-  logs:

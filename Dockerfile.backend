@@ -27,7 +27,7 @@ FROM base as dependencies
 WORKDIR /app
 
 # Copy requirements file
-COPY accreditation_copilot/requirements.txt .
+COPY accreditation_copilot/requirements.txt ./requirements.txt
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
