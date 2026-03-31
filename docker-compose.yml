@@ -34,3 +34,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
     networks:
       - accreditation-network
+
+networks:
+  accreditation-network:
+    driver: bridge
