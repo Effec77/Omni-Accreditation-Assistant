@@ -24,6 +24,9 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 # Build the application
 RUN npm run build
 
+# Ensure static files are accessible
+RUN cp -r .next/static .next/standalone/.next/static 2>/dev/null || true
+
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
@@ -41,5 +44,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start the application
-CMD ["node", ".next/standalone/server.js"]
+# Start the application from the standalone directory
+WORKDIR /app/.next/standalone
+CMD ["node", "server.js"]
