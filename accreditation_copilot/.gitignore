@@ -94,7 +94,6 @@ Thumbs.db
 *.tmp
 
 # Model files (if downloaded locally)
-models/
 *.bin
 *.safetensors
 *.onnx
