@@ -1,0 +1,1834 @@
+{
+  "audit_type": "full_naac_audit",
+  "framework": "NAAC",
+  "timestamp": "2026-03-25T00:28:46.821310",
+  "overall_result": {
+    "cgpa": 1.01,
+    "letter_grade": "Insufficient",
+    "description": "Minimal or no evidence found",
+    "evidence_quality_score": 0.253,
+    "evidence_quality_band": "Insufficient",
+    "evidence_quality_description": "Minimal or no evidence found",
+    "total_criteria_evaluated": 7,
+    "total_metrics_evaluated": 11,
+    "breakdown": [
+      {
+        "criterion": "Criterion 1",
+        "average_grade_points": 0.99,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.248,
+        "weight": 100,
+        "weighted_contribution": 0.099,
+        "metrics": [
+          {
+            "metric": "1.2.1",
+            "confidence": 0.248,
+            "grade_points": 0.992,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 2",
+        "average_grade_points": 1.05,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.262,
+        "weight": 350,
+        "weighted_contribution": 0.367,
+        "metrics": [
+          {
+            "metric": "2.1.1",
+            "confidence": 0.262,
+            "grade_points": 1.048,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 3",
+        "average_grade_points": 1.02,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.255,
+        "weight": 200,
+        "weighted_contribution": 0.204,
+        "metrics": [
+          {
+            "metric": "3.2.1",
+            "confidence": 0.259,
+            "grade_points": 1.036,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          },
+          {
+            "metric": "3.3.1",
+            "confidence": 0.266,
+            "grade_points": 1.064,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          },
+          {
+            "metric": "3.4.1",
+            "confidence": 0.244,
+            "grade_points": 0.976,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          },
+          {
+            "metric": "3.4.2",
+            "confidence": 0.253,
+            "grade_points": 1.012,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          },
+          {
+            "metric": "3.5.1",
+            "confidence": 0.255,
+            "grade_points": 1.02,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 4",
+        "average_grade_points": 0.93,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.232,
+        "weight": 100,
+        "weighted_contribution": 0.093,
+        "metrics": [
+          {
+            "metric": "4.1.2",
+            "confidence": 0.232,
+            "grade_points": 0.928,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 5",
+        "average_grade_points": 1.05,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.263,
+        "weight": 100,
+        "weighted_contribution": 0.105,
+        "metrics": [
+          {
+            "metric": "5.1.1",
+            "confidence": 0.263,
+            "grade_points": 1.052,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 6",
+        "average_grade_points": 0.94,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.236,
+        "weight": 100,
+        "weighted_contribution": 0.094,
+        "metrics": [
+          {
+            "metric": "6.2.2",
+            "confidence": 0.236,
+            "grade_points": 0.944,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      },
+      {
+        "criterion": "Criterion 7",
+        "average_grade_points": 1.02,
+        "evidence_quality": "Insufficient",
+        "evidence_score": 0.254,
+        "weight": 50,
+        "weighted_contribution": 0.051,
+        "metrics": [
+          {
+            "metric": "7.1.2",
+            "confidence": 0.254,
+            "grade_points": 1.016,
+            "evidence_quality": "Insufficient",
+            "quality_description": "Minimal or no evidence found"
+          }
+        ]
+      }
+    ],
+    "accreditation_status": "Insufficient Evidence",
+    "grade_range": "0.25 / 1.00",
+    "disclaimer": "This assessment measures evidence quality in uploaded documents. Final NAAC grade requires DVV peer team verification of data templates."
+  },
+  "improvement_suggestions": [
+    "Upload more documentation for 7 criterion/criteria with weak evidence: Criterion 1, Criterion 2, Criterion 3, Criterion 4, Criterion 5, Criterion 6, Criterion 7",
+    "To improve evidence quality, focus on uploading comprehensive documents for high-weight criteria: Criterion 2 (Teaching-Learning, 350 points) and Criterion 3 (Research, 200 points)",
+    "Ensure documents include: quantitative data, tables with metrics, policy documents, and achievement reports",
+    "Remember: This assessment measures documentation quality. Final NAAC grade depends on DVV verification of your submitted data templates."
+  ],
+  "individual_criteria": [
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "1.2.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.248,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of specific value-added courses offered by the institution",
+        "Missing year-wise breakdown of value-added courses",
+        "No data on the number of students enrolled or completing value-added courses"
+      ],
+      "recommendations": [
+        "Launch 5 value-added courses (with 30 or more contact hours) in the next academic year, targeting 200 students per course. Apply for AICTE funding (\u20b95-10 Lakhs per course) to support these courses. Partner with industry partners (e.g., IBM, Microsoft) to offer courses in emerging areas like AI, Data Analytics, and Cybersecurity. Establish a Centre for Skill Development to oversee these courses and target 80% completion rate for students enrolled. Allocate \u20b920 Lakhs for marketing and promoting these courses to attract students."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "2c8e641f-bfb2-44f2-916c-78aa002852c1",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 101,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "ogrammes offered during the last five years (30) Name of the Course Course Code Year of introduction Activities/Content with direct bearing on Employability/ Entrepreneurship/ Skill development Link to the relevant document Key Indicator - 1.3 Curriculum Enrichment (30) 3. 1.3.2 Number of value-added courses for imparting transferable and life skills offered during last five years (10) 1.3.3 Average Percentage of students enrolled in the courses under 1.3.2 above (10)\n\n[PAGE_102]\nManual for Universities NAAC for Quality and Excellence in Higher Education Year 1 Name of the value added courses",
+          "reranker_score": 0.126,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "e8c95e3f-a36a-4881-8b3a-e7f72aeb9963",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 102,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "Education Year 1 Name of the value added courses (with 30 or more contact hours)offered Course Code (if any) Year of offering No. of times offered during the same year Duration of course Number of students enrolled in the year Number of Students completing the course in the year Year 2 Name of the value added courses (with 30 or more contact hours)offered Course Code (if any) Year of offering No. of times offered during the same year Duration of course Number of students enrolled in the year Number of Students completing the course in the year Year 3 Name of the value added courses (with 30 o",
+          "reranker_score": 0.109,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "ca491682-cebe-4db2-8fea-7fc7f11c1ce4",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 50,
+          "source_type": "framework",
+          "criterion": "1.3.2",
+          "framework": "NAAC",
+          "text": "1.3.2 QnM Number of value-added courses for imparting transferable and life skills offered during last five years 1.3.2.1: How many new value-added courses are added within the last 5 years Data Requirement for last five years: (As per Data Template) \uf0b7 Names of the value added courses with 30 or more contact hours \uf0b7 No. of times offered during the same year \uf0b7 Total no. of students completing the course in the year\n\n[PAGE_51]\nManual for Universities NAAC for Quality and Excellence in Higher Education File Description (Upload) \uf0b7 Any additional information \uf0b7 Brochure or any other document relatin",
+          "reranker_score": 0.026,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "88baf7eb-4cdf-40a5-999a-e1406a3c701d",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 7: Institutional Values and Best Practices",
+          "reranker_score": 0.002,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "60f287e4-e7df-4816-90d9-a95353c24a3a",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: 1.1\nCriteria and Key Indicators: Curriculum Design and Development\nKey Indicator Weightage (W) i: 50\nKey Indicator Wise Weighted Grade Points (KIWGP) i: 200",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "88baf7eb-4cdf-40a5-999a-e1406a3c701d": {
+            "strength": "Weak",
+            "score": 0.0009670110186561941,
+            "dimensions_covered": 0
+          },
+          "60f287e4-e7df-4816-90d9-a95353c24a3a": {
+            "strength": "Weak",
+            "score": 0.0004933361196890473,
+            "dimensions_covered": 0
+          },
+          "17891310-423c-4498-90fc-bb695c253f92": {
+            "strength": "Weak",
+            "score": 0.00038607685128226875,
+            "dimensions_covered": 0
+          },
+          "c76943e6-70d8-4144-bf54-48b636a05a57": {
+            "strength": "Weak",
+            "score": 0.0002851185039617121,
+            "dimensions_covered": 0
+          },
+          "05510efe-eb33-4a79-968d-600708b651f3": {
+            "strength": "Weak",
+            "score": 0.00024301475496031342,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 5.3558353101834655e-05,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 3.178003171342425e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "time_period",
+        "education_year_1_name_of"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for value-added courses, but no specific institutional data was provided. The guidelines mention the need for 30 or more contact hours for value-added courses and the requirement for documenting the number of students enrolled and completing these courses. No specific numbers or details about the institution's value-added courses were found.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "2.1.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.262,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No institutional data on student enrollment and admission capacity for the last five years",
+        "Missing year-wise breakdown of seats filled and eligible applications received",
+        "Lack of specific numbers on student enrollment and profile"
+      ],
+      "recommendations": [
+        "Launch 'Student Enrollment Tracking System' to monitor and record student admission data (Budget: \u20b95 Lakhs, Timeline: 3 months). Apply for AICTE funding for 'Student Enrollment and Profile Analysis' project (\u20b910-15 Lakhs, Deadline: September 2026). Establish 'Admission Cell' to streamline admission processes and track enrollment data - target 500 students for the upcoming academic year. Partner with nearby universities (e.g., Punjabi University) for benchmarking and best practices."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "78efa290-4917-4a7f-a85f-1767de7d5cb7",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 104,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "eaching-Learning and Evaluation (200) Key Indicator - 2.1 Student Enrolment and Profile (10) 6. 2.1.1 Demand Ratio (Average of Last five years) (5) 2.1.1.1: Number of seats available year wise during the last five years Year 1 Programme name Programme Code Number of seats available/sanctioned Number of eligible applications received Number of Students admitted Year 2 Programme name Programme Code Number of seats available/sanctioned Number of eligible applications Number of Students admitted\n\n[PAGE_105]",
+          "reranker_score": 0.53,
+          "strength": "Moderate"
+        },
+        {
+          "chunk_id": "c272ad29-33bb-4881-ba5f-64d754f42da6",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 53,
+          "source_type": "framework",
+          "criterion": "2.1.1",
+          "framework": "NAAC",
+          "text": "2.1.1 QnM Demand Ratio (Average of last five years) 2.1.1.1: Number of seats available year wise during the last five years Year Number Data Requirement for last five years: (As per Data Template) \uf0b7 Number of seats available in all the Programmes \uf0b7 Total number of eligible applications received \uf0b7 Total number of Seats filled against sanctioned seats Formula: \ud835\udc0d\ud835\udc2e\ud835\udc26\ud835\udc1b\ud835\udc1e\ud835\udc2b \ud835\udc28\ud835\udc1f \ud835\udc1e\ud835\udc25\ud835\udc22\ud835\udc20\ud835\udc22\ud835\udc1b\ud835\udc25\ud835\udc1e \ud835\udc1a\ud835\udc29\ud835\udc29\ud835\udc25\ud835\udc22\ud835\udc1c\ud835\udc1a\ud835\udc2d\ud835\udc22\ud835\udc28\ud835\udc27\ud835\udc2c \ud835\udc2b\ud835\udc1e\ud835\udc1c\ud835\udc1e\ud835\udc22\ud835\udc2f\ud835\udc1e\ud835\udc1d \ud835\udc0d\ud835\udc2e\ud835\udc26\ud835\udc1b\ud835\udc1e\ud835\udc2b \ud835\udc28\ud835\udc1f \ud835\udc2c\ud835\udc1e\ud835\udc1a\ud835\udc2d\ud835\udc2c \ud835\udc1a\ud835\udc2f\ud835\udc1a\ud835\udc22\ud835\udc25\ud835\udc1a\ud835\udc1b\ud835\udc25\ud835\udc1e = \ud835\udc11\ud835\udc1a\ud835\udc2d\ud835\udc22\ud835\udc28 \ud835\udc0f\ud835\udc1e\ud835\udc2b \ud835\udc18\ud835\udc1e\ud835\udc1a\ud835\udc2b \ud835\udc00\ud835\udc2f\ud835\udc1e\ud835\udc2b\ud835\udc1a\ud835\udc20\ud835\udc1e \ud835\udc11\ud835\udc1a\ud835\udc2d\ud835\udc22\ud835\udc28 = \u2211\ud835\udc11\ud835\udc1a\ud835\udc2d\ud835\udc22\ud835\udc28 \ud835\udc29\ud835\udc1e\ud835\udc2b \ud835\udc18\ud835\udc1e\ud835\udc1a\ud835\udc2b File Description (Upload) \uf0b7 Any additional information Demand Ratio (Average of Last five years) based on Data Template upl",
+          "reranker_score": 0.114,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "4eccba7d-9ac4-4e54-9341-539f59f1c5bc",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 104,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "lications Number of Students admitted\n\n[PAGE_105]\nManual for Universities NAAC for Quality and Excellence in Higher Education received Year 3 Programme name Programme Code Number of seats available/sanctioned Number of eligible applications received Number of Students admitted Year 4 Programme name Programme Code Number of seats available/sanctioned Number of eligible applications received Number of Students admitted Year 5 Programme name Programme Code Number of seats available/sanctioned Number of eligible applications received Number of Students admitted\n\n[PAGE_106]",
+          "reranker_score": 0.032,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "8287ee70-18d2-4c19-9dec-38f4b04e9e03",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 1,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "NAAC Institutional Assessment and Accreditation (Effective from July 2017) Accreditation - (Cycle: 1) CHITKARA UNIVERSITY, Rajpura, Punjab, 140401 Track ID : PBUNGN106962 AISHE-ID : U-0373 Visit dates : 30 - 08 - 2021 to 01 - 09 - 2021 Grade Sheet NATIONAL ASSESSMENT AND ACCREDITATION COUNCIL An Autonomous Institution of the University Grants Commission P.O. Box No. 1075, Nagarbhavi, Bengaluru - 560 072, INDIA 1 / 4",
+          "reranker_score": 0.005,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "673fab62-cdc7-4b9e-af52-bab447653670",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: 2.1\nCriteria and Key Indicators: Student Enrollment and Profile\nKey Indicator Weightage (W) i: 10\nKey Indicator Wise Weighted Grade Points (KIWGP) i: 20",
+          "reranker_score": 0.003,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.002880735509097576,
+            "dimensions_covered": 0
+          },
+          "673fab62-cdc7-4b9e-af52-bab447653670": {
+            "strength": "Weak",
+            "score": 0.0018149642273783684,
+            "dimensions_covered": 0
+          },
+          "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8": {
+            "strength": "Weak",
+            "score": 0.0005274141090922058,
+            "dimensions_covered": 0
+          },
+          "0becbb24-1f0e-4978-bf65-90d79d233f9f": {
+            "strength": "Weak",
+            "score": 0.0001456909842090681,
+            "dimensions_covered": 0
+          },
+          "de53dc4e-1fc0-4696-9769-218eaea39139": {
+            "strength": "Weak",
+            "score": 6.49962414172478e-05,
+            "dimensions_covered": 0
+          },
+          "c058d96f-e750-40e3-be0f-6dc3588705ae": {
+            "strength": "Weak",
+            "score": 6.008806085446849e-05,
+            "dimensions_covered": 0
+          },
+          "05510efe-eb33-4a79-968d-600708b651f3": {
+            "strength": "Weak",
+            "score": 4.6680936065968126e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "time_period",
+        "lications_number_of_students_admitted"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for calculating demand ratio with specific data requirements for the last five years, including the number of seats available, eligible applications received, and seats filled. However, no specific institutional data was found, only templates and guidelines. The guidelines mention the need for year-wise data on seats available, eligible applications, and students admitted.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "3.2.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.259,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of funding from government agencies like DST, SERB, DBT, ICSSR",
+        "Missing year-wise breakdown of extramural funding for research projects",
+        "No data on the number of research projects or total funding amount"
+      ],
+      "recommendations": [
+        "Apply for DST-SERB Core Research Grant (\u20b925-50 Lakhs, Deadline: June 2026) and DBT Research Grant (\u20b915-30 Lakhs, Deadline: September 2026). Launch National Conference on AI and Data Science (300 participants, Budget: \u20b98 Lakhs, Duration: 3 days). Establish Industry Collaboration Cell and target 5 MoUs with IT companies for funded projects (\u20b910-15 Lakhs each, Deadline: December 2026). Partner with IITs/NITs for resource persons and expertise."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "602ac653-266d-4062-97b8-be508b69c959",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 110,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "uality and Excellence in Higher Education 18. 3.1.6 Percentage of departments with UGC-SAP, CAS, DST-FIST, DBT, ICSSR and other recognitions by national and international agencies (Data for the latest completed academic year) (5) 3.2.1 Extramural funding for Research (Grants sponsored by the non-government sources such as industry, corporate houses, international bodies for research projects) endowments, Chairs in the University during the last five years (INR in Lakhs) (5) 3.2.2 Grants for research projects sponsored by the government agencies during the last five years (INR in Lakhs) (10) 3.",
+          "reranker_score": 0.997,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "c6ba62e6-a75e-44ca-bad6-978107f09b19",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 63,
+          "source_type": "framework",
+          "criterion": "3.2.1",
+          "framework": "NAAC",
+          "text": "3.2.1 QnM Extramural funding for Research (Grants sponsored by the non- government sources such as industry, corporate houses, international bodies for research projects) endowments, Chairs in the University during the last five years (INR in Lakhs) 3.2.1.1: Total Grants for research projects sponsored by the non- government sources such as industry, corporate houses, international bodies, endowments, Chairs in the institution year wise during the last five years (INR in Lakhs) Year INR in Lakhs Data requirement for last five years: (As per Data Template) \uf0b7 Name of the Project/ Endowments, Cha",
+          "reranker_score": 0.817,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "b8e13da9-f0f2-4429-aef5-24c054427f2f",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 62,
+          "source_type": "framework",
+          "criterion": "3.1.6",
+          "framework": "NAAC",
+          "text": "3.1.6 QnM Percentage of departments with UGC-SAP, CAS, DST-FIST, DBT, ICSSR and other recognitions by national and international agencies (Data for the latest completed academic year) 3.1.6.1: The Number of departments with UGC-SAP, CAS, DST-FIST , DBT, ICSSR and other similar recognitions by national and international agencies Data Requirements: (As per Data Template) \uf0b7 Name of the Department \uf0b7 Name of the Scheme \uf0b7 Name of the funding agency \uf0b7 Year of Award \uf0b7 Funds provided \uf0b7 Duration of award Formula:\n\n[PAGE_63]",
+          "reranker_score": 0.27,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "908d9ee9-9194-4291-8470-e112ec5e29d0",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 3: Research, Innovations and Extension",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "7b0aa44d-c45d-4c5b-9081-f794ed627992",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "Criteria and Key Indicators: Infrastructure",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "908d9ee9-9194-4291-8470-e112ec5e29d0": {
+            "strength": "Weak",
+            "score": 0.0002957006567157805,
+            "dimensions_covered": 0
+          },
+          "7b0aa44d-c45d-4c5b-9081-f794ed627992": {
+            "strength": "Weak",
+            "score": 8.696782460901885e-05,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 2.7049551863456146e-05,
+            "dimensions_covered": 0
+          },
+          "c8c6f650-ff49-47ef-8bd1-4c79d4ccea81": {
+            "strength": "Weak",
+            "score": 2.6840133068617432e-05,
+            "dimensions_covered": 0
+          },
+          "2d5f5c7d-0720-4c2f-8647-f0c082799619": {
+            "strength": "Weak",
+            "score": 2.624995759106241e-05,
+            "dimensions_covered": 0
+          },
+          "bee158ba-dc0f-46ed-854d-d4407c00af6d": {
+            "strength": "Weak",
+            "score": 2.553896920289844e-05,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 2.2370742954080924e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_agencies",
+        "time_period"
+      ],
+      "dimensions_missing": [],
+      "explanation": "No specific evidence of extramural research funding was found, only framework guidelines for NAAC 3.2.1. The guidelines mention the need for data on extramural funding for research from non-government sources such as industry, corporate houses, and international bodies.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "3.3.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.266,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of actual research papers published in UGC notified journals",
+        "Missing year-wise breakdown of research papers published",
+        "No data on the number of teachers or research papers per teacher"
+      ],
+      "recommendations": [
+        "Apply for ICSSR Major Research Project (\u20b915-20 Lakhs, Deadline: August 2026) to support research publications. Launch a 2-day National Seminar on 'Research Publications in UGC CARE Journals' (150 participants, Budget: \u20b93 Lakhs) in collaboration with a nearby university. Establish a Research Cell to facilitate research paper writing and publication - target 20 research papers in UGC CARE journals within the next 12 months. Partner with a nearby IIT or NIT for research collaborations and joint publications."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "d78c58e6-1952-4f5c-a497-ec7ae67b222e",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 111,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "ation of the scholar Year of award of PhD 23. 3.4.5 Number of research papers per teacher in the Journals notified on UGC website during the last five years (15) 3.4.5.1: Number of research papers in the Journals notified on UGC website during the last five years Title of paper Name of the author/s Department of the teacher Name of journal Year of publication ISSN number Link to the recognition in UGC enlistment of the Journal\n\n[PAGE_112]\nManual for Universities NAAC for Quality and Excellence in Higher Education 24. 3.4.",
+          "reranker_score": 0.41,
+          "strength": "Moderate"
+        },
+        {
+          "chunk_id": "46da3c4f-4e65-4d66-9c59-a2a2ab4d770f",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 68,
+          "source_type": "framework",
+          "criterion": "3.4.5",
+          "framework": "NAAC",
+          "text": "3.4.5 QnM Number of research papers per teacher in the Journals notified on UGC website during the last five years 3.4.5.1: Number of research papers in the Journals notified on UGC website during the last five years Year Number Data Requirements: (As per Data Template) \uf0b7 Title of paper \uf0b7 Name of the author/s \uf0b7 Department of the teacher \uf0b7 Name of journal \uf0b7 Year of publication \uf0b7 ISBN/ISSN number Formula: \ud835\udc0d\ud835\udc2e\ud835\udc26\ud835\udc1b\ud835\udc1e\ud835\udc2b \ud835\udc28\ud835\udc1f \ud835\udc29\ud835\udc2e\ud835\udc1b\ud835\udc25\ud835\udc22\ud835\udc1c\ud835\udc1a\ud835\udc2d\ud835\udc22\ud835\udc28\ud835\udc27\ud835\udc2c \ud835\udc22\ud835\udc27 \ud835\udc14\ud835\udc06\ud835\udc02 \ud835\udc27\ud835\udc28\ud835\udc2d\ud835\udc22\ud835\udc1f\ud835\udc22\ud835\udc1e\ud835\udc1d \ud835\udc23\ud835\udc28\ud835\udc2e\ud835\udc2b\ud835\udc27\ud835\udc1a\ud835\udc25\ud835\udc2c \ud835\udc1d\ud835\udc2e\ud835\udc2b\ud835\udc22\ud835\udc27\ud835\udc20 \ud835\udc2d\ud835\udc21\ud835\udc1e \ud835\udc25\ud835\udc1a\ud835\udc2c\ud835\udc2d \ud835\udc1f\ud835\udc22\ud835\udc2f\ud835\udc1e \ud835\udc32\ud835\udc1e\ud835\udc1a\ud835\udc2b\ud835\udc2c \ud835\udc00\ud835\udc2f\ud835\udc1e\ud835\udc2b\ud835\udc1a\ud835\udc20\ud835\udc1e \ud835\udc27\ud835\udc2e\ud835\udc26\ud835\udc1b\ud835\udc1e\ud835\udc2b \ud835\udc28\ud835\udc1f \ud835\udc1f\ud835\udc2e\ud835\udc25\ud835\udc25 \ud835\udc2d\ud835\udc22\ud835\udc26\ud835\udc1e \ud835\udc2d\ud835\udc1e\ud835\udc1a\ud835\udc1c\ud835\udc21\ud835\udc1e\ud835\udc2b\ud835\udc2c \ud835\udc1d\ud835\udc2e\ud835\udc2b\ud835\udc22\ud835\udc27\ud835\udc20 \ud835\udc2d\ud835\udc21\ud835\udc1e \ud835\udc25\ud835\udc1a\ud835\udc2c\ud835\udc2d \ud835\udc1f\ud835\udc22\ud835\udc2f\ud835\udc1e \ud835\udc32\ud835\udc1e\ud835\udc1a\ud835\udc2b\ud835\udc2c File Description (Upload) \uf0b7 Any additional information",
+          "reranker_score": 0.229,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "e4f7c83a-45f1-436d-af87-73912f2098ae",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 99,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "f the University 3. Names of programmes offered 4. Number of teaching posts Sanctioned/Filled 5. Number of Research Projects: Total grants received 6. Inter \u2013institutional collaborative projects and Associated grants received National collaboration International collaboration 7. Departmental projects funded by DST-FIST, UGC-SAP/CAS,DPE, DBT, ICSSR, AICTE etc., : Total grants received 8. Special research laboratories sponsored by / created by industry or corporate bodies 9. Publications: Number of Papers published Number of Books with ISBN Number of Citation Index \u2013 range / average Number of Im",
+          "reranker_score": 0.188,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "c4e3cb02-f03d-4709-b401-52ce44e03686",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: 3.4\nCriteria and Key Indicators: Research Publications and Awards\nKey Indicator Weightage (W) i: 100\nKey Indicator Wise Weighted Grade Points (KIWGP) i: 150",
+          "reranker_score": 0.003,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "bee158ba-dc0f-46ed-854d-d4407c00af6d",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: 3.1\nCriteria and Key Indicators: Promotion of Research and Facilities\nKey Indicator Weightage (W) i: 20\nKey Indicator Wise Weighted Grade Points (KIWGP) i: 59",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "c4e3cb02-f03d-4709-b401-52ce44e03686": {
+            "strength": "Weak",
+            "score": 0.0017054742202162743,
+            "dimensions_covered": 0
+          },
+          "bee158ba-dc0f-46ed-854d-d4407c00af6d": {
+            "strength": "Weak",
+            "score": 0.00047948237042874095,
+            "dimensions_covered": 0
+          },
+          "2d5f5c7d-0720-4c2f-8647-f0c082799619": {
+            "strength": "Weak",
+            "score": 0.00029926170827820897,
+            "dimensions_covered": 0
+          },
+          "c76b240d-5b81-4654-a2d5-0a49bfde2364": {
+            "strength": "Weak",
+            "score": 0.00028077997849322854,
+            "dimensions_covered": 0
+          },
+          "36ef7ef5-fab1-40e7-a47e-ca517fbf86cd": {
+            "strength": "Weak",
+            "score": 0.00018708888092078269,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.00010434543946757913,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 2.4916879192460327e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "time_period",
+        "project_count"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for research papers in UGC notified journals, but no specific institutional data on the number of research papers published. The guidelines mention the requirement for the number of research papers per teacher in the last five years, but no actual numbers are provided. The institution has a weightage of 100 for research publications and awards, with a weighted grade point of 150.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "3.4.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.244,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of specific extension and outreach programs conducted by the institution",
+        "Missing year-wise breakdown of activities and funding",
+        "Lack of documentation on collaboration with industry, community, and NGOs"
+      ],
+      "recommendations": [
+        "Launch 'Community Outreach Program' (\u20b95 Lakhs, 1000 beneficiaries) in collaboration with local NGOs, focusing on Swachh Bharat, Aids Awareness, and Gender Issues. Establish an NSS unit and organize 10 awareness campaigns (500 participants) on social issues. Apply for funding from the Ministry of Youth Affairs and Sports (\u20b910-15 Lakhs) to support these initiatives. Partner with nearby IIT/NIT for resource persons and expertise. Target 5 MoUs with local industries for community development projects (\u20b910-15 Lakhs each)."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "7d3fb18d-5a70-416d-b98b-32865688273b",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 113,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "rd/ recognition Name of the Awarding government/ government recognised bodies Year of award\n\n[PAGE_114]\nManual for Universities NAAC for Quality and Excellence in Higher Education 28. 3.6. 3 Number of extension and outreach programs conducted by the institution through NSS/NCC/Red cross/YRC etc. during the last five years ( including Government initiated programs such as Swachh Bharat, Aids Awareness, Gender Issue, etc. and those organised in collaboration with industry, community and NGOs) (12) 3.6.4 Average percentage of students participating in extension activities listed at 3.6.",
+          "reranker_score": 0.961,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "de046cf1-b0fb-4e0d-a9bf-118151cb51e9",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 72,
+          "source_type": "framework",
+          "criterion": "3.6.3",
+          "framework": "NAAC",
+          "text": "3.6.3 QnM Number of extension and outreach programs conducted by the institution including those through NSS/NCC/Red cross/YRC during the last five years ( including Government initiated programs such as Swachh Bharat, Aids Awareness, Gender Issue, etc. and those organised in collaboration with industry, community and NGOs) 3.6.3.1: Number of extension and outreach programs conducted by the institution through NSS/NCC/Red cross/YRC etc. during the last five years ( including Government initiated programs such as Swachh Bharat, Aids Awareness, Gender Issue, etc.",
+          "reranker_score": 0.895,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "94128fbd-5eec-48c2-af3b-b957dfdeb76f",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 72,
+          "source_type": "framework",
+          "criterion": "3.6.3",
+          "framework": "NAAC",
+          "text": "Swachh Bharat, Aids Awareness, Gender Issue, etc. and those organised in collaboration with industry, community and NGOs) year wise during the last five years Year Number Data Requirement for last five years: (As per Data Template) \uf0b7 Name and number of the extension and outreach Programmes \uf0b7 Name of the collaborating agency: Non- government, industry, community with contact details File description (Upload) \uf0b7 Reports of the event organized \uf0b7 Any additional information \uf0b7 Number of extension and outreach Programmes conducted with industry, community etc for the last five years (Data Template)",
+          "reranker_score": 0.132,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 5: Student Support and Progression",
+          "reranker_score": 0.002,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "88baf7eb-4cdf-40a5-999a-e1406a3c701d",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 7: Institutional Values and Best Practices",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8": {
+            "strength": "Weak",
+            "score": 0.0009828442940488457,
+            "dimensions_covered": 0
+          },
+          "88baf7eb-4cdf-40a5-999a-e1406a3c701d": {
+            "strength": "Weak",
+            "score": 0.000721242930740118,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 0.00014187330671120436,
+            "dimensions_covered": 0
+          },
+          "fe1f61bf-f646-448e-8cb4-d8e276964ba7": {
+            "strength": "Weak",
+            "score": 7.629679748788476e-05,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 6.353988574119285e-05,
+            "dimensions_covered": 0
+          },
+          "05510efe-eb33-4a79-968d-600708b651f3": {
+            "strength": "Weak",
+            "score": 2.246422955067828e-05,
+            "dimensions_covered": 0
+          },
+          "36ef7ef5-fab1-40e7-a47e-ca517fbf86cd": {
+            "strength": "Weak",
+            "score": 2.2372362582245842e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "time_period",
+        "funding_agencies"
+      ],
+      "dimensions_missing": [],
+      "explanation": "No specific institutional data was found regarding extension activities, community engagement, and social issues. The retrieved evidence primarily consists of framework guidelines for NAAC 3.4.1, mentioning the need for data on extension and outreach programs conducted through NSS/NCC/Red cross/YRC, but without providing actual numbers or details. The evidence does not include any specific information on the institution's activities or achievements in this area.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "3.4.2",
+      "compliance_status": "Partial",
+      "confidence_score": 0.253,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of awards or recognition received for extension activities",
+        "Missing year-wise breakdown of extension activities",
+        "No documentation of funding received for extension activities"
+      ],
+      "recommendations": [
+        "Apply for the National Award for Excellence in Extension Activities (\u20b95-10 Lakhs, Deadline: September 2026) from the Ministry of Education. Launch the 'Community Outreach Program' (150 participants, Budget: \u20b93 Lakhs) in partnership with local NGOs. Establish an Extension Activities Cell - target 3 MoUs with government agencies for funded projects (\u20b95-10 Lakhs each) and organize 2 national seminars on extension activities (200 participants, Budget: \u20b94 Lakhs each) with funding from ICSSR and UGC."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "76326787-e443-4f12-9c7f-c529e1d01f16",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 113,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "ning with contact details Year Revenue generated (amount in rupees) Number of trainees Key Indicator - 3.6 Extension Activities (40) 27. 3.6.2 Number of awards received by the Institution, its teachers and students from Government /Government recognised bodies in recognition of the extension activities carried out during the last five years (10) 3.6.2.1: Total number of awards and recognition received for extension activities from Government / Government recognised bodies year wise during the last five years Name of the activity Name of the Award/ recognition Name of the Awarding government/ g",
+          "reranker_score": 0.97,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "861e8019-012a-45ed-a3fe-6c5c30b84cfe",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 71,
+          "source_type": "framework",
+          "criterion": "3.6.2",
+          "framework": "NAAC",
+          "text": "3.6.2 QnM Number of awards received by the Institution, its teachers and students from Government /Government recognised bodies in recognition of the extension activities carried out during the last five years Management related to consultancy policy \uf0b7 Upload soft copy of the Consultancy Policy \uf0b7 Upload any additional information \uf0b7 Paste URL of the consultancy policy document",
+          "reranker_score": 0.939,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "41b0c276-b704-4727-a702-954c6f792896",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 72,
+          "source_type": "framework",
+          "criterion": "3.5.2",
+          "framework": "NAAC",
+          "text": "r Number Data Requirement for last five years: (As per Data Template) \uf0b7 Name of the activity \uf0b7 Name of the Award/ recognition \uf0b7 Name of the Awarding Government/ Government recognized bodies \uf0b7 Year of the Award File Description (Upload) \uf0b7 Any additional information \uf0b7 Number of awards for extension activities in last 5 year (Data Template) \uf0b7 e-copy of the award letters",
+          "reranker_score": 0.741,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "1eb95d17-b396-4b14-ba70-79cc3923f9ca",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: 3.6\nCriteria and Key Indicators: Extension Activities\nKey Indicator Weightage (W) i: 40\nKey Indicator Wise Weighted Grade Points (KIWGP) i: 148",
+          "reranker_score": 0.004,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "908d9ee9-9194-4291-8470-e112ec5e29d0",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 3: Research, Innovations and Extension",
+          "reranker_score": 0.002,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "1eb95d17-b396-4b14-ba70-79cc3923f9ca": {
+            "strength": "Weak",
+            "score": 0.002679460309445858,
+            "dimensions_covered": 0
+          },
+          "908d9ee9-9194-4291-8470-e112ec5e29d0": {
+            "strength": "Weak",
+            "score": 0.0009696991648524999,
+            "dimensions_covered": 0
+          },
+          "c8c6f650-ff49-47ef-8bd1-4c79d4ccea81": {
+            "strength": "Weak",
+            "score": 8.601158915553241e-05,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 3.624603850767016e-05,
+            "dimensions_covered": 0
+          },
+          "36ef7ef5-fab1-40e7-a47e-ca517fbf86cd": {
+            "strength": "Weak",
+            "score": 2.2396314307115972e-05,
+            "dimensions_covered": 0
+          },
+          "0becbb24-1f0e-4978-bf65-90d79d233f9f": {
+            "strength": "Weak",
+            "score": 2.2378614085027947e-05,
+            "dimensions_covered": 0
+          },
+          "c76943e6-70d8-4144-bf54-48b636a05a57": {
+            "strength": "Weak",
+            "score": 2.2372875537257642e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_amount",
+        "time_period"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for extension activities with no specific institutional data. The guidelines mention the requirement for documenting awards and recognition received for extension activities from government or government-recognized bodies over the last five years. However, no actual numbers or details of such awards were found in the evidence.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "3.5.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.255,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of existing MoUs with institutions or industries",
+        "Missing year-wise breakdown of collaborative activities",
+        "Lack of documented proof from institutional records"
+      ],
+      "recommendations": [
+        "Establish an Industry Collaboration Cell to target 5 MoUs with IT companies for funded projects (\u20b910-15 Lakhs each) within the next 12 months. Apply for DST-SERB Core Research Grant (\u20b925-50 Lakhs, Deadline: June 2026) for collaborative research projects. Launch a National Conference on Innovation and Entrepreneurship (300 participants, Budget: \u20b98 Lakhs) in partnership with IIT/NIT to facilitate industry-academia collaboration. Allocate \u20b95 Lakhs for establishing a dedicated internship and training program with 10 industry partners, aiming to benefit 200 students within the next 18 months."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "a61a0b8c-22ff-4c58-a7e9-068886590e5e",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 114,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "establishment/industry for research and academic development of faculty and students year wise during the last five years Sl. No . Title of the collaborative activity Name of the collaborating agency with contact details Name of the participant Year of collaboration Duration Nature of the activity Link to the relevant document 30. 3.7.2 Number of functional MoUs with institutions/ industries in India and abroad for internship, on-the-job training, project work, student / faculty exchange and collaborative research during the last five years (10) 3.7.2.",
+          "reranker_score": 0.989,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "13787d3d-36d7-4f1e-b886-22409f8cf7fb",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 114,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "ve research during the last five years (10) 3.7.2.1: Number of functional MoUs with institutions/ industries in India and abroad for internship, on-the-job training, project work, student / faculty exchange and collaborative research during the last five years Organisation with which MoU is signed Name of the institution/ industry Year of signing MoU Duration List the actual activities under each MOU year wise Number of students/teachers participated under MoUs\n\n[PAGE_115]\nManual for Universities NAAC for Quality and Excellence in Higher Education Criterion IV \u2013 Infrastructure and Learning Res",
+          "reranker_score": 0.899,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "0581bcaa-9a22-43d4-a477-d28b584325e5",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 74,
+          "source_type": "framework",
+          "criterion": "3.7.2",
+          "framework": "NAAC",
+          "text": "3.7.2 QnM Number of functional MoUs with institutions/ industries in India and abroad for internship, on-the-job training, project work, student / faculty exchange and collaborative research during the last five years 3.7.2.1: Number of functional MoUs with institutions/ industries in India and abroad for internship, on-the-job training, project work, student / faculty exchange and collaborative research during the last five years Year Number Data Requirements for last five years: (As per Data Template) \uf0b7 Organisation with which MoU is signed \uf0b7 Name of the institution/ industry \uf0b7 Year of signi",
+          "reranker_score": 0.83,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "8287ee70-18d2-4c19-9dec-38f4b04e9e03",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 1,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "NAAC Institutional Assessment and Accreditation (Effective from July 2017) Accreditation - (Cycle: 1) CHITKARA UNIVERSITY, Rajpura, Punjab, 140401 Track ID : PBUNGN106962 AISHE-ID : U-0373 Visit dates : 30 - 08 - 2021 to 01 - 09 - 2021 Grade Sheet NATIONAL ASSESSMENT AND ACCREDITATION COUNCIL An Autonomous Institution of the University Grants Commission P.O. Box No. 1075, Nagarbhavi, Bengaluru - 560 072, INDIA 1 / 4",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "908d9ee9-9194-4291-8470-e112ec5e29d0",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 3: Research, Innovations and Extension",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.0006784760858863592,
+            "dimensions_covered": 0
+          },
+          "908d9ee9-9194-4291-8470-e112ec5e29d0": {
+            "strength": "Weak",
+            "score": 0.00023076149518601595,
+            "dimensions_covered": 0
+          },
+          "59934005-6678-4e9d-8238-8174b3576127": {
+            "strength": "Weak",
+            "score": 0.00022929577971808612,
+            "dimensions_covered": 0
+          },
+          "88baf7eb-4cdf-40a5-999a-e1406a3c701d": {
+            "strength": "Weak",
+            "score": 0.0002124277758412063,
+            "dimensions_covered": 0
+          },
+          "857ed350-600a-4ee1-8323-d2164e4715b1": {
+            "strength": "Weak",
+            "score": 2.8598785138456148e-05,
+            "dimensions_covered": 0
+          },
+          "7b0aa44d-c45d-4c5b-9081-f794ed627992": {
+            "strength": "Weak",
+            "score": 2.2382095630746333e-05,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 2.2371764498529955e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_agencies",
+        "time_period"
+      ],
+      "dimensions_missing": [],
+      "explanation": "No specific institutional data was found regarding MoUs with institutions or industries for internship, training, or research. The evidence primarily consists of framework guidelines for NAAC accreditation, with no documented proof from institutional records. The text mentions the requirement for MoUs but does not provide actual numbers or details.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "4.1.2",
+      "compliance_status": "Partial",
+      "confidence_score": 0.232,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of actual infrastructure expenditure budget allocation",
+        "Missing year-wise breakdown of expenditure on infrastructure augmentation",
+        "Lack of documented proof from institutional records"
+      ],
+      "recommendations": [
+        "Apply for AICTE - FDP grant (\u20b910-15 Lakhs, Deadline: September 2026) to upgrade infrastructure facilities. Launch 'Infrastructure Development Project' (Budget: \u20b950 Lakhs, Timeline: 12 months) focusing on classroom modernization, library expansion, and IT infrastructure enhancement. Establish a 'Campus Development Cell' to oversee infrastructure projects and allocate \u20b920 Lakhs for maintenance of physical and academic support facilities. Partner with IIT/NIT for resource sharing and expertise."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "b960c25f-cf02-4901-8399-69ded59465ce",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 115,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "ion Criterion IV \u2013 Infrastructure and Learning Resources (100) Key Indicator - 4.1 Physical Facilities (30) 31. 4.1.4 Average percentage of expenditure excluding salary for infrastructure augmentation during the last five years (INR in Lakhs) (10) 4.4.1 Average percentage expenditure incurred on maintenance of physical facilities and academic support facilities excluding salary component during the last five years (INR in lakhs) (10) Year Budget allocated for infrastructure augmentation Expenditure for infrastructure augmentation Total expenditure excluding Salary Expenditure on maintenace of",
+          "reranker_score": 0.824,
+          "strength": "Strong"
+        },
+        {
+          "chunk_id": "110edb54-2774-41ba-836e-8655df80fa77",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 17,
+          "source_type": "framework",
+          "criterion": null,
+          "framework": "NAAC",
+          "text": "ucture 4.4 Maintenance of Campus Infrastructure 4.1 Physical Facilities Adequate infrastructure facilities are keys for effective and efficient conduct of the educational programmes. The growth of infrastructure thus has to keep pace with the academic developments in the institution. The other supportive facilities on the campus are developed to contribute to the effective ambience for curricular, extra- curricular and administrative activities. A provision of expenditure in the budget is made annually for maintenance and replenishment of physical facilities which will ensure their availabilit",
+          "reranker_score": 0.143,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "7b0aa44d-c45d-4c5b-9081-f794ed627992",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "Criteria and Key Indicators: Infrastructure",
+          "reranker_score": 0.003,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "2bc5ff54-e013-417d-95be-82fa90714c41",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 79,
+          "source_type": "framework",
+          "criterion": "4.4.1",
+          "framework": "NAAC",
+          "text": "r year = Expenditure on maintenance of physical and academic support facilities excluding salary component Total expenditure excluding salary component X \ud835\udfcf\ud835\udfce\ud835\udfce Average percentage = \u2211 Percentage per year File Description \uf0b7 Upload any additional information \uf0b7 Audited statements of accounts. \uf0b7 Details about assigned budget and expenditure on physical facilities and academic facilities (Data Templates as of 4.1.4)\n\n[PAGE_80]\nManual for Universities NAAC for Quality and Excellence in Higher Education Criterion V - Student Support and Progression (100) Key Indicator - 5.",
+          "reranker_score": 0.011,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "59934005-6678-4e9d-8238-8174b3576127",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 4: Infrastructure and Learning Resources",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "7b0aa44d-c45d-4c5b-9081-f794ed627992": {
+            "strength": "Weak",
+            "score": 0.0019092776812613009,
+            "dimensions_covered": 0
+          },
+          "59934005-6678-4e9d-8238-8174b3576127": {
+            "strength": "Weak",
+            "score": 0.0003050071187317371,
+            "dimensions_covered": 0
+          },
+          "32de7560-f99f-40c0-9f18-240629d9374a": {
+            "strength": "Weak",
+            "score": 3.775216173380613e-05,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 2.9436864133458583e-05,
+            "dimensions_covered": 0
+          },
+          "671e3f3d-8775-4a89-8b76-94ed4eeac2f6": {
+            "strength": "Weak",
+            "score": 2.354386233491823e-05,
+            "dimensions_covered": 0
+          },
+          "2d5f5c7d-0720-4c2f-8647-f0c082799619": {
+            "strength": "Weak",
+            "score": 2.2371253726305438e-05,
+            "dimensions_covered": 0
+          },
+          "496b7c7c-6718-425a-ba51-6fd4b5f395b6": {
+            "strength": "Weak",
+            "score": 2.237044391222298e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "time_period",
+        "r_year_=_expenditure_on"
+      ],
+      "dimensions_missing": [],
+      "explanation": "No specific institutional data on infrastructure expenditure budget allocation and facilities development augmentation was found. The retrieved evidence primarily consists of framework guidelines and templates for NAAC accreditation, with no actual numbers or dates provided. The evidence mentions the importance of infrastructure facilities and the need for budget allocation but lacks concrete data.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "5.1.1",
+      "compliance_status": "Partial",
+      "confidence_score": 0.263,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of funding from government agencies",
+        "Missing year-wise breakdown of scholarships and freeships",
+        "Lack of data on student beneficiaries and amount of financial aid provided"
+      ],
+      "recommendations": [
+        "Apply for Government of India's National Scholarship Portal (NSP) to facilitate student scholarships (Deadline: October 2026). Launch Institutional Scholarship Scheme (\u20b95 Lakhs, 50 beneficiaries) and establish a Financial Aid Cell to support 100 students with freeships. Partner with NGOs like the Tata Trusts for additional funding (\u20b910 Lakhs) and collaborate with the District Administration for government schemes awareness and outreach programs (target 500 students)."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "0c584718-7015-476e-b88c-7975fddb34a0",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 80,
+          "source_type": "framework",
+          "criterion": "5.1.1",
+          "framework": "NAAC",
+          "text": "5.1.1 QnM Average percentage of students benefited by scholarships and freeships provided by the institution, Government and non- government agencies (NGOs) during the last five years (other than the students receiving scholarships under the government schemes for reserved categories) 5.1.1.1: Number of students benefited by scholarships and freeships provided by the institution, Government and non-government agencies (NGOs) year wise during the last five years (other than the students receiving scholarships under the government schemes for reserved categories) Year Number Data Requirement for",
+          "reranker_score": 0.671,
+          "strength": "Moderate"
+        },
+        {
+          "chunk_id": "f266b742-edaf-419c-a6ac-9dc15c4d433a",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 119,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "AN, audio video recording facilities (Data for the latest completed academic year) (5) Room number or Name of classrooms/Seminar Hall with LCD / wifi/LAN facilities with room numbers Type of ICT facility Link to geo tagged photos and master time table ** (Data for the latest completed academic year) Criterion V - Student Support and Progression (100) Key Indicator - 5.1 Student Support (30) 34. 5.1.1 Average percentage of students benefited by scholarships, freeships, etc. provided by the institution, Government and non-government agencies (NGOs) during the last five years(other than the stude",
+          "reranker_score": 0.238,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "4f391d5c-81d7-4805-bc4f-4b438b9bd14f",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 119,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "s) during the last five years(other than the students receiving scholarships under the government schemes for reserved categories) (10) Year Name of the scheme Number of students benefited by government scheme and amount Number of students benefited by the institution's schemes and amount Number of students benefited by the non- government agencies (NGOs) and amount Link to relevant document Number of students Amount Number of students Amount Number of students Amount Name of the NGO/agency\n\n[PAGE_120]\nManual for Universities NAAC for Quality and Excellence in Higher Education 35. 5.1.",
+          "reranker_score": 0.132,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "8287ee70-18d2-4c19-9dec-38f4b04e9e03",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 1,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "NAAC Institutional Assessment and Accreditation (Effective from July 2017) Accreditation - (Cycle: 1) CHITKARA UNIVERSITY, Rajpura, Punjab, 140401 Track ID : PBUNGN106962 AISHE-ID : U-0373 Visit dates : 30 - 08 - 2021 to 01 - 09 - 2021 Grade Sheet NATIONAL ASSESSMENT AND ACCREDITATION COUNCIL An Autonomous Institution of the University Grants Commission P.O. Box No. 1075, Nagarbhavi, Bengaluru - 560 072, INDIA 1 / 4",
+          "reranker_score": 0.001,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 5: Student Support and Progression",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.0005529212881810963,
+            "dimensions_covered": 0
+          },
+          "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8": {
+            "strength": "Weak",
+            "score": 0.000280114560155198,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 4.5889653847552836e-05,
+            "dimensions_covered": 0
+          },
+          "32de7560-f99f-40c0-9f18-240629d9374a": {
+            "strength": "Weak",
+            "score": 2.6721125323092565e-05,
+            "dimensions_covered": 0
+          },
+          "f46eb7d3-97d9-4668-9f42-670e178b2aff": {
+            "strength": "Weak",
+            "score": 2.6009274733951315e-05,
+            "dimensions_covered": 0
+          },
+          "0becbb24-1f0e-4978-bf65-90d79d233f9f": {
+            "strength": "Weak",
+            "score": 2.2374283435055987e-05,
+            "dimensions_covered": 0
+          },
+          "68bbddf9-6107-4699-8f24-3b00f4bae9e6": {
+            "strength": "Weak",
+            "score": 2.2371939121512695e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_agencies",
+        "funding_amount"
+      ],
+      "dimensions_missing": [],
+      "explanation": "No specific institutional data on scholarships, freeships, and financial aid was found, with only framework guidelines and templates provided. The evidence primarily consists of NAAC framework descriptions and institutional assessment templates without actual data. No numbers or specific details on student beneficiaries or government schemes were retrieved.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "6.2.2",
+      "compliance_status": "Partial",
+      "confidence_score": 0.236,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of e-governance implementation in the institution",
+        "Missing year-wise breakdown of e-governance implementation",
+        "No information on funding for e-governance initiatives"
+      ],
+      "recommendations": [
+        "Implement e-governance ERP system for digital administration, online admission, and examination management. Apply for funding from agencies like AICTE (\u20b910-15 Lakhs) or UGC (\u20b95-10 Lakhs) for e-governance initiatives. Launch a 3-day workshop on 'E-Governance in Higher Education' (100 participants, Budget: \u20b92 Lakhs) in partnership with a nearby IIT/NIT. Establish an E-Governance Cell - target 2 MoUs with IT companies for technical support and funding (\u20b95-10 Lakhs each)."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "17a9d95b-b8c6-4582-872f-e0ea3b3df3ed",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 88,
+          "source_type": "framework",
+          "criterion": "6.2.3",
+          "framework": "NAAC",
+          "text": "Admission and Support Examination \uf0b7 Name of the Vendor with contact details \uf0b7 Year of implementation File Description (Upload) \uf0b7 ERP (Enterprise Resource Planning) Document \uf0b7 Screen shots of user interfaces \uf0b7 Any additional information \uf0b7 Details of implementation of e-governance in areas of operation, Administration etc (Data Template) Key Indicator - 6.3 Faculty Empowerment Strategies (30) Metric No. Weightage 6.3.1 QlM The institution has a performance appraisal system, promotional avenues and effective welfare measures for teaching and non-teaching staff Write description in maximum of 500",
+          "reranker_score": 0.612,
+          "strength": "Moderate"
+        },
+        {
+          "chunk_id": "0b8c05ea-5a6d-44a8-80bf-f1922516714f",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 123,
+          "source_type": "framework",
+          "criterion": "7.1.10",
+          "framework": "NAAC",
+          "text": "Leadership and Management (100) Key Indicator - 6.2 Strategy Development and Deployment (10) 42. 6.2.3 Institution Implements e-governance in its areas of operations (5) 6.2.3.1 e-governance is implemented covering following areas of operation 1. Administration, 2. Finance and Accounts, 3. Student Admission and Support, 4. Examination Areas of e governance Year of implementation Name of the Vendor with contact details Link to relevant website/ document Administration Finance and Accounts Student Admission and Support Examination Key Indicator - 6.3 Faculty Empowerment Strategies (30) 43. 6.3.",
+          "reranker_score": 0.159,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "472724e2-a718-4986-af5d-3f2e39fd3897",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 87,
+          "source_type": "framework",
+          "criterion": "6.2.3",
+          "framework": "NAAC",
+          "text": "6.2.3 QnM Institution Implements e-governance in its areas of operations 6.2.3.1 e-governance is implemented covering following areas of operation 1. Administration 2. Finance and Accounts 3. Student Admission and Support 4. Examination\n\n[PAGE_88]\nManual for Universities NAAC for Quality and Excellence in Higher Education Options: A. All of the above B. Any 3 of the above C. Any 2 of the above D. Any 1 of the above E. None of the above Data Requirements: (As per Data Template) \uf0b7 Areas of e-governance Administration Finance and Accounts Student Admission and Support Examination \uf0b7 Name of the Ve",
+          "reranker_score": 0.05,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "79e65ae7-0f90-4cb4-a37b-3223ec831c6f",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 4,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 6: Governance, Leadership and Management",
+          "reranker_score": 0.009,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "8287ee70-18d2-4c19-9dec-38f4b04e9e03",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 1,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "NAAC Institutional Assessment and Accreditation (Effective from July 2017) Accreditation - (Cycle: 1) CHITKARA UNIVERSITY, Rajpura, Punjab, 140401 Track ID : PBUNGN106962 AISHE-ID : U-0373 Visit dates : 30 - 08 - 2021 to 01 - 09 - 2021 Grade Sheet NATIONAL ASSESSMENT AND ACCREDITATION COUNCIL An Autonomous Institution of the University Grants Commission P.O. Box No. 1075, Nagarbhavi, Bengaluru - 560 072, INDIA 1 / 4",
+          "reranker_score": 0.003,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "79e65ae7-0f90-4cb4-a37b-3223ec831c6f": {
+            "strength": "Weak",
+            "score": 0.005603683367371559,
+            "dimensions_covered": 0
+          },
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.001806659437716007,
+            "dimensions_covered": 0
+          },
+          "88baf7eb-4cdf-40a5-999a-e1406a3c701d": {
+            "strength": "Weak",
+            "score": 0.0013778507709503174,
+            "dimensions_covered": 0
+          },
+          "940ce3ca-edfc-43ac-857d-89027455abaa": {
+            "strength": "Weak",
+            "score": 0.0008650355972349644,
+            "dimensions_covered": 0
+          },
+          "17891310-423c-4498-90fc-bb695c253f92": {
+            "strength": "Weak",
+            "score": 0.0004138775635510683,
+            "dimensions_covered": 0
+          },
+          "c76943e6-70d8-4144-bf54-48b636a05a57": {
+            "strength": "Weak",
+            "score": 0.00024325093254446982,
+            "dimensions_covered": 0
+          },
+          "7b0aa44d-c45d-4c5b-9081-f794ed627992": {
+            "strength": "Weak",
+            "score": 7.45739584090188e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_amount",
+        "project_count",
+        "funding_agencies",
+        "time_period"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for e-governance implementation in areas of administration, finance, student admission, and examination, but no specific institutional data or documented proof was provided. The evidence includes templates for data collection and areas of e-governance implementation. No specific numbers or dates were mentioned in the retrieved evidence.",
+      "grade": "C"
+    },
+    {
+      "status": "success",
+      "framework": "NAAC",
+      "criterion": "7.1.2",
+      "compliance_status": "Partial",
+      "confidence_score": 0.254,
+      "coverage_ratio": 1.0,
+      "gaps": [
+        "No evidence of funding from agencies for environmental sustainability initiatives",
+        "Missing year-wise breakdown for environmental sustainability initiatives",
+        "No evidence of disabled-friendly infrastructure or initiatives"
+      ],
+      "recommendations": [
+        "Apply for MNRE (Ministry of New and Renewable Energy) grant for solar energy installation (\u20b920-50 Lakhs, Deadline: March 2026). Launch 'Green Campus Initiative' with a budget of \u20b95 Lakhs, targeting 1000 participants, and partner with NGOs for waste management and water conservation awareness programs. Establish a 'Disabled-Friendly Infrastructure Cell' to create accessible ramps, toilets, and pathways with a budget of \u20b910 Lakhs. Collaborate with IIT/NIT for resource persons to conduct workshops on environmental sustainability and disabled-friendly infrastructure."
+      ],
+      "evidence_sources": [
+        {
+          "chunk_id": "918ff0ef-4d6b-4bed-ae8c-52561c8e1661",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 95,
+          "source_type": "framework",
+          "criterion": "7.1.6",
+          "framework": "NAAC",
+          "text": "7.1.6 QnM Quality audits on environment and energy are regularly undertaken by the institution (5) 7.1.6.1. The institutional environment and energy initiatives are confirmed through the following 1.Green audit 2. Energy audit 3.Environment audit 4.Clean and green campus recognitions/awards 5. Beyond the campus environmental promotional activities Options: A. Any 4 or all of the above B. Any 3 of the above C. Any 2 of the above D. Any 1of the above E. None of the above Upload: \uf0b7 Reports on environment and energy audits submitted by the auditing agency \uf0b7 Certification by the auditing agency \uf0b7 C",
+          "reranker_score": 0.022,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "8782e574-bd62-4aa9-9614-74eec3cdd5ec",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 21,
+          "source_type": "framework",
+          "criterion": null,
+          "framework": "NAAC",
+          "text": "est Practices 7.3 Institutional Distinctiveness 7.1 Institutional Values and Social Responsibilities The institution organizes gender equity promotion programmes. The institution displays sensitivity to issues like climate change and environmental issues. It adopts environment friendly practices and takes necessary actions such as \u2013 energy conservation, rain water harvesting, waste recycling (solid/liquid waste management, e-waste management), carbon neutral, green practices etc. The institution facilitates the differently abled (Divyangjan friendliness), effective dealing of location advantag",
+          "reranker_score": 0.021,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "a71c1718-1d49-4b11-97ae-aeee5d3df803",
+          "source": "NAAC_SSR_Manual_Universities.pdf",
+          "page": 93,
+          "source_type": "framework",
+          "criterion": "7.1.2",
+          "framework": "NAAC",
+          "text": "7.1.2 QnM The Institution has facilities for alternate sources of energy and energy conservation measures 1. Solar energy 2. Biogas plant 3. Wheeling to the Grid 4. Sensor-based energy conservation Template) 6.5.3 QlM Incremental improvements made for the preceding five years with regard to quality (in case of first cycle) Post accreditation quality initiatives (second and subsequent cycles) Describe quality enhancement initiatives in the academic and administrative domains successfully implemented during the last five years within a Maximum of 500 words each File Description \uf0b7 Paste link for",
+          "reranker_score": 0.006,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "8287ee70-18d2-4c19-9dec-38f4b04e9e03",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 1,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "NAAC Institutional Assessment and Accreditation (Effective from July 2017) Accreditation - (Cycle: 1) CHITKARA UNIVERSITY, Rajpura, Punjab, 140401 Track ID : PBUNGN106962 AISHE-ID : U-0373 Visit dates : 30 - 08 - 2021 to 01 - 09 - 2021 Grade Sheet NATIONAL ASSESSMENT AND ACCREDITATION COUNCIL An Autonomous Institution of the University Grants Commission P.O. Box No. 1075, Nagarbhavi, Bengaluru - 560 072, INDIA 1 / 4",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        },
+        {
+          "chunk_id": "59934005-6678-4e9d-8238-8174b3576127",
+          "source": "naac_Grade_Sheet.pdf",
+          "page": 3,
+          "source_type": "institution",
+          "criterion": null,
+          "framework": "INSTITUTION",
+          "text": "No: Criterion 4: Infrastructure and Learning Resources",
+          "reranker_score": 0.0,
+          "strength": "Weak"
+        }
+      ],
+      "evidence_count": 10,
+      "institution_evidence_count": 7,
+      "dimension_grounding": [],
+      "gaps_identified": [
+        {
+          "gap_type": "low_coverage",
+          "severity": "high",
+          "description": "Low dimension coverage: 0.0%",
+          "coverage_ratio": 0.0,
+          "recommendation": "Expand evidence to cover more required dimensions"
+        },
+        {
+          "gap_type": "low_confidence",
+          "severity": "medium",
+          "description": "Low confidence score: 0.0%",
+          "confidence_score": 0.0,
+          "recommendation": "Provide more detailed or higher-quality evidence"
+        },
+        {
+          "gap_type": "weak_evidence",
+          "severity": "medium",
+          "description": "Weak evidence quality: 0.0%",
+          "evidence_quality": 0.0,
+          "recommendation": "Improve evidence specificity and relevance"
+        }
+      ],
+      "evidence_strength": {
+        "overall_strength": "Weak",
+        "strong_count": 0,
+        "moderate_count": 0,
+        "weak_count": 7,
+        "per_chunk_strength": {
+          "8287ee70-18d2-4c19-9dec-38f4b04e9e03": {
+            "strength": "Weak",
+            "score": 0.00025145220570266247,
+            "dimensions_covered": 0
+          },
+          "59934005-6678-4e9d-8238-8174b3576127": {
+            "strength": "Weak",
+            "score": 3.1917556043481454e-05,
+            "dimensions_covered": 0
+          },
+          "7b0aa44d-c45d-4c5b-9081-f794ed627992": {
+            "strength": "Weak",
+            "score": 2.871504038921557e-05,
+            "dimensions_covered": 0
+          },
+          "c8544ba0-ee3b-4005-a464-eacf5ac6e3e8": {
+            "strength": "Weak",
+            "score": 2.3177911498351022e-05,
+            "dimensions_covered": 0
+          },
+          "d7ff0c18-ce48-4cb6-a8f9-45d9593c92fe": {
+            "strength": "Weak",
+            "score": 2.3106560547603294e-05,
+            "dimensions_covered": 0
+          },
+          "0becbb24-1f0e-4978-bf65-90d79d233f9f": {
+            "strength": "Weak",
+            "score": 2.2377976711140944e-05,
+            "dimensions_covered": 0
+          },
+          "496b7c7c-6718-425a-ba51-6fd4b5f395b6": {
+            "strength": "Weak",
+            "score": 2.2375693515641614e-05,
+            "dimensions_covered": 0
+          }
+        }
+      },
+      "timestamp": null,
+      "dimensions_covered": [
+        "funding_agencies"
+      ],
+      "dimensions_missing": [],
+      "explanation": "Found framework guidelines for environmental sustainability, green campus, solar energy, waste management, and water conservation, but no specific institutional data or documented proof from institutional records. The evidence includes 5 documents with framework guidelines for NAAC 7.1.2, but lacks concrete numbers and dates. No evidence of disabled-friendly initiatives was found.",
+      "grade": "C"
+    }
+  ],
+  "summary": {
+    "total_criteria": 11,
+    "criteria_evaluated": 7,
+    "metrics_evaluated": 11,
+    "cgpa": 1.01,
+    "grade": "Insufficient",
+    "accreditation_status": "Insufficient Evidence"
+  }
+}

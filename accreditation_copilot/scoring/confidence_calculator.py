@@ -71,21 +71,31 @@ class ConfidenceCalculator:
             sum(e['evidence_score'] for e in institution_evidence_scores) / len(institution_evidence_scores)
         )
         
-        # Average retrieval score (reranker) - institution only
-        total_reranker_score = 0.0
+        # Average retrieval score (dense/FAISS) - institution only
+        # CALIBRATION FIX: Use dense score instead of reranker score
+        # BGE-reranker-base gives systematically low scores (0.03-0.04) on domain-specific text
+        # Dense scores (FAISS cosine similarity) are more stable and well-calibrated
+        total_dense_score = 0.0
         for r in institution_retrieval_results:
-            score = r.get('reranker_score', 0.0)
+            # Try to get dense score first (preferred)
+            score = r.get('dense_score', 0.0)
             if score == 0.0:
                 # Try nested format
-                score = r.get('scores', {}).get('reranker', 0.0)
-            total_reranker_score += score
+                score = r.get('scores', {}).get('dense', 0.0)
+            if score == 0.0:
+                # Fallback to reranker if dense not available
+                score = r.get('reranker_score', 0.0)
+                if score == 0.0:
+                    score = r.get('scores', {}).get('reranker', 0.0)
+            total_dense_score += score
         
-        avg_retrieval_score = total_reranker_score / len(institution_retrieval_results)
+        avg_retrieval_score = total_dense_score / len(institution_retrieval_results)
         
-        # Base score: weighted combination - UPDATED: Less weight on unreliable reranker
+        # Base score: weighted combination - CALIBRATION FIX
+        # Using dense scores which are more stable (0.85-0.99 for relevant matches)
         base_score = (
-            0.75 * avg_evidence_score +  # Increased from 0.6 - trust evidence more
-            0.25 * avg_retrieval_score   # Decreased from 0.4 - reranker too strict
+            0.6 * avg_evidence_score +   # Evidence quality from heuristics
+            0.4 * avg_retrieval_score    # Dense similarity score (well-calibrated)
         )
         
         # Coverage ratio (FIXED: multiplicative penalty)

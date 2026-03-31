@@ -1,0 +1,212 @@
+{
+  "NAAC": {
+    "meta": {
+      "total_points": 1000,
+      "metrics_count": 11,
+      "institution_type": "University",
+      "grade_bands": {
+        "A++": {"min": 850, "max": 1000, "cgpa": "3.51-4.00"},
+        "A+":  {"min": 776, "max": 849,  "cgpa": "3.26-3.50"},
+        "A":   {"min": 701, "max": 775,  "cgpa": "3.01-3.25"},
+        "B++": {"min": 651, "max": 700,  "cgpa": "2.76-3.00"},
+        "B+":  {"min": 601, "max": 650,  "cgpa": "2.51-2.75"},
+        "B":   {"min": 501, "max": 600,  "cgpa": "2.01-2.50"},
+        "C":   {"min": 401, "max": 500,  "cgpa": "1.51-2.00"},
+        "D":   {"min": 0,   "max": 400,  "cgpa": "Below 1.51"}
+      },
+      "criterion_weights": {
+        "1": 100, "2": 350, "3": 200,
+        "4": 100, "5": 100, "6": 100, "7": 50
+      }
+    },
+    "metrics": {
+      "1.2.1": {
+        "name": "Certificate and Value Added Courses",
+        "criterion": "1",
+        "criterion_name": "Curricular Aspects",
+        "max_points": 100,
+        "type": "QnM",
+        "formula": "Percentage of students enrolled in value-added courses last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=30% students enrolled", "threshold": {"enrollment_percentage": 30}},
+          "75":  {"description": "20-30% students enrolled", "threshold": {"enrollment_percentage": 20}},
+          "50":  {"description": "10-20% students enrolled", "threshold": {"enrollment_percentage": 10}},
+          "25":  {"description": "5-10% students enrolled",  "threshold": {"enrollment_percentage": 5}},
+          "0":   {"description": "<5% students enrolled",    "threshold": {"enrollment_percentage": 0}}
+        },
+        "data_fields_required": ["students_enrolled_value_courses", "total_students", "enrollment_percentage"],
+        "evidence_keywords": ["value added", "certificate course", "MOOC", "SWAYAM", "NPTEL", "enrolled"]
+      },
+      "2.1.1": {
+        "name": "Student Enrollment Percentage",
+        "criterion": "2",
+        "criterion_name": "Teaching-Learning and Evaluation",
+        "max_points": 350,
+        "type": "QnM",
+        "formula": "Average enrollment percentage against sanctioned intake last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=80% enrollment against intake", "threshold": {"enrollment_percentage": 80}},
+          "75":  {"description": "60-80% enrollment",              "threshold": {"enrollment_percentage": 60}},
+          "50":  {"description": "40-60% enrollment",              "threshold": {"enrollment_percentage": 40}},
+          "25":  {"description": "20-40% enrollment",              "threshold": {"enrollment_percentage": 20}},
+          "0":   {"description": "<20% enrollment",                "threshold": {"enrollment_percentage": 0}}
+        },
+        "data_fields_required": ["sanctioned_intake", "actual_enrollment", "enrollment_percentage", "year_wise_data"],
+        "evidence_keywords": ["enrollment", "intake", "admitted", "sanctioned strength", "students enrolled"]
+      },
+      "3.2.1": {
+        "name": "Extramural Research Funding",
+        "criterion": "3",
+        "criterion_name": "Research Innovations and Extension",
+        "max_points": 40,
+        "type": "QnM",
+        "formula": "Total extramural funding received last 5 years in INR Lakhs",
+        "scoring_rubric": {
+          "100": {"description": ">=500 Lakhs OR >=25 projects", "threshold": {"total_funding_lakhs": 500, "project_count": 25}},
+          "75":  {"description": "300-500 Lakhs OR 15-25 projects", "threshold": {"total_funding_lakhs": 300, "project_count": 15}},
+          "50":  {"description": "100-300 Lakhs OR 8-15 projects",  "threshold": {"total_funding_lakhs": 100, "project_count": 8}},
+          "25":  {"description": "50-100 Lakhs OR 4-8 projects",    "threshold": {"total_funding_lakhs": 50,  "project_count": 4}},
+          "0":   {"description": "<50 Lakhs OR <4 projects",        "threshold": {"total_funding_lakhs": 0,   "project_count": 0}}
+        },
+        "data_fields_required": ["total_funding_lakhs", "project_count", "funding_agencies", "year_wise_data"],
+        "evidence_keywords": ["extramural", "grant", "funded", "DST", "SERB", "DBT", "ICSSR", "sponsored", "sanctioned"]
+      },
+      "3.3.1": {
+        "name": "Research Papers in UGC CARE Journals",
+        "criterion": "3",
+        "criterion_name": "Research Innovations and Extension",
+        "max_points": 40,
+        "type": "QnM",
+        "formula": "Number of research papers per teacher per year last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=2.0 papers per teacher per year", "threshold": {"papers_per_teacher_per_year": 2.0}},
+          "75":  {"description": "1.0-2.0 papers per teacher",        "threshold": {"papers_per_teacher_per_year": 1.0}},
+          "50":  {"description": "0.5-1.0 papers per teacher",        "threshold": {"papers_per_teacher_per_year": 0.5}},
+          "25":  {"description": "0.1-0.5 papers per teacher",        "threshold": {"papers_per_teacher_per_year": 0.1}},
+          "0":   {"description": "<0.1 papers per teacher",           "threshold": {"papers_per_teacher_per_year": 0}}
+        },
+        "data_fields_required": ["total_papers", "total_teachers", "papers_per_teacher", "ugc_care_listed_count"],
+        "evidence_keywords": ["UGC CARE", "research paper", "publication", "journal", "Scopus", "Web of Science"]
+      },
+      "3.4.1": {
+        "name": "Extension Activities in Community",
+        "criterion": "3",
+        "criterion_name": "Research Innovations and Extension",
+        "max_points": 40,
+        "type": "QlM",
+        "formula": "Quality and reach of extension activities last 5 years",
+        "scoring_rubric": {
+          "100": {"description": "Large scale with 1000+ participants and documented impact", "threshold": {"activities_count": 20, "participants": 1000}},
+          "75":  {"description": "Regular activities 500+ participants",  "threshold": {"activities_count": 10, "participants": 500}},
+          "50":  {"description": "Some activities 200+ participants",     "threshold": {"activities_count": 5,  "participants": 200}},
+          "25":  {"description": "Occasional activities",                 "threshold": {"activities_count": 2,  "participants": 50}},
+          "0":   {"description": "No documented extension activities",    "threshold": {"activities_count": 0,  "participants": 0}}
+        },
+        "data_fields_required": ["activities_count", "participants_count", "community_reach", "nss_ncc_activities"],
+        "evidence_keywords": ["extension", "community", "NSS", "NCC", "outreach", "social", "village", "blood donation"]
+      },
+      "3.4.2": {
+        "name": "Awards for Extension Activities",
+        "criterion": "3",
+        "criterion_name": "Research Innovations and Extension",
+        "max_points": 40,
+        "type": "QlM",
+        "formula": "Number and level of awards received for extension activities",
+        "scoring_rubric": {
+          "100": {"description": ">=5 national or international awards", "threshold": {"national_awards": 5}},
+          "75":  {"description": "3-5 state or national awards",         "threshold": {"national_awards": 3}},
+          "50":  {"description": "1-3 state level awards",               "threshold": {"state_awards": 1}},
+          "25":  {"description": "Institutional level recognition only", "threshold": {"institutional_awards": 1}},
+          "0":   {"description": "No awards documented",                 "threshold": {"institutional_awards": 0}}
+        },
+        "data_fields_required": ["award_name", "awarding_body", "award_level", "year_received"],
+        "evidence_keywords": ["award", "recognition", "felicitation", "honour", "best institution", "excellence"]
+      },
+      "3.5.1": {
+        "name": "MoUs and Linkages",
+        "criterion": "3",
+        "criterion_name": "Research Innovations and Extension",
+        "max_points": 40,
+        "type": "QnM",
+        "formula": "Number of active MoUs with documented outcomes last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=25 active MoUs with outcomes", "threshold": {"active_mous": 25}},
+          "75":  {"description": "15-25 active MoUs",              "threshold": {"active_mous": 15}},
+          "50":  {"description": "8-15 active MoUs",               "threshold": {"active_mous": 8}},
+          "25":  {"description": "3-8 MoUs",                       "threshold": {"active_mous": 3}},
+          "0":   {"description": "<3 MoUs",                        "threshold": {"active_mous": 0}}
+        },
+        "data_fields_required": ["mou_partner", "mou_purpose", "mou_outcomes", "mou_validity"],
+        "evidence_keywords": ["MoU", "memorandum", "linkage", "collaboration", "agreement", "partnership", "internship"]
+      },
+      "4.1.2": {
+        "name": "Infrastructure Expenditure",
+        "criterion": "4",
+        "criterion_name": "Infrastructure and Learning Resources",
+        "max_points": 100,
+        "type": "QnM",
+        "formula": "Percentage of budget spent on infrastructure excluding salary last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=15% of total budget on infrastructure", "threshold": {"infrastructure_budget_percentage": 15}},
+          "75":  {"description": "10-15% on infrastructure",                "threshold": {"infrastructure_budget_percentage": 10}},
+          "50":  {"description": "6-10% on infrastructure",                 "threshold": {"infrastructure_budget_percentage": 6}},
+          "25":  {"description": "3-6% on infrastructure",                  "threshold": {"infrastructure_budget_percentage": 3}},
+          "0":   {"description": "<3% on infrastructure",                   "threshold": {"infrastructure_budget_percentage": 0}}
+        },
+        "data_fields_required": ["total_budget", "infrastructure_expenditure", "expenditure_percentage", "year_wise_data"],
+        "evidence_keywords": ["infrastructure", "capital expenditure", "construction", "equipment", "laboratory", "budget"]
+      },
+      "5.1.1": {
+        "name": "Students Benefited by Scholarships",
+        "criterion": "5",
+        "criterion_name": "Student Support and Progression",
+        "max_points": 100,
+        "type": "QnM",
+        "formula": "Percentage of students receiving scholarships or freeships last 5 years",
+        "scoring_rubric": {
+          "100": {"description": ">=40% students receive scholarships", "threshold": {"scholarship_percentage": 40}},
+          "75":  {"description": "25-40% students receive scholarships", "threshold": {"scholarship_percentage": 25}},
+          "50":  {"description": "15-25% students receive scholarships", "threshold": {"scholarship_percentage": 15}},
+          "25":  {"description": "5-15% students receive scholarships",  "threshold": {"scholarship_percentage": 5}},
+          "0":   {"description": "<5% students receive scholarships",    "threshold": {"scholarship_percentage": 0}}
+        },
+        "data_fields_required": ["students_with_scholarship", "total_students", "scholarship_percentage", "scholarship_sources"],
+        "evidence_keywords": ["scholarship", "freeship", "fellowship", "stipend", "financial aid", "merit", "SC/ST"]
+      },
+      "6.2.2": {
+        "name": "E-Governance Implementation",
+        "criterion": "6",
+        "criterion_name": "Governance Leadership and Management",
+        "max_points": 100,
+        "type": "QnM",
+        "formula": "Number of e-governance areas implemented out of 4",
+        "scoring_rubric": {
+          "100": {"description": "All 4 areas: Administration Finance Admission Examination", "threshold": {"egovernance_areas": 4}},
+          "75":  {"description": "3 of 4 areas implemented", "threshold": {"egovernance_areas": 3}},
+          "50":  {"description": "2 of 4 areas implemented", "threshold": {"egovernance_areas": 2}},
+          "25":  {"description": "1 area implemented",       "threshold": {"egovernance_areas": 1}},
+          "0":   {"description": "No e-governance",          "threshold": {"egovernance_areas": 0}}
+        },
+        "data_fields_required": ["administration_egov", "finance_egov", "admission_egov", "examination_egov"],
+        "evidence_keywords": ["ERP", "e-governance", "online portal", "MIS", "digital", "automation", "software"]
+      },
+      "7.1.2": {
+        "name": "Green Campus Initiatives",
+        "criterion": "7",
+        "criterion_name": "Institutional Values and Best Practices",
+        "max_points": 50,
+        "type": "QnM",
+        "formula": "Number of green campus areas implemented out of 4",
+        "scoring_rubric": {
+          "100": {"description": "All 4: Energy Waste Water Disabled-friendly", "threshold": {"green_areas": 4}},
+          "75":  {"description": "3 of 4 areas", "threshold": {"green_areas": 3}},
+          "50":  {"description": "2 of 4 areas", "threshold": {"green_areas": 2}},
+          "25":  {"description": "1 area",        "threshold": {"green_areas": 1}},
+          "0":   {"description": "No green initiatives", "threshold": {"green_areas": 0}}
+        },
+        "data_fields_required": ["solar_energy", "waste_management", "water_conservation", "disabled_friendly"],
+        "evidence_keywords": ["solar", "green", "waste management", "rainwater", "ramp", "wheelchair", "disabled", "renewable"]
+      }
+    }
+  }
+}

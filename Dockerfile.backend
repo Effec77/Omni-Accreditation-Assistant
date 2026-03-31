@@ -1,0 +1,68 @@
+# Backend Dockerfile for Accreditation Copilot
+# Multi-stage build for optimized image size
+
+# Stage 1: Base image with Python and system dependencies
+FROM python:3.12-slim as base
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    tesseract-ocr \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Stage 2: Dependencies installation
+FROM base as dependencies
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements file
+COPY accreditation_copilot/requirements.txt .
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+# Stage 3: Application
+FROM dependencies as application
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code
+COPY accreditation_copilot/ ./accreditation_copilot/
+COPY data/ ./data/
+
+# Create necessary directories
+RUN mkdir -p /app/accreditation_copilot/data \
+    /app/accreditation_copilot/indexes \
+    /app/accreditation_copilot/api/indexes \
+    /app/accreditation_copilot/api/data \
+    /app/accreditation_copilot/audit_results \
+    /app/logs
+
+# Set permissions
+RUN chmod -R 755 /app
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Set working directory to accreditation_copilot
+WORKDIR /app/accreditation_copilot
+
+# Run the application
+CMD ["python", "api/start_api.py"]
