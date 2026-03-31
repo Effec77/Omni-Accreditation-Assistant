@@ -1,5 +1,5 @@
 # Core
-langchain==0.3.18
+langchain==0.3.19
 langchain-community==0.3.18
 langchain-groq==0.3.2
 langsmith==0.2.11
