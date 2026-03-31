@@ -37,7 +37,7 @@ export default function HelpChatbot() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
       
-      const response = await fetch('http://localhost:8000/api/chatbot/chat', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chatbot/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

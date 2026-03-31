@@ -21,6 +21,16 @@ services:
     networks:
       - accreditation-network
 
-networks:
-  accreditation-network:
-    driver: bridge
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: accreditation-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
+    networks:
+      - accreditation-network
