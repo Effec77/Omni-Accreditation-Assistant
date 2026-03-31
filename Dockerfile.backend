@@ -54,6 +54,9 @@ RUN mkdir -p /app/accreditation_copilot/data \
 # Set permissions
 RUN chmod -R 755 /app
 
+# Set PYTHONPATH to include the accreditation_copilot directory
+ENV PYTHONPATH=/app/accreditation_copilot:$PYTHONPATH
+
 # Expose port
 EXPOSE 8000
 

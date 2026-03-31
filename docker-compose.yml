@@ -10,6 +10,7 @@ services:
     environment:
       - ENVIRONMENT=production
       - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app/accreditation_copilot
     env_file:
       - accreditation_copilot/.env
     volumes:
