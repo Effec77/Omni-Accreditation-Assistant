@@ -10,8 +10,8 @@ WORKDIR /app
 # Copy package files
 COPY accreditation_copilot/frontend/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production && \
+# Install ALL dependencies (including devDependencies for build)
+RUN npm ci && \
     npm cache clean --force
 
 # Stage 2: Builder
@@ -28,7 +28,8 @@ COPY accreditation_copilot/frontend/ ./
 
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1 \
-    NODE_ENV=production
+    NODE_ENV=production \
+    NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
 
 # Build the application
 RUN npm run build
@@ -42,7 +43,8 @@ WORKDIR /app
 # Set environment variables
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
-    PORT=3000
+    PORT=3000 \
+    NEXT_PUBLIC_API_URL=http://13.232.129.54:8000
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
